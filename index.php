@@ -70,7 +70,7 @@
                 var loader = new THREE.ColladaLoader();
                 initPuces(loader);	
                 loader.options.convertUpAxis = true;
-                initTrees(loader);
+             //   initTrees(loader);
                 initSun();
        
                  scene.fog = new THREE.FogExp2( 0xffffff, 0.001 );
@@ -124,7 +124,7 @@
                 mirrorCube.visible = true; 
                 controls.update( clock.getDelta() );
                 if(puceCloned)
-                    puceCloned.rotation.y += 0.1;
+                    puceCloned.rotation.y += 0.01;
                 renderer.render( scene, camera );
             }
             
@@ -189,7 +189,7 @@
 //                sunLight2.castShadow = true; 
 //                scene.add(sunLight2); 
             }
-            
+            var xPos = 0;
             function initTrees(loader){
                 loader.load( './models/tree.dae', function ( collada ) {
                     var tree = collada.scene;
@@ -209,16 +209,17 @@
             }
             
             function initPuces(loader){
-                loader.load( './models/puce_or_ronde.dae', function ( collada ) {
+                loader.load( './models/puce_or_ronde_with_attache.dae', function ( collada ) {
                     puce = collada.scene;
                     puce.scale.x = puce.scale.y = puce.scale.z = 0.02;
                     var made = false;
-                     for(var i=0; i<1;i++){
+                     for(var i=0; i<2;i++){
                     //  for(var j=-15; j<15;j+=10){
                   //  if(!made){
-                        var x = 0 + Math.random()*10;
+                        var x = xPos;
                         var z = 0 + Math.random()*10;
-                        createPuce(puce,x,z);
+                        createPuce(puce,x,0);
+                        xPos++;
                    // }
                    // made=!made;
                     //        }
@@ -233,7 +234,7 @@
                 puceCloned.position.z = z;
                 puceCloned.rotation.y = Math.random() * Math.PI * 2;
                 puceCloned.traverse(function ( child ) {
-                child.castShadow = true;
+              //  child.castShadow = true;
                 } );
              //   puceCloned.children[0].children[6].material = new THREE.MeshBasicMaterial( { color : 0xFFFFFF});// envMap: mirrorCubeCamera.renderTarget } );
                  
@@ -246,8 +247,7 @@
                     reflectivity: 0.5,
                     envMap: cubeTarget
                     } );
-                 
-                 puceCloned.children[0].children[6].material = cubeMaterial1;
+                 puceCloned.children[0].children[0].children[6].material = cubeMaterial1;
                  mirrorCubeCamera.position.copy( puceCloned.position );
               //  mirrorCubeCamera.renderTarget.minFilter = THREE.LinearMipMapLinearFilter; 
                 
