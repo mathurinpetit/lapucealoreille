@@ -15,7 +15,8 @@
         <script src="lib/three.js/Detector.js"></script>
         <script src="lib/three.js/Stats.js"></script>
         <script>
-            if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+            if (! Detector.webgl )
+                Detector.addGetWebGLMessage();
             
             var container, stats;
 
@@ -30,7 +31,7 @@
             function init() {
                 
                 camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 2000 );
-                camera.position.set( 0, 2 , 0 );
+                camera.position.set( -4, 2 , 0 );
 
                 renderer = new THREE.WebGLRenderer();  
                 renderer.setSize( window.innerWidth, window.innerHeight );
@@ -56,13 +57,13 @@
                 controls = new THREE.FirstPersonControls( camera );
                 controls.movementSpeed = 3;
                 controls.lookSpeed = 0.05;
-                controls.lookVertical = false;
-                controls.constrainVertical = false;
+                controls.lookVertical = true;
+                controls.constrainVertical = true;
                 controls.verticalMin = 1.1;
                 controls.verticalMax = 2.2;
 
                 
-              //  mirrorCubeCamera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 100 );
+                //  mirrorCubeCamera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 100 );
                 
                 mirrorCubeCamera = new THREE.CubeCamera( 0.1, 100000, 128   );
                 scene.add( mirrorCubeCamera );
@@ -70,10 +71,10 @@
                 var loader = new THREE.ColladaLoader();
                 initPuces(loader);	
                 loader.options.convertUpAxis = true;
-             //   initTrees(loader);
+          //      initTrees(loader);
                 initSun();
        
-                 scene.fog = new THREE.FogExp2( 0xffffff, 0.001 );
+                scene.fog = new THREE.FogExp2( 0xffffff, 0.001 );
                
 
                 
@@ -81,12 +82,13 @@
                 var ambianteLight = new THREE.AmbientLight( 0x444444 );
                 scene.add(ambianteLight);
                 
-           //     sphereDebug(0,4,10);
-           //     sphereDebug(0,2,12);             
+                     sphereDebug(0,4,10);
+                //     sphereDebug(0,2,12);             
        
        
                 createFloor();
-        //        createPlafond();
+                createPlafond();
+                
                 stats = new Stats();
                 stats.domElement.style.position = 'absolute';
                 stats.domElement.style.top = '0px';
@@ -171,23 +173,23 @@
                 sunLight.shadowCameraNear = 0.1;
                 sunLight.shadowCameraFar = 100;
                 sunLight.shadowCameraFov = 70;
-           //     sunLight.shadowCameraVisible = true;   
+                //     sunLight.shadowCameraVisible = true;   
                 sunLight.castShadow = true; 
                 scene.add(sunLight); 
                 
-//                sunLight2 = new THREE.SpotLight( 0xffffff,1);
-//                sunLight2.position.set(0,20,20);
-//                
-//                sunLight2.shadowDarkness = 0.7; 
-//                sunLight2.shadowMapWidth = 1024;
-//                sunLight2.shadowMapHeight = 1024;
-//                
-//                sunLight2.shadowCameraNear = 0.1;
-//                sunLight2.shadowCameraFar = 100;
-//                sunLight2.shadowCameraFov = 70;
-//           //     sunLight.shadowCameraVisible = true;   
-//                sunLight2.castShadow = true; 
-//                scene.add(sunLight2); 
+                //                sunLight2 = new THREE.SpotLight( 0xffffff,1);
+                //                sunLight2.position.set(0,20,20);
+                //                
+                //                sunLight2.shadowDarkness = 0.7; 
+                //                sunLight2.shadowMapWidth = 1024;
+                //                sunLight2.shadowMapHeight = 1024;
+                //                
+                //                sunLight2.shadowCameraNear = 0.1;
+                //                sunLight2.shadowCameraFar = 100;
+                //                sunLight2.shadowCameraFov = 70;
+                //           //     sunLight.shadowCameraVisible = true;   
+                //                sunLight2.castShadow = true; 
+                //                scene.add(sunLight2); 
             }
             var xPos = 0;
             function initTrees(loader){
@@ -209,21 +211,22 @@
             }
             
             function initPuces(loader){
-                loader.load( './models/puce_or_ronde_with_attache.dae', function ( collada ) {
+                   loader.load( './models/puce_classic_without_texture.dae', function ( collada ) {
+                //loader.load( './models/puce_classic_without_texture.dae', function ( collada ) {
                     puce = collada.scene;
                     puce.scale.x = puce.scale.y = puce.scale.z = 0.02;
                     var made = false;
-                     for(var i=0; i<2;i++){
-                    //  for(var j=-15; j<15;j+=10){
-                  //  if(!made){
+                    for(var i=0; i<2;i++){
+                        //  for(var j=-15; j<15;j+=10){
+                        //  if(!made){
                         var x = xPos;
                         var z = 0 + Math.random()*10;
                         createPuce(puce,x,0);
                         xPos++;
-                   // }
-                   // made=!made;
-                    //        }
-                       }
+                        // }
+                        // made=!made;
+                        //        }
+                    }
                 });
             }
             
@@ -232,24 +235,25 @@
                 puceCloned.position.y = 2;
                 puceCloned.position.x = x;
                 puceCloned.position.z = z;
-                puceCloned.rotation.y = Math.random() * Math.PI * 2;
+                      puceCloned.rotation.y = Math.random() * Math.PI * 2;
                 puceCloned.traverse(function ( child ) {
-              //  child.castShadow = true;
+                    //  child.castShadow = true;
                 } );
-             //   puceCloned.children[0].children[6].material = new THREE.MeshBasicMaterial( { color : 0xFFFFFF});// envMap: mirrorCubeCamera.renderTarget } );
-                 
-                 var texture = THREE.ImageUtils.loadTexture( './models/puce_or_ronde/texture1.png' );
-                 var cubeMaterial1 = new THREE.MeshLambertMaterial( {
+               
+               var texture = THREE.ImageUtils.loadTexture( './models/puce_or_ronde/texture1.png' );
+              //  var texture = THREE.ImageUtils.loadTexture( './models/textures/texture1.png' );
+                var cubeMaterial1 = new THREE.MeshLambertMaterial( {
                     color: 0xffffff,
                     ambient: 0xffffff,
                     map: texture,
                     combine: THREE.MixOperation,
                     reflectivity: 0.5,
                     envMap: cubeTarget
-                    } );
-                 puceCloned.children[0].children[0].children[6].material = cubeMaterial1;
-                 mirrorCubeCamera.position.copy( puceCloned.position );
-              //  mirrorCubeCamera.renderTarget.minFilter = THREE.LinearMipMapLinearFilter; 
+                } );
+          //      puceCloned.children[0].children[0].children[6].material = cubeMaterial1;
+                puceCloned.children[0].children[4].children[10].material = cubeMaterial1;
+                mirrorCubeCamera.position.copy( puceCloned.position );
+                //  mirrorCubeCamera.renderTarget.minFilter = THREE.LinearMipMapLinearFilter; 
                 
                 scene.add( puceCloned );
             }
@@ -261,9 +265,9 @@
                 treeCloned.rotation.y = Math.random() * Math.PI * 2;
                 treeCloned.traverse(function ( child ) {
 
-    child.castShadow = true;
+                    child.castShadow = true;
 
-} );
+                } );
                 scene.add( treeCloned );
                     
             }
@@ -278,11 +282,11 @@
             }
             
             function createPlafond(){
-                var planeGeo = new THREE.PlaneGeometry(500,500, 10, 10);
-                var planeMat = new THREE.MeshPhongMaterial({color: 0x000000});
+                var planeGeo = new THREE.CubeGeometry(-100,0,0,100,100,100);// 10,10);
+                var planeMat = new THREE.MeshPhongMaterial({color: 0xFF0000});
                 plane = new THREE.Mesh(planeGeo, planeMat);
-                plane.rotation.x = Math.PI/2;
-                plane.position.y = 200;
+               // plane.rotation.z = Math.PI/2;
+                plane.position.y = 5;
                 scene.add(plane);
             }
             
