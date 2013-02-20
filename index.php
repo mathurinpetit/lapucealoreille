@@ -14,19 +14,19 @@
 
         <script src="lib/three.js/Detector.js"></script>
         <script src="lib/three.js/Stats.js"></script>
+        <script src="lib/Puces.js"></script>
         <script>
             if (! Detector.webgl )
                 Detector.addGetWebGLMessage();
             
             var container, stats;
 
-            var camera, scene, renderer, objects, controls, sun, sunLight,sunLight2,puce;
-            var particleLight, pointLight;
-            var dae, skin;
+            var camera, scene, renderer, controls, sun, sunLight ,sunLight2, pucesList, projector;
             var puceCloned, plane;
             var mirrorCubeCamera,cubeTarget,mirrorCube;            
             var t = 0;
             var clock = new THREE.Clock();
+            var mouse = { x: 0, y: 0 }, INTERSECTED;
             
             function init() {
                 
@@ -52,7 +52,8 @@
                 container = document.createElement( 'div' );
                 document.body.appendChild( container );
                 scene = new THREE.Scene();
-
+                projector = new THREE.Projector();
+                
                 
                 controls = new THREE.FirstPersonControls( camera );
                 controls.movementSpeed = 3;
@@ -63,15 +64,37 @@
                 controls.verticalMax = 2.2;
 
                 
-                //  mirrorCubeCamera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 100 );
-                
-                mirrorCubeCamera = new THREE.CubeCamera( 0.1, 100000, 128   );
+
+                mirrorCubeCamera = new THREE.CubeCamera( 0.1, 100, 128);
                 scene.add( mirrorCubeCamera );
                 cubeTarget = mirrorCubeCamera.renderTarget;
                 var loader = new THREE.ColladaLoader();
-                initPuces(loader);	
                 loader.options.convertUpAxis = true;
-          //      initTrees(loader);
+                pucesList = [];
+                
+                var modelPath = './models/puce_classic_without_texture.dae';
+                var modelTexturePath = './textures/texture_argent_carre.jpg';
+                var attacheModelPath = './models/attache_argent.dae';
+               pucesList = PUCES.CreatePuce(scene, loader, pucesList , modelPath , modelTexturePath , attacheModelPath,false, false, true );
+                
+                console.log(pucesList);
+                
+                PUCES.CreatePuce(scene, loader, pucesList , modelPath , modelTexturePath , attacheModelPath,false, false, true );
+                
+                PUCES.CreatePuce(scene, loader, pucesList , modelPath , modelTexturePath , attacheModelPath,false, false, true );
+                
+                PUCES.CreatePuce(scene, loader, pucesList , modelPath , modelTexturePath , attacheModelPath,false, false, true );
+                
+                PUCES.CreatePuce(scene, loader, pucesList , modelPath , modelTexturePath , attacheModelPath,false, false, true );
+                
+                PUCES.CreatePuce(scene, loader, pucesList , modelPath , modelTexturePath , attacheModelPath,false, false, true );
+                
+                PUCES.CreatePuce(scene, loader, pucesList , modelPath , modelTexturePath , attacheModelPath,false, false, true );
+                //initPuces(loader,'classic','argent');	
+                //      sphereDebug(1,1,1);
+              //  initPuces(loader,'classic','argent_carre');	
+             //   initPuces(loader,'classic','or_petit_rond');	
+                //   initTrees(loader);
                 initSun();
        
                 scene.fog = new THREE.FogExp2( 0xffffff, 0.001 );
@@ -82,12 +105,11 @@
                 var ambianteLight = new THREE.AmbientLight( 0x444444 );
                 scene.add(ambianteLight);
                 
-                     sphereDebug(0,4,10);
                 //     sphereDebug(0,2,12);             
        
        
                 createFloor();
-                createPlafond();
+                //         createPlafond();
                 
                 stats = new Stats();
                 stats.domElement.style.position = 'absolute';
@@ -96,18 +118,24 @@
 
 
                 window.addEventListener( 'resize', onWindowResize, false );
-                
+                document.addEventListener( 'mousemove', onDocumentMouseMove, false );
                 container.appendChild( renderer.domElement );
             }
-
+            
             function onWindowResize() {
 
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
-
+                
                 renderer.setSize( window.innerWidth, window.innerHeight );
 
             }
+            
+            function onDocumentMouseMove( event ) {
+                event.preventDefault();
+                mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+                mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+            } 
             
             function animate() {
                 
@@ -117,7 +145,7 @@
                 render();
                 stats.update();
             }
-
+            
             function render() {
 
                 var timer = Date.now() * 0.0005;
@@ -127,6 +155,24 @@
                 controls.update( clock.getDelta() );
                 if(puceCloned)
                     puceCloned.rotation.y += 0.01;
+                
+                // find intersections
+                var vector = new THREE.Vector3( mouse.x, mouse.y, 1 );
+                projector.unprojectVector( vector, camera );
+                var raycaster = new THREE.Raycaster( camera.position, vector.subSelf( camera.position ).normalize() );
+                var intersects = raycaster.intersectObjects( scene.children );
+                if ( intersects.length > 0 ) {
+                    if ( INTERSECTED != intersects[ 0 ].object ) {
+                        if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+                        INTERSECTED = intersects[ 0 ].object;
+                        INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+                        INTERSECTED.material.emissive.setHex( 0xff0000 );
+                    }
+                } else {
+                    if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+                    INTERSECTED = null;
+                } 
+                
                 renderer.render( scene, camera );
             }
             
@@ -177,21 +223,18 @@
                 sunLight.castShadow = true; 
                 scene.add(sunLight); 
                 
-                //                sunLight2 = new THREE.SpotLight( 0xffffff,1);
-                //                sunLight2.position.set(0,20,20);
-                //                
-                //                sunLight2.shadowDarkness = 0.7; 
-                //                sunLight2.shadowMapWidth = 1024;
-                //                sunLight2.shadowMapHeight = 1024;
-                //                
-                //                sunLight2.shadowCameraNear = 0.1;
-                //                sunLight2.shadowCameraFar = 100;
-                //                sunLight2.shadowCameraFov = 70;
-                //           //     sunLight.shadowCameraVisible = true;   
-                //                sunLight2.castShadow = true; 
-                //                scene.add(sunLight2); 
+                sunLight2 = new THREE.SpotLight( 0xffffff,1);
+                sunLight2.position.set(0,20,20);
+                sunLight2.shadowDarkness = 0.7; 
+                sunLight2.shadowMapWidth = 1024;
+                sunLight2.shadowMapHeight = 1024;
+                sunLight2.shadowCameraNear = 0.1;
+                sunLight2.shadowCameraFar = 100;
+                sunLight2.shadowCameraFov = 70; 
+                sunLight2.castShadow = true; 
+                scene.add(sunLight2); 
             }
-            var xPos = 0;
+            
             function initTrees(loader){
                 loader.load( './models/tree.dae', function ( collada ) {
                     var tree = collada.scene;
@@ -210,53 +253,6 @@
                 });
             }
             
-            function initPuces(loader){
-                   loader.load( './models/puce_classic_without_texture.dae', function ( collada ) {
-                //loader.load( './models/puce_classic_without_texture.dae', function ( collada ) {
-                    puce = collada.scene;
-                    puce.scale.x = puce.scale.y = puce.scale.z = 0.02;
-                    var made = false;
-                    for(var i=0; i<2;i++){
-                        //  for(var j=-15; j<15;j+=10){
-                        //  if(!made){
-                        var x = xPos;
-                        var z = 0 + Math.random()*10;
-                        createPuce(puce,x,0);
-                        xPos++;
-                        // }
-                        // made=!made;
-                        //        }
-                    }
-                });
-            }
-            
-            function createPuce(puce,x,z){                
-                puceCloned = puce.clone();
-                puceCloned.position.y = 2;
-                puceCloned.position.x = x;
-                puceCloned.position.z = z;
-                      puceCloned.rotation.y = Math.random() * Math.PI * 2;
-                puceCloned.traverse(function ( child ) {
-                    //  child.castShadow = true;
-                } );
-               
-               var texture = THREE.ImageUtils.loadTexture( './models/puce_or_ronde/texture1.png' );
-              //  var texture = THREE.ImageUtils.loadTexture( './models/textures/texture1.png' );
-                var cubeMaterial1 = new THREE.MeshLambertMaterial( {
-                    color: 0xffffff,
-                    ambient: 0xffffff,
-                    map: texture,
-                    combine: THREE.MixOperation,
-                    reflectivity: 0.5,
-                    envMap: cubeTarget
-                } );
-          //      puceCloned.children[0].children[0].children[6].material = cubeMaterial1;
-                puceCloned.children[0].children[4].children[10].material = cubeMaterial1;
-                mirrorCubeCamera.position.copy( puceCloned.position );
-                //  mirrorCubeCamera.renderTarget.minFilter = THREE.LinearMipMapLinearFilter; 
-                
-                scene.add( puceCloned );
-            }
             
             function createTree(tree,x,z){
                 var treeCloned = tree.clone();	 
@@ -285,7 +281,7 @@
                 var planeGeo = new THREE.CubeGeometry(-100,0,0,100,100,100);// 10,10);
                 var planeMat = new THREE.MeshPhongMaterial({color: 0xFF0000});
                 plane = new THREE.Mesh(planeGeo, planeMat);
-               // plane.rotation.z = Math.PI/2;
+                // plane.rotation.z = Math.PI/2;
                 plane.position.y = 5;
                 scene.add(plane);
             }
@@ -299,5 +295,6 @@
                 animate();
             });    
         </script>
+        <a id="visualisation"></a>
     </body>
 </html>
