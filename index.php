@@ -1,3 +1,9 @@
+<?php
+$models = array('classic_puce' => './models/puce_classic_without_texture.dae',
+                 'attache_or' => './models/attache_or.dae',
+                 'attache_argent' => './models/attache_argent.dae');
+
+?>
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -15,21 +21,60 @@
         <script src="lib/three.js/Detector.js"></script>
         <script src="lib/three.js/Stats.js"></script>
         <script src="lib/Puces.js"></script>
+<!--        <div id="ajax-waiter"></div>-->
         <script>
             if (! Detector.webgl )
                 Detector.addGetWebGLMessage();
             
             var container, stats;
 
-            var camera, scene, renderer, controls, sun, sunLight ,sunLight2, pucesList, projector;
+            var camera, scene, renderer, controls, sun, sunLight ,sunLight2, projector;
             var puceCloned, plane;
-            var mirrorCubeCamera,cubeTarget,mirrorCube;            
+                        
             var t = 0;
             var clock = new THREE.Clock();
             var mouse = { x: 0, y: 0 }, INTERSECTED;
             
+            
+            
+            /*
+             * Fonctions de chargement en chaine des modèles collada
+             */
+            
+            <?php 
+                $cpt = 0;
+                $modelsKeys = array_keys($models);
+                foreach ($models as $key => $model): ?>
+                    
+                var <?php echo 'loader_for_'.$key; ?> = new THREE.ColladaLoader();
+                <?php echo 'loader_for_'.$key; ?>.options.convertUpAxis = true;
+                    
+                var <?php echo $key; ?> = null;  
+                var <?php echo $key.'Func'; ?> = function(){
+                    <?php echo 'loader_for_'.$key; ?>.load("<?php echo $model; ?>", function colladaReady(collada) {
+                        model = collada.scene;                
+                        model.scale.x = model.scale.y = model.scale.z = 0.02;
+                        model.updateMatrix();
+                        <?php echo $key; ?> = model;
+                        <?php if($cpt < count($models) - 1):
+                        echo $modelsKeys[$cpt+1].'Func();';
+                    else :
+                        ?> 
+                              init();
+                              animate();    
+                        <?php
+                    endif;
+                    ?>           
+                    },function(){} ); 
+                };
+                <?php 
+                $cpt++;
+                endforeach; 
+                ?>
+                    
+                    var pucePool =null;
+                    
             function init() {
-                
                 camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 2000 );
                 camera.position.set( -4, 2 , 0 );
 
@@ -63,42 +108,37 @@
                 controls.verticalMin = 1.1;
                 controls.verticalMax = 2.2;
 
-                
+            
 
-                mirrorCubeCamera = new THREE.CubeCamera( 0.1, 100, 128);
-                scene.add( mirrorCubeCamera );
-                cubeTarget = mirrorCubeCamera.renderTarget;
-                var loader = new THREE.ColladaLoader();
-                loader.options.convertUpAxis = true;
-                pucesList = [];
                 
-                var modelPath = './models/puce_classic_without_texture.dae';
-                var modelTexturePath = './textures/texture_argent_carre.jpg';
-                var attacheModelPath = './models/attache_argent.dae';
-               pucesList = PUCES.CreatePuce(scene, loader, pucesList , modelPath , modelTexturePath , attacheModelPath,false, false, true );
                 
-                console.log(pucesList);
+            pucePool = new PUCES(scene);           
+            
+            
+            
+            pucePool.createPuce("puce_01",
+                            <?php echo "classic_puce"; ?>,                                
+                            <?php echo "attache_argent"; ?>,
+                            "<?php echo "texture_argent"; ?>" ,
+                            true, true, false );
+               
+              pucePool.createPuce("puce_02",
+                            <?php echo "classic_puce"; ?>,                                
+                            <?php echo "attache_or"; ?>,
+                            "<?php echo "texture_or_petit_rond"; ?>" ,
+                            true, true, false );  
+            //
                 
-                PUCES.CreatePuce(scene, loader, pucesList , modelPath , modelTexturePath , attacheModelPath,false, false, true );
+              //  pucePool.createPuce(modelPath , modelTexturePath , attacheModelPath,false, false, true );
+              //  pucePool.createPuce(modelPath , modelTexturePath , attacheModelPath,false, false, true );                
+
+
+            
                 
-                PUCES.CreatePuce(scene, loader, pucesList , modelPath , modelTexturePath , attacheModelPath,false, false, true );
-                
-                PUCES.CreatePuce(scene, loader, pucesList , modelPath , modelTexturePath , attacheModelPath,false, false, true );
-                
-                PUCES.CreatePuce(scene, loader, pucesList , modelPath , modelTexturePath , attacheModelPath,false, false, true );
-                
-                PUCES.CreatePuce(scene, loader, pucesList , modelPath , modelTexturePath , attacheModelPath,false, false, true );
-                
-                PUCES.CreatePuce(scene, loader, pucesList , modelPath , modelTexturePath , attacheModelPath,false, false, true );
-                //initPuces(loader,'classic','argent');	
-                //      sphereDebug(1,1,1);
-              //  initPuces(loader,'classic','argent_carre');	
-             //   initPuces(loader,'classic','or_petit_rond');	
                 //   initTrees(loader);
                 initSun();
        
                 scene.fog = new THREE.FogExp2( 0xffffff, 0.001 );
-               
 
                 
                 // Lights
@@ -150,7 +190,9 @@
 
                 var timer = Date.now() * 0.0005;
                 mirrorCube.visible = false;
-                mirrorCubeCamera.updateCubeMap( renderer, scene );
+                
+                pucePool.update(renderer);
+                
                 mirrorCube.visible = true; 
                 controls.update( clock.getDelta() );
                 if(puceCloned)
@@ -291,10 +333,12 @@
             }
             
             $(document).ready(function() {
-                init();
-                animate();
+              /**
+               * Appel du premier modèle à charger => lancement de l'init et de l'animate
+               */      
+              <?php echo $modelsKeys[0].'Func();'; ?>
             });    
-        </script>
+        </script>        
         <a id="visualisation"></a>
     </body>
 </html>
