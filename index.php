@@ -105,7 +105,7 @@ var pucePool =null;
                     
 function init() {
     camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 2000 );
-    camera.position.set( -4, 2 , 0 );
+    camera.position.set( -15, 2 , 0 );
 
     renderer = new THREE.WebGLRenderer();  
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -130,10 +130,10 @@ function init() {
                 
                 
     controls = new THREE.FirstPersonControls( camera );
-    controls.movementSpeed = 3;
+    controls.movementSpeed = 4;
     controls.lookSpeed = 0.05;
-    controls.lookVertical = true;
-    controls.constrainVertical = true;
+    controls.lookVertical = false;
+    controls.constrainVertical = false;
     controls.verticalMin = 1.1;
     controls.verticalMax = 2.2;
 
@@ -154,14 +154,26 @@ function init() {
 <?php echo "classic_puce"; ?>,                                
 <?php echo "attache_argent"; ?>,
     "<?php echo "texture_argent"; ?>" ,
-    true, false, true ,0);
+    true, true, true ,0.02);
                
     pucePool.createPuce("puce_02",
 <?php echo "classic_puce"; ?>,                                
+<?php echo "attache_argent"; ?>,
+    "<?php echo "texture_argent_carre"; ?>" ,
+    true, true, true , 0.02);  
+    
+    pucePool.createPuce("puce_03",
+<?php echo "classic_puce"; ?>,                                
 <?php echo "attache_or"; ?>,
     "<?php echo "texture_or_petit_rond"; ?>" ,
-    true, false, true , 0);  
-    //
+    true, true, true , 0.02);  
+    
+    pucePool.createPuce("puce_04",
+<?php echo "classic_puce"; ?>,                                
+<?php echo "attache_or"; ?>,
+    "<?php echo "texture_or_petit_rond"; ?>" ,
+    true, true, true , 0.02);  
+   
                 
     //  pucePool.createPuce(modelPath , modelTexturePath , attacheModelPath,false, false, true );
     //  pucePool.createPuce(modelPath , modelTexturePath , attacheModelPath,false, false, true );                
@@ -171,16 +183,16 @@ function init() {
                 
     //   initTrees(loader);
     initSpot(0,20,-20,true,false);                                
-    //    initSpot(0,20,20,true,false);
+    initSpot(0,20,20,true,false);
        
     highLight = new THREE.SpotLight( 0xffffff,0);
     scene.add(highLight);
                                
-    scene.fog = new THREE.FogExp2( 0xffffff, 0.01 );
+    scene.fog = new THREE.FogExp2( 0xffffff, 0.05 );
 
                 
     // Lights
-    var ambianteLight = new THREE.AmbientLight( 0x444444 );
+    var ambianteLight = new THREE.AmbientLight( 0x333333 );
     scene.add(ambianteLight);
                 
     //     sphereDebug(0,2,12);             
