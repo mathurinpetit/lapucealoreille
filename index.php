@@ -154,25 +154,12 @@ function init() {
 <?php echo "classic_puce"; ?>,                                
 <?php echo "attache_argent"; ?>,
     "<?php echo "texture_argent"; ?>" ,
-    true, true, true ,0.02);
+    true, false, true ,0.05);
                
-    pucePool.createPuce("puce_02",
-<?php echo "classic_puce"; ?>,                                
-<?php echo "attache_argent"; ?>,
-    "<?php echo "texture_argent_carre"; ?>" ,
-    true, true, true , 0.02);  
+    pucePool.move("puce_01",0,2,0);
+
     
-    pucePool.createPuce("puce_03",
-<?php echo "classic_puce"; ?>,                                
-<?php echo "attache_or"; ?>,
-    "<?php echo "texture_or_petit_rond"; ?>" ,
-    true, true, true , 0.02);  
-    
-    pucePool.createPuce("puce_04",
-<?php echo "classic_puce"; ?>,                                
-<?php echo "attache_or"; ?>,
-    "<?php echo "texture_or_petit_rond"; ?>" ,
-    true, true, true , 0.02);  
+
    
                 
     //  pucePool.createPuce(modelPath , modelTexturePath , attacheModelPath,false, false, true );
@@ -188,7 +175,7 @@ function init() {
     highLight = new THREE.SpotLight( 0xffffff,0);
     scene.add(highLight);
                                
-    scene.fog = new THREE.FogExp2( 0xffffff, 0.05 );
+   // scene.fog = new THREE.FogExp2( 0xffffff, 0.05 );
 
                 
     // Lights
