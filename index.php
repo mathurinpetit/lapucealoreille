@@ -1,7 +1,12 @@
 <?php
-$models = array('classic_puce' => './models/puce_classic_without_texture.dae',
+$dae_models = array('classic_puce' => './models/puce_classic_without_texture.dae',
     'attache_or' => './models/attache_or.dae',
     'attache_argent' => './models/attache_argent.dae');
+
+$models = array('classic_or_rond' => array('puce_model' => 'classic_puce',
+                                           'attache_model' => 'attache_or',
+                                            'texture' => 'texture_or_petit_rond'));
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -45,8 +50,8 @@ $models = array('classic_puce' => './models/puce_classic_without_texture.dae',
             
 <?php
 $cpt = 0;
-$modelsKeys = array_keys($models);
-foreach ($models as $key => $model):
+$dae_models_keys = array_keys($dae_models);
+foreach ($dae_models as $key => $dae_model):
     ?>
                                     
             var <?php echo 'loader_for_' . $key; ?> = new THREE.ColladaLoader();
@@ -54,14 +59,14 @@ foreach ($models as $key => $model):
                                     
             var <?php echo $key; ?> = null;  
             var <?php echo $key . 'Func'; ?> = function(){
-    <?php echo 'loader_for_' . $key; ?>.load("<?php echo $model; ?>", function colladaReady(collada) {
+    <?php echo 'loader_for_' . $key; ?>.load("<?php echo $dae_model; ?>", function colladaReady(collada) {
                 model = collada.scene;                
                 model.scale.x = model.scale.y = model.scale.z = 0.02;
                 model.updateMatrix();
     <?php echo $key; ?> = model;
     <?php
-    if ($cpt < count($models) - 1):
-        echo $modelsKeys[$cpt + 1] . 'Func();';
+    if ($cpt < count($dae_models) - 1):
+        echo $dae_models_keys[$cpt + 1] . 'Func();';
     else :
         ?> 
                         init();
@@ -149,14 +154,16 @@ function init() {
     sound.position.z = 0;
     sound.playSound();  
             
-            
-    pucePool.createPuce("puce_01",
-<?php echo "classic_puce"; ?>,                                
-<?php echo "attache_argent"; ?>,
-    "<?php echo "texture_argent"; ?>" ,
-    true, false, true ,0.05);
+            <?php 
+            foreach ($models as $model_name => $model): ?>
+                pucePool.createPuce("<?php echo $model_name; ?>",
+                <?php echo $model["puce_model"]; ?>,   
+                    <?php echo $model["attache_model"]; ?>,
+    "<?php echo $model["texture"]; ?>" ,
+    true, false, true ,0.01);
                
-    pucePool.move("puce_01",0,2,0);
+           <?php  endforeach; ?>
+               
 
     
 
@@ -219,6 +226,7 @@ function onDocumentMouseClick( event ) {
     event.preventDefault();
     if(INTERSECTED != null){
         alert(INTERSECTED.id);
+        $('form#'+INTERSECTED.id).submit();
     }
 } 
             
@@ -399,9 +407,15 @@ $(document).ready(function() {
     /**
      * Appel du premier modèle à charger => lancement de l'init et de l'animate
      */      
-<?php echo $modelsKeys[0] . 'Func();'; ?>
+<?php echo $dae_models_keys[0] . 'Func();'; ?>
 });    
-        </script>        
-        <a id="visualisation"></a>
+        </script>
+        <?php foreach ($models as $model_name => $model) : 
+     
+            ?>
+        
+        <form id="<?php echo $model_name; ?>" action="./<?php echo $model_name; ?>" method="post" ></form>
+        <?php 
+        endforeach; ?>
     </body>
 </html>
