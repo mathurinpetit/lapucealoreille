@@ -1,11 +1,18 @@
 <?php
-$dae_models = array('classic_puce' => './models/puce_classic_without_texture.dae',
+$dae_models = array('logo' => './models/logo.dae',
+    'classic_puce' => './models/puce_classic_without_texture.dae',
     'attache_or' => './models/attache_or.dae',
     'attache_argent' => './models/attache_argent.dae');
 
 $models = array('classic_or_rond' => array('puce_model' => 'classic_puce',
                                            'attache_model' => 'attache_or',
-                                            'texture' => 'texture_or_petit_rond'));
+                                            'texture' => 'texture_or_petit_rond'),
+    'classic_argent' => array('puce_model' => 'classic_puce',
+                                           'attache_model' => 'attache_argent',
+                                            'texture' => 'texture_argent'),
+    'classic_argent_carre' => array('puce_model' => 'classic_puce',
+                                           'attache_model' => 'attache_argent',
+                                            'texture' => 'texture_argent_carre'));
 
 ?>
 <!DOCTYPE html>
@@ -160,12 +167,14 @@ function init() {
                 <?php echo $model["puce_model"]; ?>,   
                     <?php echo $model["attache_model"]; ?>,
     "<?php echo $model["texture"]; ?>" ,
-    true, false, true ,0.01);
+    true, false, true ,0.05);
                
-           <?php  endforeach; ?>
+          <?php  endforeach; ?>
                
-
-    
+logo.position.y = 2;
+logo.rotation.y = Math.PI/2;
+logo.scale.x = logo.scale.y = logo.scale.z = 0.05;
+    scene.add( logo );
 
    
                 
@@ -225,8 +234,8 @@ function onDocumentMouseMove( event ) {
 function onDocumentMouseClick( event ) {
     event.preventDefault();
     if(INTERSECTED != null){
-        alert(INTERSECTED.id);
-        $('form#'+INTERSECTED.id).submit();
+        var model = INTERSECTED.id;
+        $('form#'+model).submit();
     }
 } 
             
