@@ -191,7 +191,7 @@ logo.scale.x = logo.scale.y = logo.scale.z = 0.05;
     highLight = new THREE.SpotLight( 0xffffff,0);
     scene.add(highLight);
                                
-   // scene.fog = new THREE.FogExp2( 0xffffff, 0.05 );
+    scene.fog = new THREE.FogExp2( 0xffffff, 0.05 );
 
                 
     // Lights
@@ -296,7 +296,7 @@ function sphereDebug(x,y,z){
 }
             
 function initSpot(x,y,z,shadow,debug){
-    var spot = new THREE.SpotLight( 0xffffff,1);
+    var spot = new THREE.SpotLight( 0xffffff,0.7);
     setSpotParameters(spot,x,y,z,shadow,debug);   
     scene.add(spot); 
 }
@@ -402,6 +402,7 @@ function highLightInit(dist){
             
 function highLightDisable(obj){
     highLight.intensity = 0;
+    $('canvas').css('cursor','default');
 }
                         
 function highLightEnable(obj,vector,dist,direction){
@@ -409,7 +410,8 @@ function highLightEnable(obj,vector,dist,direction){
     var position = vector.sub(obj.position,direction);
     setSpotParameters(highLight,position.x,position.y,position.z,true,false);
     highLight.target.position.set(obj.position.x,obj.position.y,obj.position.z);
-    highLight.intensity = 0.7;
+    highLight.intensity = 1;
+    $('canvas').css('cursor','pointer');
 }
             
 $(document).ready(function() {
@@ -423,7 +425,7 @@ $(document).ready(function() {
      
             ?>
         
-        <form id="<?php echo $model_name; ?>" action="./<?php echo $model_name; ?>" method="post" ></form>
+        <form id="<?php echo $model_name; ?>" action="<?php echo $model_name; ?>.php" method="post" ></form>
         <?php 
         endforeach; ?>
     </body>
