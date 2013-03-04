@@ -31,13 +31,14 @@ $models = array('classic_or_rond' => array('puce_model' => 'classic_puce',
 
         <script src="lib/three.js/Detector.js"></script>
         <script src="lib/three.js/Stats.js"></script>
+        <script src="lib/Panier.js"></script>
         <script src="lib/Puces.js"></script>
         <!--        <div id="ajax-waiter"></div>-->
         <script>
             if (! Detector.webgl )
                 Detector.addGetWebGLMessage();
-            
-            var container, stats;
+            var debug = true;
+            var container, stats, panier;
 
             var camera, scene, renderer, controls, projector;
             var highLight;
@@ -137,6 +138,7 @@ function init() {
                 
     container = document.createElement( 'div' );
     document.body.appendChild( container );
+    
     scene = new THREE.Scene();
     projector = new THREE.Projector();
                 
@@ -191,7 +193,7 @@ logo.scale.x = logo.scale.y = logo.scale.z = 0.05;
     highLight = new THREE.SpotLight( 0xffffff,0);
     scene.add(highLight);
                                
-    scene.fog = new THREE.FogExp2( 0xffffff, 0.05 );
+   // scene.fog = new THREE.FogExp2( 0xffffff, 0.05 );
 
                 
     // Lights
@@ -202,12 +204,19 @@ logo.scale.x = logo.scale.y = logo.scale.z = 0.05;
        
        
     createFloor();
-    //         createPlafond();
-                
-    stats = new Stats();
-    stats.domElement.style.position = 'absolute';
-    stats.domElement.style.top = '0px';
-    container.appendChild( stats.domElement );
+    
+    if(debug){            
+        stats = new Stats();
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.top = '0px';
+        container.appendChild( stats.domElement );
+    }
+    
+    panier = new Panier();
+    panier.domElement.style.position = 'absolute';
+    panier.domElement.style.top = '0px';
+    panier.domElement.style.right = '500px';
+    container.appendChild( panier.domElement );
 
 
     window.addEventListener( 'resize', onWindowResize, false );
@@ -235,7 +244,8 @@ function onDocumentMouseClick( event ) {
     event.preventDefault();
     if(INTERSECTED != null){
         var model = INTERSECTED.id;
-        $('form#'+model).submit();
+        pucePool.setVitesseTranslationRotationForAll(0,0);
+        displayModelPanel(model);
     }
 } 
             
@@ -245,15 +255,14 @@ function animate() {
                 
     requestAnimationFrame( animate );
     render();
-    stats.update();
+    if(debug)
+        stats.update();
 }
             
 function render() {
 
-    var timer = Date.now() * 0.0005;
-    mirrorCube.visible = false;                
-    pucePool.update(renderer);                
-    mirrorCube.visible = true; 
+    var timer = Date.now() * 0.0005;              
+    pucePool.update(renderer);     
                 
     controls.update( clock.getDelta() );
         
@@ -316,6 +325,17 @@ function setSpotParameters(spot,x,y,z,shadow,debug){
 
     spot.shadowCameraVisible = debug;
 }
+
+function displayModelPanel(model){
+    var id0 = model+'_panel_0';
+    var id1 = model+'_panel_1';
+    
+    pucePool.copyPuceForPanel(model, id0);
+    pucePool.setPosition(id0, 1, 1, 1);    
+    
+    pucePool.copyPuceForPanel(model, id1);
+    pucePool.setPosition(id1, 1, 2, 1);
+}
                         
 function initTrees(loader){
     loader.load( './models/tree.dae', function ( collada ) {
@@ -349,29 +369,19 @@ function createTree(tree,x,z){
     scene.add( treeCloned );
                     
 }
-            
+
 function createFloor(){
-    var cubeGeom = new THREE.CubeGeometry(100, 100, 100, 1, 1, 1);
-    var mirrorCubeMaterial = new THREE.MeshPhongMaterial( {color: 0xFFFFFF});//, envMap: mirrorCubeCamera.renderTarget } );
-    mirrorCube = new THREE.Mesh( cubeGeom, mirrorCubeMaterial );
-    mirrorCube.position.set(0,-50,0);
-    mirrorCube.receiveShadow = true;
-    scene.add(mirrorCube); 
+    var groundGeo = new THREE.PlaneGeometry(400, 400);
+    var groundMat = new THREE.MeshPhongMaterial( {color: 0xFFFFFF});
+    var ground = new THREE.Mesh(groundGeo,groundMat); 
+    ground.position.y = -1; 
+    ground.rotation.x = -Math.PI/2; 
+    ground.doubleSided = true; 
+    ground.receiveShadow = true;
+    scene.add(ground); 
 }
-            
-function createPlafond(){
-    var planeGeo = new THREE.CubeGeometry(-100,0,0,100,100,100);// 10,10);
-    var planeMat = new THREE.MeshPhongMaterial({color: 0xFF0000});
-    plane = new THREE.Mesh(planeGeo, planeMat);
-    // plane.rotation.z = Math.PI/2;
-    plane.position.y = 5;
-    scene.add(plane);
-}
-            
-function updateTrees(){
-    //reperer la zone de camera et update le arbres
-}
-            
+ 
+                
 function highLightInit(dist){
     // find intersections
     var vector = new THREE.Vector3( mouse.x, mouse.y, 1 );
@@ -425,7 +435,9 @@ $(document).ready(function() {
      
             ?>
         
-        <form id="<?php echo $model_name; ?>" action="<?php echo $model_name; ?>.php" method="post" ></form>
+        <form id="<?php echo $model_name; ?>" action="visualisation.php" method="post" >
+            <input type="text" hidden="<?php echo $model_name; ?>" name="model" value="<?php echo $model_name; ?>"/>
+        </form>
         <?php 
         endforeach; ?>
     </body>
