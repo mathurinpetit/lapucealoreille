@@ -212,7 +212,7 @@ logo.scale.x = logo.scale.y = logo.scale.z = 0.05;
         container.appendChild( stats.domElement );
     }
     
-    panier = new Panier();
+    panier = new Panier(this);
     panier.domElement.style.position = 'absolute';
     panier.domElement.style.top = '0px';
     panier.domElement.style.right = '500px';
@@ -327,14 +327,24 @@ function setSpotParameters(spot,x,y,z,shadow,debug){
 }
 
 function displayModelPanel(model){
+    
+    var vector = new THREE.Vector3( model.x, model.y, model.z);
+    var direction = vector.subSelf( camera.position ).normalize();
+    var angle = vector.angleTo(new THREE.Vector3( 0, 0, 1));
+    console.log(angle);
     var id0 = model+'_panel_0';
     var id1 = model+'_panel_1';
     
-    pucePool.copyPuceForPanel(model, id0);
-    pucePool.setPosition(id0, 1, 1, 1);    
+    createTransparentPanel(direction);
+    var x = camera.position.x + (direction.x)*6;
+    var y = camera.position.y + (direction.y)*6;
+    var z = camera.position.z + (direction.z)*6;
     
-    pucePool.copyPuceForPanel(model, id1);
-    pucePool.setPosition(id1, 1, 2, 1);
+    pucePool.copyPuceForPanel(model, id0);
+    pucePool.setPosition(id0, x, y, z);    
+    
+//    pucePool.copyPuceForPanel(model, id1);
+//    pucePool.setPosition(id1, x+1, y, z);
 }
                         
 function initTrees(loader){
@@ -381,6 +391,24 @@ function createFloor(){
     scene.add(ground); 
 }
  
+function createTransparentPanel(direction){
+    var panelGeo = new THREE.PlaneGeometry(5, 5);
+    var panelMat = new THREE.MeshPhongMaterial( {color: 0x000000, opacity:0.5, transparent: true});
+    panelMat.side = THREE.DoubleSide;
+    var panel = new THREE.Mesh(panelGeo,panelMat);    
+    panel.doubleSided = true; 
+    var v = panel.position.clone();
+    v.addSelf( direction );
+    panel.lookAt( v ); 
+     panel.position.x = camera.position.x + direction.x * 8;
+    panel.position.y = camera.position.y + direction.y * 8;
+    panel.position.z = camera.position.z + direction.z * 8;
+    scene.add(panel); 
+    
+    var html = $("de").html();
+    new THREE.WebGLRenderer({canvas : html});
+    highLightEnable(panel, camera.position, 10, direction);
+}
                 
 function highLightInit(dist){
     // find intersections
@@ -414,16 +442,20 @@ function highLightDisable(obj){
     highLight.intensity = 0;
     $('canvas').css('cursor','default');
 }
+
                         
 function highLightEnable(obj,vector,dist,direction){
-    direction.multiplyScalar(dist);
-    var position = vector.sub(obj.position,direction);
+    var d = direction.clone();
+    d.multiplyScalar(dist);
+    var position = vector.sub(obj.position,d);
     setSpotParameters(highLight,position.x,position.y,position.z,true,false);
     highLight.target.position.set(obj.position.x,obj.position.y,obj.position.z);
     highLight.intensity = 1;
     $('canvas').css('cursor','pointer');
 }
-            
+      
+
+
 $(document).ready(function() {
     /**
      * Appel du premier modèle à charger => lancement de l'init et de l'animate
