@@ -49,7 +49,7 @@ $models = array('classic_or_rond' => array('puce_model' => 'classic_puce',
             var t = 0;
             var clock = new THREE.Clock();
             var mouse = { x: 0, y: 0 }, INTERSECTED;
-            
+            var stop = false;
             
             
             /*
@@ -243,9 +243,8 @@ function onDocumentMouseMove( event ) {
 function onDocumentMouseClick( event ) {
     event.preventDefault();
     if(INTERSECTED != null){
-        var model = INTERSECTED.id;
         pucePool.setVitesseTranslationRotationForAll(0,0);
-        displayModelPanel(model);
+        displayModelPanel(INTERSECTED.id);
     }
 } 
             
@@ -263,9 +262,9 @@ function render() {
 
     var timer = Date.now() * 0.0005;              
     pucePool.update(renderer);     
-                
-    controls.update( clock.getDelta() );
-        
+    if(!stop){            
+        controls.update( clock.getDelta() );
+    }
     sound.updateSound( camera );   
     highLightInit(4);
                             
@@ -326,25 +325,31 @@ function setSpotParameters(spot,x,y,z,shadow,debug){
     spot.shadowCameraVisible = debug;
 }
 
-function displayModelPanel(model){
+function displayModelPanel(id){
     
-    var vector = new THREE.Vector3( model.x, model.y, model.z);
+    stop = true;
+    var pucePosition = pucePool.getPosition(id);
+    highLightDisable(id);
+    var vector = new THREE.Vector3( pucePosition.x, camera.position.y, pucePosition.z);
     var direction = vector.subSelf( camera.position ).normalize();
-    var angle = vector.angleTo(new THREE.Vector3( 0, 0, 1));
-    console.log(angle);
-    var id0 = model+'_panel_0';
-    var id1 = model+'_panel_1';
     
-    createTransparentPanel(direction);
-    var x = camera.position.x + (direction.x)*6;
-    var y = camera.position.y + (direction.y)*6;
-    var z = camera.position.z + (direction.z)*6;
+    var id0 = id+'_panel_0';
+    var id1 = id+'_panel_1';
     
-    pucePool.copyPuceForPanel(model, id0);
-    pucePool.setPosition(id0, x, y, z);    
+    var v = createTransparentPanel(direction);
     
-//    pucePool.copyPuceForPanel(model, id1);
-//    pucePool.setPosition(id1, x+1, y, z);
+    var x0 = camera.position.x + (v.x)*6;
+    var z0 = camera.position.z + (v.z)*6;
+    
+    pucePool.copyPuceForPanel(id, id0);
+    pucePool.setPosition(id0, x0, 2, z0);  
+    
+    var x1 = x0 - v.z;
+    var z1 = z0 + v.x;
+    
+    pucePool.copyPuceForPanel(id, id1);
+    pucePool.setPosition(id1, x1, 2, z1);
+    
 }
                         
 function initTrees(loader){
@@ -392,22 +397,21 @@ function createFloor(){
 }
  
 function createTransparentPanel(direction){
-    var panelGeo = new THREE.PlaneGeometry(5, 5);
+    var panelGeo = new THREE.PlaneGeometry(10, 6);
     var panelMat = new THREE.MeshPhongMaterial( {color: 0x000000, opacity:0.5, transparent: true});
     panelMat.side = THREE.DoubleSide;
     var panel = new THREE.Mesh(panelGeo,panelMat);    
     panel.doubleSided = true; 
     var v = panel.position.clone();
     v.addSelf( direction );
+    v.y = 0;
     panel.lookAt( v ); 
-     panel.position.x = camera.position.x + direction.x * 8;
-    panel.position.y = camera.position.y + direction.y * 8;
+    panel.position.x = camera.position.x + direction.x * 8;
+    panel.position.y = 2;
     panel.position.z = camera.position.z + direction.z * 8;
-    scene.add(panel); 
-    
-    var html = $("de").html();
-    new THREE.WebGLRenderer({canvas : html});
-    highLightEnable(panel, camera.position, 10, direction);
+    scene.add(panel);
+    highLightEnable(panel, direction, 10, v);    
+    return v;
 }
                 
 function highLightInit(dist){
@@ -439,7 +443,9 @@ function highLightInit(dist){
 }
             
 function highLightDisable(obj){
+   if(!stop){
     highLight.intensity = 0;
+   }    
     $('canvas').css('cursor','default');
 }
 
@@ -447,7 +453,8 @@ function highLightDisable(obj){
 function highLightEnable(obj,vector,dist,direction){
     var d = direction.clone();
     d.multiplyScalar(dist);
-    var position = vector.sub(obj.position,d);
+    var position = vector.clone();
+    position.sub(obj.position,d);
     setSpotParameters(highLight,position.x,position.y,position.z,true,false);
     highLight.target.position.set(obj.position.x,obj.position.y,obj.position.z);
     highLight.intensity = 1;
