@@ -44,12 +44,13 @@ $models = array('classic_or_rond' => array('puce_model' => 'classic_puce',
             var sound;
             
             var plane;
-            var panel;            
+            var panelOverlay = [];             
+            var panelText; 
             var t = 0;
             var clock = new THREE.Clock();
             var mouse = { x: 0, y: 0 }, INTERSECTED;
             var stop = false;
-            
+            var selectedModel_0, selectedModel_1;
             
             /*
              * Fonctions de chargement en chaine des modèles collada
@@ -174,12 +175,8 @@ function init() {
     "<?php echo $model["texture"]; ?>" ,
     true, false, true ,0.05);
                
-          <?php  endforeach; ?>
-               
-logo.position.y = 2;
-logo.rotation.y = Math.PI/2;
-logo.scale.x = logo.scale.y = logo.scale.z = 0.05;
-    scene.add( logo );
+          <?php  endforeach; ?>              
+
 
    
                 
@@ -196,7 +193,7 @@ logo.scale.x = logo.scale.y = logo.scale.z = 0.05;
     highLight = new THREE.SpotLight( 0xffffff,0);
     scene.add(highLight);
                                
-   // scene.fog = new THREE.FogExp2( 0xffffff, 0.05 );
+    scene.fog = new THREE.FogExp2( 0x778877, 0.04 );
 
                 
     // Lights
@@ -251,11 +248,50 @@ function onDocumentMouseClick( event ) {
     }
 } 
 
-//function loopAudio(){
-//    document.getElementById('audio').addEventListener('ended', function(){
-//        this.currentTime = 0;
-//    }, false);
-//}
+function onDocumentMousePanelClick( event ) {
+    event.preventDefault();
+    for (var i in panelOverlay){
+        scene.remove(panelOverlay[i]);
+        delete panelOverlay[i];
+    }
+    scene.remove(panelText);
+    scene.remove(logo);
+    pucePool.removeModel(selectedModel_0);
+    pucePool.removeModel(selectedModel_1);
+    document.removeEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
+    document.removeEventListener( 'click', onDocumentMousePanelClick, false );
+    pucePool.setVitesseTranslationRotationForAll(0.05,0.05);
+    stop = false;
+} 
+
+
+
+function onDocumentMouseWheel( event ){
+    event.preventDefault();
+    var delta = 0;
+    if (event.wheelDelta) {
+        delta = event.wheelDelta / 600;
+ 
+    } else if (event.detail) {
+         delta = -event.detail / 20;
+    }
+    var pos0 = pucePool.getPosition(selectedModel_0);
+    var pos1 = pucePool.getPosition(selectedModel_1);
+    
+    if(delta > 0 && pos0.y < -0.4) 
+        return;
+    if(delta < 0 && pos0.y > 8.30) 
+        return;
+    for(var i in panelOverlay){
+        panelOverlay[i].position.y += -delta;
+    }
+    panelText.position.y += -delta;
+    logo.position.y += -delta;
+    pucePool.setPosition(selectedModel_0,pos0.x, pos0.y - delta, pos0.z);
+    pucePool.setPosition(selectedModel_1,pos1.x, pos1.y - delta, pos1.z);
+
+}
+
 
 function animate() {
                 
@@ -342,22 +378,23 @@ function displayModelPanel(id){
     var vector = new THREE.Vector3( pucePosition.x, camera.position.y, pucePosition.z);
     var direction = vector.subSelf( camera.position ).normalize();
     
-    var id0 = id+'_panel_0';
-    var id1 = id+'_panel_1';
+    selectedModel_0 = id+'_panel_0';
+    selectedModel_1 = id+'_panel_1';
     
-    var v = createTransparentPanel(direction);
+    var v = createTransparentPanel(direction,id);
     
-    var x0 = camera.position.x + (v.x)*6;
-    var z0 = camera.position.z + (v.z)*6;
+    var x0 = camera.position.x + (v.x)*8;
+    var z0 = camera.position.z + (v.z)*8;
     
-    pucePool.copyPuceForPanel(id, id0);
-    pucePool.setPosition(id0, x0, 2, z0);  
+    var vectX = 2.2*v.z;
+    var vectZ = -2.2*v.x;
     
-    var x1 = x0 - v.z;
-    var z1 = z0 + v.x;
+    pucePool.copyPuceForPanel(id, selectedModel_0);
+    pucePool.setPosition(selectedModel_0, x0+vectX, 1.4, z0+vectZ);  
     
-    pucePool.copyPuceForPanel(id, id1);
-    pucePool.setPosition(id1, x1, 2, z1);
+    
+    pucePool.copyPuceForPanel(id, selectedModel_1);
+    pucePool.setPosition(selectedModel_1, x0 + 1.6 * vectX, 1.4, z0 + 1.6 * vectZ);
     
 }
                         
@@ -405,21 +442,116 @@ function createFloor(){
     scene.add(ground); 
 }
  
-function createTransparentPanel(direction){
-    var panelGeo = new THREE.PlaneGeometry(10, 6);
-    var panelMat = new THREE.MeshPhongMaterial( {color: 0x000000, opacity:0.5, transparent: true});
-    panelMat.side = THREE.DoubleSide;
-    panel = new THREE.Mesh(panelGeo,panelMat);    
-    panel.doubleSided = true; 
-    var v = panel.position.clone();
+function createTransparentPanel(direction,modelType){
+    
+    var c = document.createElement("canvas");
+    $(c).append('<a href="#">Ca c\'est google</a>');
+    
+    var xc = c.getContext("2d");
+    c.width = c.height = 1024;
+    
+    //xc.shadowBlur = 1;
+    xc.fillStyle = "black";
+    xc.font = "10pt arial bold";
+    xc.fillText("LA PUCE A L'OREILLE", 200, 40);
+    xc.fillText("Modèle : \"Classics Or\"", 40, 160);
+    xc.fillText("Type de puce : \"Classics Or rond (S)\"", 40, 200);
+    xc.fillText("Attache : \"Or\"", 40, 240);
+    xc.fillText("Cette paire est constituée d'une puce \"Classics Or rond\" ", 440, 300);
+    xc.fillText("dont le centre est rond et porte une attache simple dorée.", 400, 340);
+    xc.fillText("Elle fait partie de la collection des \"Classics\", ",400, 380);
+    xc.fillText("première collection vendue par La Puce à l'oreille.",400, 420);
+    xc.fillText("C'est une boucle d'oreille élégante et simple",400, 460);
+    xc.fillText("tout en restant originale. Entièrement fait main",400, 500);
+    xc.fillText("avec des puces de récupération, elle présente une",400, 540);
+    xc.fillText("mise en bijoux écologique d'un produit courant.",400, 580);
+    xc.fillText("Première paire des créations La Puce à l'oreille,",500, 620);
+    xc.fillText("Elle est le \"Must have\" de la marque.", 500,660);
+    xc.fillStyle = "red";
+    xc.fillRect(500, 700, 100, 50);
+    var htmlImg = document.getElementById("html5Img");
+    xc.drawImage(htmlImg, 40, 500);
+ 
+    
+    
+    var panelTextGeo = new THREE.PlaneGeometry(10, 10);
+    
+    var panelOverlayGeo_0 = new THREE.PlaneGeometry(10, 1.5);
+    var panelOverlayGeo_1 = new THREE.PlaneGeometry(0.5, 3.5);
+    var panelOverlayGeo_2 = new THREE.PlaneGeometry(6.5, 3.5);
+    var panelOverlayGeo_3 = new THREE.PlaneGeometry(10, 7.25);
+    
+    var panelOverlayMat = new THREE.MeshPhongMaterial( {color: 0x000000, opacity:0.35, transparent: true});
+    
+    var texture = new THREE.Texture(c);
+    var xm = new THREE.MeshLambertMaterial({map: texture, transparent:true });
+    xm.doubleSided = true; 
+    xm.map.needsUpdate = true;
+    
+    panelText = new THREE.Mesh(panelTextGeo, xm);
+    
+    var panelOverlay_0 = new THREE.Mesh(panelOverlayGeo_0,panelOverlayMat);
+    var panelOverlay_1 = new THREE.Mesh(panelOverlayGeo_1,panelOverlayMat);
+    var panelOverlay_2 = new THREE.Mesh(panelOverlayGeo_2,panelOverlayMat);
+    var panelOverlay_3 = new THREE.Mesh(panelOverlayGeo_3,panelOverlayMat);
+    
+    var v = panelText.position.clone();
     v.addSelf( direction );
     v.y = 0;
-    panel.lookAt( v ); 
-    panel.position.x = camera.position.x + direction.x * 8;
-    panel.position.y = 2;
-    panel.position.z = camera.position.z + direction.z * 8;
-    scene.add(panel);
-    highLightEnable(panel, direction, 10, v);    
+    var vI = v.clone().multiplyScalar(-1);
+    panelText.lookAt( vI ); 
+    logo.lookAt(vI);
+    panelOverlay_0.lookAt( vI ); 
+    panelOverlay_1.lookAt( vI ); 
+    panelOverlay_2.lookAt( vI );
+    panelOverlay_3.lookAt( vI );
+    panelText.doubleSided = panelOverlay_0.doubleSided = panelOverlay_1.doubleSided = panelOverlay_2.doubleSided = panelOverlay_3.doubleSided = true; 
+    
+    var baseX = camera.position.x + direction.x * 8;
+    var baseZ = camera.position.z + direction.z * 8;
+    
+    panelText.position.x = panelOverlay_0.position.x = panelOverlay_1.position.x = panelOverlay_2.position.x = panelOverlay_3.position.x = baseX ;
+    panelText.position.y = panelOverlay_0.position.y = panelOverlay_1.position.y = panelOverlay_2.position.y = panelOverlay_3.position.y = 0;
+    panelText.position.z = panelOverlay_0.position.z = panelOverlay_1.position.z = panelOverlay_2.position.z = panelOverlay_3.position.z = baseZ ;
+    
+    panelText.position.x -= direction.x * 0.1;
+    panelText.position.z -= direction.z * 0.1;
+    
+    
+    
+    panelOverlay_0.position.y +=4.5;
+    panelOverlay_1.position.y += 2;
+    panelOverlay_2.position.y += 2;
+    panelOverlay_1.position.z += - 4.75*v.x;
+    panelOverlay_1.position.x += 4.75*v.z;
+    panelOverlay_2.position.z += 1.75*v.x;
+    panelOverlay_2.position.x += -1.75*v.z;
+    panelOverlay_3.position.y -= 3.375;
+    
+    scene.add(panelText);
+    scene.add(panelOverlay_0);
+    panelOverlay.push(panelOverlay_0);
+    
+    scene.add(panelOverlay_1);
+    panelOverlay.push(panelOverlay_1);
+    
+    scene.add(panelOverlay_2);
+    panelOverlay.push(panelOverlay_2);
+    
+    scene.add(panelOverlay_3);
+    panelOverlay.push(panelOverlay_3);
+    
+    var logoPosBase = panelOverlay_0.position.clone();
+    logo.position.z = logoPosBase.z + 2.75*v.x + direction.z * -0.5;
+    logo.position.x = logoPosBase.x - 2.75*v.z + direction.x * -0.5;
+    logo.position.y = logoPosBase.y - 0.5;  
+    //logo.rotation.y = Math.PI;
+    logo.scale.x = logo.scale.y = logo.scale.z = 0.05;
+    scene.add( logo );
+    
+    document.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
+    document.addEventListener( 'click', onDocumentMousePanelClick, false );
+    highLightEnable(panelText, direction, 10, v);    
     return v;
 }
                 
@@ -450,7 +582,11 @@ function highLightInit(dist){
         INTERSECTED = null;
     }   
 }
-            
+       
+       function addPanier(){
+           console.log('addPanier');
+       }
+       
 function highLightDisable(obj){
    if(!stop){
     highLight.intensity = 0;
@@ -488,5 +624,6 @@ $(document).ready(function() {
         </form>
         <?php 
         endforeach; ?>
+        <img id="html5Img" src="/textures/texture_2.jpg" alt="logo html5" width="160" height="120" hidden onclick="addPanier()" />
     </body>
 </html>
