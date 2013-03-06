@@ -21,19 +21,18 @@ $models = array('classic_or_rond' => array('puce_model' => 'classic_puce',
         <title>La Puce à l'oreille</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    </head>
-    <body>
-        <script type="text/css" src="css/main.css"></script>
+                
+        <LINK href="css/main.css" rel="stylesheet" type="text/css">
         <script src="lib/jquery-1.8.3.js"></script>
         <script src="lib/three.js/three.js"></script>
         <script src="lib/three.js/FirstPersonControls.js"></script>
         <script src="lib/three.js/ColladaLoader.js"></script>
-
         <script src="lib/three.js/Detector.js"></script>
         <script src="lib/three.js/Stats.js"></script>
         <script src="lib/Panier.js"></script>
         <script src="lib/Puces.js"></script>
-        <!--        <div id="ajax-waiter"></div>-->
+    </head>
+    <body>        
         <script>
             if (! Detector.webgl )
                 Detector.addGetWebGLMessage();
@@ -45,7 +44,7 @@ $models = array('classic_or_rond' => array('puce_model' => 'classic_puce',
             var sound;
             
             var plane;
-                        
+            var panel;            
             var t = 0;
             var clock = new THREE.Clock();
             var mouse = { x: 0, y: 0 }, INTERSECTED;
@@ -112,6 +111,10 @@ var Sound = function ( sources, radius, volume ) {
             audio.volume = 0;
         }
     }
+    
+    audio.addEventListener('ended', function(){
+        this.currentTime = 0;
+    }, false);
 }
 
 var pucePool =null;
@@ -247,7 +250,13 @@ function onDocumentMouseClick( event ) {
         displayModelPanel(INTERSECTED.id);
     }
 } 
-            
+
+//function loopAudio(){
+//    document.getElementById('audio').addEventListener('ended', function(){
+//        this.currentTime = 0;
+//    }, false);
+//}
+
 function animate() {
                 
     //  updateTrees();
@@ -400,7 +409,7 @@ function createTransparentPanel(direction){
     var panelGeo = new THREE.PlaneGeometry(10, 6);
     var panelMat = new THREE.MeshPhongMaterial( {color: 0x000000, opacity:0.5, transparent: true});
     panelMat.side = THREE.DoubleSide;
-    var panel = new THREE.Mesh(panelGeo,panelMat);    
+    panel = new THREE.Mesh(panelGeo,panelMat);    
     panel.doubleSided = true; 
     var v = panel.position.clone();
     v.addSelf( direction );
