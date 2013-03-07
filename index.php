@@ -445,19 +445,19 @@ function createFloor(){
 function createTransparentPanel(direction,modelType){
     
     var c = document.createElement("canvas");
-    $(c).append('<a href="#">Ca c\'est google</a>');
     
     var xc = c.getContext("2d");
     c.width = c.height = 1024;
     
     //xc.shadowBlur = 1;
     xc.fillStyle = "black";
+    xc.font = "14pt arial bold";
+    xc.fillText("LA PUCE A L'OREILLE - Modèle Classic Or Rond Small", 200, 40);
     xc.font = "10pt arial bold";
-    xc.fillText("LA PUCE A L'OREILLE", 200, 40);
-    xc.fillText("Modèle : \"Classics Or\"", 40, 160);
-    xc.fillText("Type de puce : \"Classics Or rond (S)\"", 40, 200);
-    xc.fillText("Attache : \"Or\"", 40, 240);
-    xc.fillText("Cette paire est constituée d'une puce \"Classics Or rond\" ", 440, 300);
+    xc.fillText("Modèle : \"Classics Or\"", 450, 160);
+    xc.fillText("Type de puce : \"Classics Or rond (S)\"", 450, 200);
+    xc.fillText("Attache : \"Or\"", 450, 240);
+    xc.fillText("Cette paire est constituée d'une puce \"Classics Or rond\" Cette paire est constituée d'une puce \"Classics Or rond\"", 450, 300, 12);
     xc.fillText("dont le centre est rond et porte une attache simple dorée.", 400, 340);
     xc.fillText("Elle fait partie de la collection des \"Classics\", ",400, 380);
     xc.fillText("première collection vendue par La Puce à l'oreille.",400, 420);
@@ -469,6 +469,16 @@ function createTransparentPanel(direction,modelType){
     xc.fillText("Elle est le \"Must have\" de la marque.", 500,660);
     xc.fillStyle = "red";
     xc.fillRect(500, 700, 100, 50);
+    
+     var maxWidth = 400;
+         var lineHeight = 60;
+         var x = 20; // (canvas.width - maxWidth) / 2;
+         var y = 58;
+
+
+         var text = document.getElementById("text").value.toUpperCase();
+    wrapText(xc, text, x, y, maxWidth, lineHeight);
+    
     var htmlImg = document.getElementById("html5Img");
     xc.drawImage(htmlImg, 40, 500);
  
@@ -606,7 +616,33 @@ function highLightEnable(obj,vector,dist,direction){
     $('canvas').css('cursor','pointer');
 }
       
+function wrapText(context, text, x, y, maxWidth, lineHeight) {
+        var cars = text.split("\n");
 
+        for (var ii = 0; ii < cars.length; ii++) {
+
+            var line = "";
+            var words = cars[ii].split(" ");
+
+            for (var n = 0; n < words.length; n++) {
+                var testLine = line + words[n] + " ";
+                var metrics = context.measureText(testLine);
+                var testWidth = metrics.width;
+
+                if (testWidth > maxWidth) {
+                    context.fillText(line, x, y);
+                    line = words[n] + " ";
+                    y += lineHeight;
+                }
+                else {
+                    line = testLine;
+                }
+            }
+
+            context.fillText(line, x, y);
+            y += lineHeight;
+        }
+     }
 
 $(document).ready(function() {
     /**
@@ -625,5 +661,7 @@ $(document).ready(function() {
         <?php 
         endforeach; ?>
         <img id="html5Img" src="/textures/texture_2.jpg" alt="logo html5" width="160" height="120" hidden onclick="addPanier()" />
+        <input id="text" value="From that I was able to think get multi lines working (sorry Ramirez, yours didn't work for me!)\n. My complete code to wrap text in a canvas is as follows:" hidden>
+    
     </body>
 </html>
