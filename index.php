@@ -4,6 +4,9 @@ $dae_models = array('logo' => './models/logo.dae',
     'attache_or' => './models/attache_or.dae',
     'attache_argent' => './models/attache_argent.dae');
 
+$dbhandle = new SQLite3('lapucealoreille.db');
+$result = $dbhandle->query('SELECT * FROM models', SQLITE_ASSOC);
+
 $models = array('classic_or_rond' => array('puce_model' => 'classic_puce',
                                            'attache_model' => 'attache_or',
                                             'texture' => 'texture_or_petit_rond'),
@@ -13,7 +16,7 @@ $models = array('classic_or_rond' => array('puce_model' => 'classic_puce',
     'classic_argent_carre' => array('puce_model' => 'classic_puce',
                                            'attache_model' => 'attache_argent',
                                             'texture' => 'texture_argent_carre'));
-
+           
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -29,6 +32,7 @@ $models = array('classic_or_rond' => array('puce_model' => 'classic_puce',
         <script src="lib/three.js/ColladaLoader.js"></script>
         <script src="lib/three.js/Detector.js"></script>
         <script src="lib/three.js/Stats.js"></script>
+        <script src="lib/microcache.js"></script>
         <script src="lib/Panier.js"></script>
         <script src="lib/Puces.js"></script>
     </head>
@@ -137,7 +141,7 @@ function init() {
     renderer.shadowMapDarkness = 0.5;
     renderer.shadowMapWidth = 1024;
     renderer.shadowMapHeight = 1024;
-                
+    renderer._microCache = new MicroCache();    
                 
                 
     container = document.createElement( 'div' );
@@ -662,6 +666,8 @@ $(document).ready(function() {
         endforeach; ?>
         <img id="html5Img" src="/textures/texture_2.jpg" alt="logo html5" width="160" height="120" hidden onclick="addPanier()" />
         <input id="text" value="From that I was able to think get multi lines working (sorry Ramirez, yours didn't work for me!)\n. My complete code to wrap text in a canvas is as follows:" hidden>
-    
+<?php foreach ($result as $entry) {
+    echo 'Name: ' . $entry['name'] . '  E-mail: ' . $entry['email'];
+} ?>
     </body>
 </html>
