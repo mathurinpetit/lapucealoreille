@@ -265,7 +265,7 @@ function onDocumentMousePanelClick( event ) {
     document.removeEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
     document.removeEventListener( 'click', onDocumentMousePanelClick, false );
     pucePool.setVitesseTranslationRotationForAll(0.05,0.05);
-    stop = false;
+    stop = false; 
 } 
 
 
@@ -647,6 +647,10 @@ function wrapText(context, text, x, y, maxWidth, lineHeight) {
             y += lineHeight;
         }
      }
+     
+     function clickPanier(){
+        $('form#payer_or').submit();
+     }
 
 $(document).ready(function() {
     /**
@@ -669,5 +673,15 @@ $(document).ready(function() {
 <?php foreach ($result as $entry) {
     echo 'Name: ' . $entry['name'] . '  E-mail: ' . $entry['email'];
 } ?>
+        <form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" hidden id="payer_or">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="hosted_button_id" value="KTNJ55KFEU7QW">
+<input type="image" src="https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_cart_LG.gif" border="0" name="submit" alt="PayPal - la solution de paiement en ligne la plus simple et la plus sécurisée !">
+<img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1" height="1">
+</form>
+
+
+
+        
     </body>
 </html>
