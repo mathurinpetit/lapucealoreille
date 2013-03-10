@@ -241,6 +241,9 @@ function onDocumentMouseClick( event ) {
 
 function onDocumentMousePanelClick( event ) {
     event.preventDefault();
+    
+    console.log(event.src);
+    return;
     for (var i in panelOverlay){
         scene.remove(panelOverlay[i]);
         delete panelOverlay[i];
@@ -300,6 +303,10 @@ function render() {
     pucePool.update(renderer);     
     if(!stop){            
         controls.update( clock.getDelta() );
+    }
+    else
+    {
+        logo.rotation.y -= 0.05;
     }
     sound.updateSound( camera );   
     highLightInit(4);
@@ -381,11 +388,11 @@ function displayModelPanel(id){
     var vectZ = -2.2*v.x;
     
     pucePool.copyPuceForPanel(id, selectedModel_0);
-    pucePool.setPosition(selectedModel_0, x0+vectX, 1.4, z0+vectZ);  
+    pucePool.setPosition(selectedModel_0, x0+vectX, 0.2, z0+vectZ);  
     
     
     pucePool.copyPuceForPanel(id, selectedModel_1);
-    pucePool.setPosition(selectedModel_1, x0 + 1.6 * vectX, 1.4, z0 + 1.6 * vectZ);
+    pucePool.setPosition(selectedModel_1, x0 + 1.6 * vectX, 0.2, z0 + 1.6 * vectZ);
     
 }
                         
@@ -445,7 +452,7 @@ function createTransparentPanel(direction,modelType){
     //xc.shadowBlur = 1;
     xc.fillStyle = "black";
     xc.font = "14pt arial bold";
-    xc.fillText("LA PUCE A L'OREILLE - Modèle Classic Or Rond Small", 205, 215);
+    xc.fillText("LA PUCE A L'OREILLE - Modèle Classic Or Rond Small", 208, 215);
     xc.font = "10pt arial bold";
     
     wrapText(xc, caracteristique, 440, 270, 400, 25);
@@ -456,9 +463,9 @@ function createTransparentPanel(direction,modelType){
     var model_img_1 = document.getElementById(modelType+'_img_1');
     var model_img_2 = document.getElementById(modelType+'_img_2');
     var model_img_3 = document.getElementById(modelType+'_img_3');
-    xc.drawImage(model_img_0, 205, 510, 300, 225);
+    xc.drawImage(model_img_0, 208, 510, 300, 225);
     xc.drawImage(model_img_1, 530, 510, 300, 225);
-    xc.drawImage(model_img_2, 205, 770, 300, 225);
+    xc.drawImage(model_img_2, 208, 770, 300, 225);
     xc.drawImage(model_img_3, 530, 770, 300, 225);
         
     var panelTextGeo = new THREE.PlaneGeometry(15, 15);
@@ -468,10 +475,14 @@ function createTransparentPanel(direction,modelType){
     var panelOverlayGeo_2 = new THREE.PlaneGeometry(6.5, 3.5);
     var panelOverlayGeo_3 = new THREE.PlaneGeometry(10, 10.25);
     
+    var buttonGeo = new THREE.PlaneGeometry(2, 0.3);    
+    var buttonMat = new THREE.MeshPhongMaterial( {color: 0xff0000});
+    
+    
     var panelOverlayMat = new THREE.MeshPhongMaterial( {color: 0x000000, opacity:0.35, transparent: true});
     
     var texture = new THREE.Texture(c);
-    var xm = new THREE.MeshLambertMaterial({map: texture, transparent:true });
+    var xm = new THREE.MeshLambertMaterial({ map: texture, transparent:true });
     xm.doubleSided = true; 
     xm.map.needsUpdate = true;
     
@@ -481,6 +492,7 @@ function createTransparentPanel(direction,modelType){
     var panelOverlay_1 = new THREE.Mesh(panelOverlayGeo_1,panelOverlayMat);
     var panelOverlay_2 = new THREE.Mesh(panelOverlayGeo_2,panelOverlayMat);
     var panelOverlay_3 = new THREE.Mesh(panelOverlayGeo_3,panelOverlayMat);
+    buttonPanier = new THREE.Mesh(buttonGeo, buttonMat);
     
     var v = panelText.position.clone();
     v.addSelf( direction );
@@ -492,14 +504,15 @@ function createTransparentPanel(direction,modelType){
     panelOverlay_1.lookAt( vI ); 
     panelOverlay_2.lookAt( vI );
     panelOverlay_3.lookAt( vI );
-    panelText.doubleSided = panelOverlay_0.doubleSided = panelOverlay_1.doubleSided = panelOverlay_2.doubleSided = panelOverlay_3.doubleSided = true; 
+    buttonPanier.lookAt(vI);
+    panelText.doubleSided = buttonPanier.doubleSided = panelOverlay_0.doubleSided = panelOverlay_1.doubleSided = panelOverlay_2.doubleSided = panelOverlay_3.doubleSided = true; 
     
     var baseX = camera.position.x + direction.x * 8;
     var baseZ = camera.position.z + direction.z * 8;
     
-    panelText.position.x = panelOverlay_0.position.x = panelOverlay_1.position.x = panelOverlay_2.position.x = panelOverlay_3.position.x = baseX ;
-    panelText.position.y = panelOverlay_0.position.y = panelOverlay_1.position.y = panelOverlay_2.position.y = panelOverlay_3.position.y = 0;
-    panelText.position.z = panelOverlay_0.position.z = panelOverlay_1.position.z = panelOverlay_2.position.z = panelOverlay_3.position.z = baseZ ;
+    panelText.position.x = buttonPanier.position.x = panelOverlay_0.position.x = panelOverlay_1.position.x = panelOverlay_2.position.x = panelOverlay_3.position.x = baseX ;
+    panelText.position.y = buttonPanier.position.y = panelOverlay_0.position.y = panelOverlay_1.position.y = panelOverlay_2.position.y = panelOverlay_3.position.y = -1.2;
+    panelText.position.z = buttonPanier.position.z = panelOverlay_0.position.z = panelOverlay_1.position.z = panelOverlay_2.position.z = panelOverlay_3.position.z = baseZ ;
     
     panelText.position.x -= direction.x * 0.1;
     panelText.position.z -= direction.z * 0.1;
@@ -514,8 +527,15 @@ function createTransparentPanel(direction,modelType){
     panelOverlay_2.position.z += 1.75*v.x;
     panelOverlay_2.position.x += -1.75*v.z;
     panelOverlay_3.position.y -= 4.875;
-    
+    buttonPanier.position.y += 3;
+    buttonPanier.position.x += -4*v.z;
+    buttonPanier.position.z += 4*v.x;
+    buttonPanier.id = 'ajout_panier';
     scene.add(panelText);
+    
+    scene.add(buttonPanier);
+    panelOverlay.push(buttonPanier);
+    
     scene.add(panelOverlay_0);
     panelOverlay.push(panelOverlay_0);
     
@@ -529,16 +549,17 @@ function createTransparentPanel(direction,modelType){
     panelOverlay.push(panelOverlay_3);
     
     var logoPosBase = panelOverlay_0.position.clone();
-    logo.position.z = logoPosBase.z + 2.75*v.x + direction.z * -0.5;
-    logo.position.x = logoPosBase.x - 2.75*v.z + direction.x * -0.5;
-    logo.position.y = logoPosBase.y - 0.5;  
+    logo.position.z = logoPosBase.z + 3.4*v.x + direction.z * -1.5;
+    logo.position.x = logoPosBase.x - 3.4*v.z + direction.x * -1.5;
+    logo.position.y = logoPosBase.y - 0.6;  
     //logo.rotation.y = Math.PI;
     logo.scale.x = logo.scale.y = logo.scale.z = 0.05;
     scene.add( logo );
     
     document.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
     document.addEventListener( 'click', onDocumentMousePanelClick, false );
-    highLightEnable(panelText, direction, 10, v);    
+    highLightEnable(panelText, direction, 10, v); 
+    highLight.intensity = 2;
     return v;
 }
                 
@@ -594,8 +615,7 @@ function highLightEnable(obj,vector,dist,direction){
 }
       
 function wrapText(context, text, x, y, maxWidth, lineHeight) {
-        var cars = text.split("\n");
-
+        var cars = text.split("\\");
         for (var ii = 0; ii < cars.length; ii++) {
 
             var line = "";
@@ -682,9 +702,7 @@ $(document).ready(function() {
             <?php endif; ?>
         <?php endforeach; ?>
         
-        <input id="text" value="From that I was able to think get multi lines working (sorry Ramirez, yours didn't work for me!)\n. My complete code to wrap text in a canvas is as follows:" hidden>
-
-        <form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" hidden id="payer_or">
+       <form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" hidden id="payer_or">
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="hosted_button_id" value="KTNJ55KFEU7QW">
 <input type="image" src="https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_cart_LG.gif" border="0" name="submit" alt="PayPal - la solution de paiement en ligne la plus simple et la plus sécurisée !">
