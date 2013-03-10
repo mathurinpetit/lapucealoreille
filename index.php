@@ -1,22 +1,9 @@
 <?php
-$dae_models = array('logo' => './models/logo.dae',
-    'classic_puce' => './models/puce_classic_without_texture.dae',
-    'attache_or' => './models/attache_or.dae',
-    'attache_argent' => './models/attache_argent.dae');
+include_once 'db/DB.php';
 
-$dbhandle = new SQLite3('lapucealoreille.db');
-$result = $dbhandle->query('SELECT * FROM models', SQLITE_ASSOC);
-
-$models = array('classic_or_rond' => array('puce_model' => 'classic_puce',
-                                           'attache_model' => 'attache_or',
-                                            'texture' => 'texture_or_petit_rond'),
-    'classic_argent' => array('puce_model' => 'classic_puce',
-                                           'attache_model' => 'attache_argent',
-                                            'texture' => 'texture_argent'),
-    'classic_argent_carre' => array('puce_model' => 'classic_puce',
-                                           'attache_model' => 'attache_argent',
-                                            'texture' => 'texture_argent_carre'));
-           
+$db = new DB();
+$dae_models = $db->getAllDaeModels();
+$models = $db->getAllModels();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -177,7 +164,7 @@ function init() {
                 <?php echo $model["puce_model"]; ?>,   
                     <?php echo $model["attache_model"]; ?>,
     "<?php echo $model["texture"]; ?>" ,
-    true, false, true ,0.05);
+    false, false, true ,0.05);
                
           <?php  endforeach; ?>              
 
@@ -197,7 +184,7 @@ function init() {
     highLight = new THREE.SpotLight( 0xffffff,0);
     scene.add(highLight);
                                
-    scene.fog = new THREE.FogExp2( 0x778877, 0.04 );
+    scene.fog = new THREE.FogExp2( 0xffffff, 0.04 );
 
                 
     // Lights
@@ -218,8 +205,8 @@ function init() {
     
     panier = new Panier(this);
     panier.domElement.style.position = 'absolute';
-    panier.domElement.style.top = '0px';
-    panier.domElement.style.right = '500px';
+    panier.domElement.style.top = '30px';
+    panier.domElement.style.right = '30px';
     container.appendChild( panier.domElement );
 
 
@@ -452,40 +439,27 @@ function createTransparentPanel(direction,modelType){
     
     var xc = c.getContext("2d");
     c.width = c.height = 1024;
+    var caracteristique = document.getElementById(modelType+"_caracteristique").value;
+    var description = document.getElementById(modelType+"_description").value;
     
     //xc.shadowBlur = 1;
     xc.fillStyle = "black";
     xc.font = "14pt arial bold";
     xc.fillText("LA PUCE A L'OREILLE - Modèle Classic Or Rond Small", 200, 40);
+    xc.font = "12pt arial bold";
+    
+    wrapText(xc, caracteristique, 400, 150, 500, 25);
     xc.font = "10pt arial bold";
-    xc.fillText("Modèle : \"Classics Or\"", 450, 160);
-    xc.fillText("Type de puce : \"Classics Or rond (S)\"", 450, 200);
-    xc.fillText("Attache : \"Or\"", 450, 240);
-    xc.fillText("Cette paire est constituée d'une puce \"Classics Or rond\" Cette paire est constituée d'une puce \"Classics Or rond\"", 450, 300, 12);
-    xc.fillText("dont le centre est rond et porte une attache simple dorée.", 400, 340);
-    xc.fillText("Elle fait partie de la collection des \"Classics\", ",400, 380);
-    xc.fillText("première collection vendue par La Puce à l'oreille.",400, 420);
-    xc.fillText("C'est une boucle d'oreille élégante et simple",400, 460);
-    xc.fillText("tout en restant originale. Entièrement fait main",400, 500);
-    xc.fillText("avec des puces de récupération, elle présente une",400, 540);
-    xc.fillText("mise en bijoux écologique d'un produit courant.",400, 580);
-    xc.fillText("Première paire des créations La Puce à l'oreille,",500, 620);
-    xc.fillText("Elle est le \"Must have\" de la marque.", 500,660);
-    xc.fillStyle = "red";
-    xc.fillRect(500, 700, 100, 50);
+    wrapText(xc, description, 400, 300, 500, 25);
     
-     var maxWidth = 400;
-         var lineHeight = 60;
-         var x = 20; // (canvas.width - maxWidth) / 2;
-         var y = 58;
-
-
-         var text = document.getElementById("text").value.toUpperCase();
-    wrapText(xc, text, x, y, maxWidth, lineHeight);
-    
-    var htmlImg = document.getElementById("html5Img");
-    xc.drawImage(htmlImg, 40, 500);
- 
+    var model_img_0 = document.getElementById(modelType+'_img_0');
+    var model_img_1 = document.getElementById(modelType+'_img_1');
+    var model_img_2 = document.getElementById(modelType+'_img_2');
+    var model_img_3 = document.getElementById(modelType+'_img_3');
+    xc.drawImage(model_img_0, 40, 500);
+//    xc.drawImage(model_img_1, 40, 500);
+//    xc.drawImage(model_img_2, 40, 500);
+//    xc.drawImage(model_img_3, 40, 500);
     
     
     var panelTextGeo = new THREE.PlaneGeometry(10, 10);
@@ -533,14 +507,14 @@ function createTransparentPanel(direction,modelType){
     
     
     
-    panelOverlay_0.position.y +=4.5;
-    panelOverlay_1.position.y += 2;
-    panelOverlay_2.position.y += 2;
+    panelOverlay_0.position.y +=4;
+    panelOverlay_1.position.y += 1.5;
+    panelOverlay_2.position.y += 1.5;
     panelOverlay_1.position.z += - 4.75*v.x;
     panelOverlay_1.position.x += 4.75*v.z;
     panelOverlay_2.position.z += 1.75*v.x;
     panelOverlay_2.position.x += -1.75*v.z;
-    panelOverlay_3.position.y -= 3.375;
+    panelOverlay_3.position.y -= 3.875;
     
     scene.add(panelText);
     scene.add(panelOverlay_0);
@@ -668,11 +642,49 @@ $(document).ready(function() {
         </form>
         <?php 
         endforeach; ?>
-        <img id="html5Img" src="/textures/texture_2.jpg" alt="logo html5" width="160" height="120" hidden onclick="addPanier()" />
+        
+        <?php foreach ($models as $key => $model) : ?>
+            <?php if($model['image_0']) : ?>
+                <img id="<?php echo $key;?>_img_0"
+                    src="./textures/<?php echo $model['image_0'];?>"
+                    alt="<?php echo $key;?>"
+                    width="160" height="120"
+                    hidden />
+            <?php endif; ?>
+            <?php if($model['image_1']) : ?>
+                <img id="<?php echo $key;?>_img_1"
+                 src="./textures/<?php echo $model['image_1'];?>"
+                 alt="<?php echo $key;?>"
+                 width="160" height="120"
+                 hidden />
+            <?php endif; ?>
+            <?php if($model['image_2']) : ?>  
+             <img id="<?php echo $key;?>_img_2"
+                 src="./textures/<?php echo $model['image_2'];?>"
+                 alt="<?php echo $key;?>"
+                 width="160" height="120"
+                 hidden />
+            <?php endif; ?>
+            <?php if($model['image_3']) : ?>  
+             <img id="<?php echo $key;?>_img_3"
+                 src="./textures/<?php echo $model['image_3'];?>"
+                 alt="<?php echo $key;?>"
+                 width="160" height="120"
+                 hidden />
+             <?php endif; ?>
+             <?php if($model['caracteristiques']) : ?>  
+                <input id="<?php echo $key;?>_caracteristique"
+                    value="<?php echo $model['caracteristiques'];?>" hidden >
+            <?php endif; ?>
+                
+             <?php if($model['description']) : ?>  
+                <input id="<?php echo $key;?>_description"
+                    value="<?php echo $model['description'];?>" hidden >
+            <?php endif; ?>
+        <?php endforeach; ?>
+        
         <input id="text" value="From that I was able to think get multi lines working (sorry Ramirez, yours didn't work for me!)\n. My complete code to wrap text in a canvas is as follows:" hidden>
-<?php foreach ($result as $entry) {
-    echo 'Name: ' . $entry['name'] . '  E-mail: ' . $entry['email'];
-} ?>
+
         <form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" hidden id="payer_or">
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="hosted_button_id" value="KTNJ55KFEU7QW">
