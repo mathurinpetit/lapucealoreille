@@ -445,29 +445,28 @@ function createTransparentPanel(direction,modelType){
     //xc.shadowBlur = 1;
     xc.fillStyle = "black";
     xc.font = "14pt arial bold";
-    xc.fillText("LA PUCE A L'OREILLE - Modèle Classic Or Rond Small", 200, 40);
-    xc.font = "12pt arial bold";
-    
-    wrapText(xc, caracteristique, 400, 150, 500, 25);
+    xc.fillText("LA PUCE A L'OREILLE - Modèle Classic Or Rond Small", 205, 215);
     xc.font = "10pt arial bold";
-    wrapText(xc, description, 400, 300, 500, 25);
+    
+    wrapText(xc, caracteristique, 440, 270, 400, 25);
+    xc.font = "8pt arial bold";
+    wrapText(xc, description, 440, 340, 400, 20);
     console.log(modelType+'_img_0');
     var model_img_0 = document.getElementById(modelType+'_img_0');
     var model_img_1 = document.getElementById(modelType+'_img_1');
     var model_img_2 = document.getElementById(modelType+'_img_2');
     var model_img_3 = document.getElementById(modelType+'_img_3');
-    xc.drawImage(model_img_0, 58, 550, 440, 330);
-    xc.drawImage(model_img_1, 540, 550, 440, 330);
-    xc.drawImage(model_img_2, 58, 800,440, 330);
-    xc.drawImage(model_img_3, 540, 800,440, 330);
-    
-    
-    var panelTextGeo = new THREE.PlaneGeometry(10, 10);
+    xc.drawImage(model_img_0, 205, 510, 300, 225);
+    xc.drawImage(model_img_1, 530, 510, 300, 225);
+    xc.drawImage(model_img_2, 205, 770, 300, 225);
+    xc.drawImage(model_img_3, 530, 770, 300, 225);
+        
+    var panelTextGeo = new THREE.PlaneGeometry(15, 15);
     
     var panelOverlayGeo_0 = new THREE.PlaneGeometry(10, 1.5);
     var panelOverlayGeo_1 = new THREE.PlaneGeometry(0.5, 3.5);
     var panelOverlayGeo_2 = new THREE.PlaneGeometry(6.5, 3.5);
-    var panelOverlayGeo_3 = new THREE.PlaneGeometry(10, 7.25);
+    var panelOverlayGeo_3 = new THREE.PlaneGeometry(10, 10.25);
     
     var panelOverlayMat = new THREE.MeshPhongMaterial( {color: 0x000000, opacity:0.35, transparent: true});
     
@@ -506,7 +505,7 @@ function createTransparentPanel(direction,modelType){
     panelText.position.z -= direction.z * 0.1;
     
     
-    
+
     panelOverlay_0.position.y += 4.5;
     panelOverlay_1.position.y += 2;
     panelOverlay_2.position.y += 2;
@@ -514,7 +513,7 @@ function createTransparentPanel(direction,modelType){
     panelOverlay_1.position.x += 4.75*v.z;
     panelOverlay_2.position.z += 1.75*v.x;
     panelOverlay_2.position.x += -1.75*v.z;
-    panelOverlay_3.position.y -= 3.375;
+    panelOverlay_3.position.y -= 4.875;
     
     scene.add(panelText);
     scene.add(panelOverlay_0);
