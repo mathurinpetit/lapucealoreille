@@ -14,9 +14,9 @@ sqlite3 lapucealoreille.db "insert into models VALUES (1,
                             'classic_or_petit_rond',
                             'Modèle : Classics Or \n Type de puce : Classics Or rond (S) \n Attache : Or ',
                 'Cette paire est constituée dune puce Classics Or rond Cette paire est constituée dune puce Classics Or rond dont le centre est rond et porte une attache simple dorée. Elle fait partie de la collection des Classics, première collection vendue par La Puce à loreille. Cest une boucle doreille élégante et simple tout en restant originale. Entièrement fait main avec des puces de récupération, elle présente une mise en bijoux écologique dun produit courant. Première paire des créations La Puce à loreille, Elle est le Must have de la marque.',
-                'texture_2.jpg',
-                null,
-                null,
-                null ,3);";
+                'classic_or_petit_rond_0.jpg',
+                'classic_or_petit_rond_1.jpg',
+                'classic_or_petit_rond_2.jpg',
+                'classic_or_petit_rond_0.jpg',3);";
 sqlite3 lapucealoreille.db "insert into models VALUES (2,'classic_puce','attache_argent','texture_argent','classic_argent', 'SUPER PAIRE','SUPER PAIRE crée en ... par et de',null,null,null,null ,3);";
 sqlite3 lapucealoreille.db "insert into models VALUES (3,'classic_puce','attache_argent','texture_argent_carre','classic_argent_carre', 'SUPER PAIRE','SUPER PAIRE crée en ... par et de',null,null,null,null ,3);";

@@ -451,15 +451,15 @@ function createTransparentPanel(direction,modelType){
     wrapText(xc, caracteristique, 400, 150, 500, 25);
     xc.font = "10pt arial bold";
     wrapText(xc, description, 400, 300, 500, 25);
-    
+    console.log(modelType+'_img_0');
     var model_img_0 = document.getElementById(modelType+'_img_0');
     var model_img_1 = document.getElementById(modelType+'_img_1');
     var model_img_2 = document.getElementById(modelType+'_img_2');
     var model_img_3 = document.getElementById(modelType+'_img_3');
-    xc.drawImage(model_img_0, 40, 500);
-//    xc.drawImage(model_img_1, 40, 500);
-//    xc.drawImage(model_img_2, 40, 500);
-//    xc.drawImage(model_img_3, 40, 500);
+    xc.drawImage(model_img_0, 58, 550, 440, 330);
+    xc.drawImage(model_img_1, 540, 550, 440, 330);
+    xc.drawImage(model_img_2, 58, 800,440, 330);
+    xc.drawImage(model_img_3, 540, 800,440, 330);
     
     
     var panelTextGeo = new THREE.PlaneGeometry(10, 10);
@@ -507,14 +507,14 @@ function createTransparentPanel(direction,modelType){
     
     
     
-    panelOverlay_0.position.y +=4;
-    panelOverlay_1.position.y += 1.5;
-    panelOverlay_2.position.y += 1.5;
+    panelOverlay_0.position.y += 4.5;
+    panelOverlay_1.position.y += 2;
+    panelOverlay_2.position.y += 2;
     panelOverlay_1.position.z += - 4.75*v.x;
     panelOverlay_1.position.x += 4.75*v.z;
     panelOverlay_2.position.z += 1.75*v.x;
     panelOverlay_2.position.x += -1.75*v.z;
-    panelOverlay_3.position.y -= 3.875;
+    panelOverlay_3.position.y -= 3.375;
     
     scene.add(panelText);
     scene.add(panelOverlay_0);
@@ -646,28 +646,28 @@ $(document).ready(function() {
         <?php foreach ($models as $key => $model) : ?>
             <?php if($model['image_0']) : ?>
                 <img id="<?php echo $key;?>_img_0"
-                    src="./textures/<?php echo $model['image_0'];?>"
+                    src="./models/images/<?php echo $model['image_0'];?>"
                     alt="<?php echo $key;?>"
                     width="160" height="120"
                     hidden />
             <?php endif; ?>
             <?php if($model['image_1']) : ?>
                 <img id="<?php echo $key;?>_img_1"
-                 src="./textures/<?php echo $model['image_1'];?>"
+                 src="./models/images/<?php echo $model['image_1'];?>"
                  alt="<?php echo $key;?>"
                  width="160" height="120"
                  hidden />
             <?php endif; ?>
             <?php if($model['image_2']) : ?>  
              <img id="<?php echo $key;?>_img_2"
-                 src="./textures/<?php echo $model['image_2'];?>"
+                 src="./models/images/<?php echo $model['image_2'];?>"
                  alt="<?php echo $key;?>"
                  width="160" height="120"
                  hidden />
             <?php endif; ?>
             <?php if($model['image_3']) : ?>  
              <img id="<?php echo $key;?>_img_3"
-                 src="./textures/<?php echo $model['image_3'];?>"
+                 src="./models/images/<?php echo $model['image_3'];?>"
                  alt="<?php echo $key;?>"
                  width="160" height="120"
                  hidden />
