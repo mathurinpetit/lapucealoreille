@@ -42,6 +42,7 @@ $models = $db->getAllModels();
             var mouse = { x: 0, y: 0 }, INTERSECTED;
             var stop = false;
             var selectedModel_0, selectedModel_1;
+            var panelCanvas;
             
             /*
              * Fonctions de chargement en chaine des modèles collada
@@ -83,6 +84,7 @@ endforeach;
 
 var Sound = function ( sources, radius, volume ) {
     var audio = document.createElement( 'audio' );
+     $(audio).attr('loop','');
     for ( var i = 0; i < sources.length; i ++ ) {
         var source = document.createElement( 'source' );
         source.src = sources[ i ];
@@ -287,6 +289,26 @@ function onDocumentMouseWheel( event ){
 }
 
 
+function onCanvasMouseMove(event){
+    var x, y;
+  if (event.layerX || event.layerX == 0) { 
+    x = event.layerX;
+    y = event.layerY;
+  }
+  x-=panelCanvas.offsetLeft;
+  y-=panelCanvas.offsetTop;
+
+  //is the mouse over the link?
+  if(x>=linkX && x <= (linkX + linkWidth) && y<=linkY && y>= (linkY-linkHeight)){
+      document.body.style.cursor = "pointer";
+      inLink=true;
+  }
+  else{
+      document.body.style.cursor = "";
+      inLink=false;
+  }
+}
+
 function animate() {
                 
     //  updateTrees();
@@ -442,10 +464,9 @@ function createFloor(){
  
 function createTransparentPanel(direction,modelType){
     
-    var c = document.createElement("canvas");
-    
-    var xc = c.getContext("2d");
-    c.width = c.height = 1024;
+    panelCanvas = document.createElement("canvas");
+    var xc = panelCanvas.getContext("2d");
+    panelCanvas.width = panelCanvas.height = 1024;
     var caracteristique = document.getElementById(modelType+"_caracteristique").value;
     var description = document.getElementById(modelType+"_description").value;
     
@@ -458,7 +479,7 @@ function createTransparentPanel(direction,modelType){
     wrapText(xc, caracteristique, 440, 270, 400, 25);
     xc.font = "8pt arial bold";
     wrapText(xc, description, 440, 340, 400, 20);
-    console.log(modelType+'_img_0');
+    
     var model_img_0 = document.getElementById(modelType+'_img_0');
     var model_img_1 = document.getElementById(modelType+'_img_1');
     var model_img_2 = document.getElementById(modelType+'_img_2');
@@ -467,6 +488,7 @@ function createTransparentPanel(direction,modelType){
     xc.drawImage(model_img_1, 530, 510, 300, 225);
     xc.drawImage(model_img_2, 208, 770, 300, 225);
     xc.drawImage(model_img_3, 530, 770, 300, 225);
+    
         
     var panelTextGeo = new THREE.PlaneGeometry(15, 15);
     
@@ -481,7 +503,7 @@ function createTransparentPanel(direction,modelType){
     
     var panelOverlayMat = new THREE.MeshPhongMaterial( {color: 0x000000, opacity:0.35, transparent: true});
     
-    var texture = new THREE.Texture(c);
+    var texture = new THREE.Texture(panelCanvas);
     var xm = new THREE.MeshLambertMaterial({ map: texture, transparent:true });
     xm.doubleSided = true; 
     xm.map.needsUpdate = true;
@@ -556,6 +578,7 @@ function createTransparentPanel(direction,modelType){
     logo.scale.x = logo.scale.y = logo.scale.z = 0.05;
     scene.add( logo );
     
+    panelCanvas.addEventListener("mousemove", onCanvasMouseMove, false);
     document.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
     document.addEventListener( 'click', onDocumentMousePanelClick, false );
     highLightEnable(panelText, direction, 10, v); 
