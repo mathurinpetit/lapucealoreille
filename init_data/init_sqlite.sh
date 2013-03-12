@@ -3,14 +3,17 @@ rm lapucealoreille.db
 sqlite3 lapucealoreille.db "create table daemodels ( id TEXT, path TEXT);";
 sqlite3 lapucealoreille.db "insert into daemodels VALUES ('logo','logo.dae');";
 sqlite3 lapucealoreille.db "insert into daemodels VALUES ('classic_puce','puce_classic_without_texture.dae');";
+sqlite3 lapucealoreille.db "insert into daemodels VALUES ('classic_puce_light','puce_classic_without_texture_light.dae');";
 sqlite3 lapucealoreille.db "insert into daemodels VALUES ('attache_or','attache_or.dae');";
 sqlite3 lapucealoreille.db "insert into daemodels VALUES ('attache_argent','attache_argent.dae');";
+sqlite3 lapucealoreille.db "insert into daemodels VALUES ('attache_or_light','attache_or_light.dae');";
+sqlite3 lapucealoreille.db "insert into daemodels VALUES ('attache_argent_light','attache_argent_light.dae');";
 
 sqlite3 lapucealoreille.db "create table models (id INTEGER, model_libelle TEXT, puce_model TEXT, attache_model TEXT, texture TEXT, type_model TEXT, caracteristiques TEXT, description TEXT, image_0 TEXT, image_1 TEXT, image_2 TEXT, image_3 TEXT, qte INTEGER);";
 sqlite3 lapucealoreille.db "insert into models VALUES (1,
                             'Classic Or Rond',
                             'classic_puce',
-                            'attache_or',
+                            'attache_or_light',
                             'texture_or_petit_rond',
                             'classic_or_petit_rond',
                             'Modèle : Classic Or \Type de puce : Classics Or rond (petit) \Attaches : Dorées ',
@@ -22,7 +25,7 @@ sqlite3 lapucealoreille.db "insert into models VALUES (1,
 sqlite3 lapucealoreille.db "insert into models VALUES (2,
                              'Classic Argent',
                              'classic_puce',
-                             'attache_argent',
+                             'attache_argent_light',
                              'texture_argent',
                              'classic_argent',
                              'Modèle : Classic Argent \Type de puce : Classics Argent \Attaches : Argentées ',
