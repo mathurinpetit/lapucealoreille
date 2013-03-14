@@ -168,16 +168,7 @@ function init() {
     "<?php echo $model["texture"]; ?>" ,
     false, false, true ,0.05);
                
-          <?php  endforeach; ?>              
-
-
-   
-                
-    //  pucePool.createPuce(modelPath , modelTexturePath , attacheModelPath,false, false, true );
-    //  pucePool.createPuce(modelPath , modelTexturePath , attacheModelPath,false, false, true );                
-
-
-            
+          <?php  endforeach; ?>                       
                 
     //   initTrees(loader);
     initSpot(0,20,-20,true,false);                                
@@ -191,10 +182,7 @@ function init() {
                 
     // Lights
     var ambianteLight = new THREE.AmbientLight( 0x333333 );
-    scene.add(ambianteLight);
-                
-    //     sphereDebug(0,2,12);             
-       
+    scene.add(ambianteLight);    
        
     createFloor();
     
@@ -478,11 +466,13 @@ function createTransparentPanel(direction,modelType){
     wrapText(xc, caracteristique, 440, 270, 400, 25);
     xc.font = "8pt arial bold";
     wrapText(xc, description, 440, 340, 400, 20);
-    
+        
     var model_img_0 = document.getElementById(modelType+'_img_0');
     var model_img_1 = document.getElementById(modelType+'_img_1');
     var model_img_2 = document.getElementById(modelType+'_img_2');
     var model_img_3 = document.getElementById(modelType+'_img_3');
+    xc.drawImage(document.getElementById('contour'), 190, 150,670,880);
+    
     xc.drawImage(model_img_0, 208, 510, 300, 225);
     xc.drawImage(model_img_1, 530, 510, 300, 225);
     xc.drawImage(model_img_2, 208, 770, 300, 225);
@@ -496,9 +486,7 @@ function createTransparentPanel(direction,modelType){
     var buttonMat = new THREE.MeshPhongMaterial( {color: 0xff0000});
     
     
-    var panelOverlayMat = new THREE.MeshPhongMaterial( {color: 0x000000, opacity:0.35, transparent: true});
-    
-//    var panelOverlayGeo_0 = new THREE.PlaneGeometry(10, 1.5);
+   
 //    var panelOverlayGeo_1 = new THREE.PlaneGeometry(0.5, 3.5);
 //    var panelOverlayGeo_2 = new THREE.PlaneGeometry(6.5, 3.5);
 //    var panelOverlayGeo_3 = new THREE.PlaneGeometry(10, 10.25);
@@ -686,7 +674,7 @@ $(document).ready(function() {
         </form>
         <?php 
         endforeach; ?>
-        
+         <img id="contour" src="./assets/contour.png" width="1024" height="1024" hidden />
         <?php foreach ($models as $key => $model) : ?>
             <?php if($model['image_0']) : ?>
                 <img id="<?php echo $key;?>_img_0"
