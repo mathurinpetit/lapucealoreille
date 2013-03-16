@@ -43,6 +43,7 @@ $models = $db->getAllModels();
             var stop = false;
             var selectedModel_0, selectedModel_1;
             var panelCanvas;
+            var ajout_panier_label = "ajout_panier";
             
             /*
              * Fonctions de chargement en chaine des modèles collada
@@ -518,7 +519,7 @@ function createTransparentPanel(direction,modelType){
     buttonPanier.position.x += -3.85*v.z - direction.x * 0.2;
     buttonPanier.position.z += 3.85*v.x - direction.z * 0.2;
     
-    buttonPanier.id = 'ajout_panier';
+    buttonPanier.id = ajout_panier_label;
     
     scene.add(panelText);
     
@@ -553,19 +554,24 @@ function highLightInit(dist){
 
         if ( INTERSECTED != intersects[ 0 ].object ) {
             if ( INTERSECTED ){
-                highLightDisable(INTERSECTED);
+                if(INTERSECTED.id  != ajout_panier_label)
+                     highLightDisable(INTERSECTED);
+                cursor_transform('default');
             }
             INTERSECTED = intersects[ 0 ].object;
             if(typeof INTERSECTED.id  != "number"){
-                console.log(INTERSECTED.id);
-                highLightEnable(INTERSECTED,vector,dist,direction);                                        
+                if(INTERSECTED.id  != ajout_panier_label)
+                    highLightEnable(INTERSECTED,vector,dist,direction);
+                cursor_transform('pointer');
             }else{
                 INTERSECTED = null;
             }
         }
     } else {
         if ( INTERSECTED ){
-            highLightDisable(INTERSECTED); 
+            if(INTERSECTED.id  != ajout_panier_label)
+                highLightDisable(INTERSECTED);
+            cursor_transform('default');
         }
         INTERSECTED = null;
     }   
@@ -579,11 +585,10 @@ function highLightDisable(obj){
    if(!stop){
     highLight.intensity = 0;
    }    
-    $('canvas').css('cursor','default');
 }
 
                         
-function highLightEnable(obj,vector,dist,direction){
+function highLightEnable(obj,vector,dist,direction){    
     var d = direction.clone();
     d.multiplyScalar(dist);
     var position = vector.clone();
@@ -591,7 +596,10 @@ function highLightEnable(obj,vector,dist,direction){
     setSpotParameters(highLight,position.x,position.y,position.z,true,false);
     highLight.target.position.set(obj.position.x,obj.position.y,obj.position.z);
     highLight.intensity = 1;
-    $('canvas').css('cursor','pointer');
+}
+
+function cursor_transform(cursor_type){
+    $('canvas').css('cursor',cursor_type);
 }
       
 function wrapText(context, text, x, y, maxWidth, lineHeight) {
