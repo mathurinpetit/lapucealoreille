@@ -179,6 +179,9 @@ function init() {
                     <?php echo $model["attache_model"]; ?>,
     "<?php echo $model["texture"]; ?>" ,
     true, false, true ,0.05,"<?php echo $model_name; ?>");
+                var x = 5 - Math.random() * 10;
+                var z = 5 - Math.random() * 10;
+              pucePool.setPosition("<?php echo $model_name.'_'.$i; ?>",x,2,z);
               <?php  endfor; ?>    
           <?php  endforeach; ?>                       
                 
@@ -244,6 +247,7 @@ function onDocumentMouseClick( event ) {
         if(INTERSECTED.id == ajout_panier_label){
             panelNoRemove = true;
             panier.addProduct(selectedModel_type);
+            $("panier_paypal").append('<input type="hidden" name="hosted_button_id" value="KTNJ55KFEU7QW">');
             return;
         }
         pucePool.setVitesseTranslationRotationForAll(0,0);
