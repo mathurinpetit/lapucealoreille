@@ -21,6 +21,7 @@ $models = $db->getAllModels();
         <script src="lib/three.js/Stats.js"></script>
         <script src="lib/microcache.js"></script>
         <script src="lib/Panier.js"></script>
+        <script src="lib/Music.js"></script>
         <script src="lib/Puces.js"></script>
     </head>
     <body>        
@@ -28,7 +29,7 @@ $models = $db->getAllModels();
             if (! Detector.webgl )
                 Detector.addGetWebGLMessage();
             var debug = true;
-            var container, stats, panier;
+            var container, stats, panier, music;
 
             var camera, scene, renderer, controls, projector;
             var highLight;
@@ -41,10 +42,10 @@ $models = $db->getAllModels();
             var clock = new THREE.Clock();
             var mouse = { x: 0, y: 0 }, INTERSECTED;
             var stop = false;
-            var selectedModel_0, selectedModel_1;
+            var selectedModel_0, selectedModel_1, selectedModel_type;
             var panelCanvas;
             var ajout_panier_label = "ajout_panier";
-            
+            var panelNoRemove = false;
             /*
              * Fonctions de chargement en chaine des modèles collada
              */
@@ -95,7 +96,16 @@ var Sound = function ( sources, radius, volume ) {
     this.position = new THREE.Vector3();
     
     this.playSound = function () {
-        audio.play();
+        audio.play();        
+    }
+    
+    this.switchSound = function () {
+        if(audio.paused){
+            audio.play();  
+        }
+        else {
+            audio.pause();  
+        }
     }
             
     this.updateSound = function ( camera ) {
@@ -110,6 +120,10 @@ var Sound = function ( sources, radius, volume ) {
     audio.addEventListener('ended', function(){
         this.currentTime = 0;
     }, false);
+}
+
+function musicSwitch(){
+    sound.switchSound();
 }
 
 var pucePool =null;
@@ -148,12 +162,8 @@ function init() {
     controls.constrainVertical = false;
     controls.verticalMin = 1.1;
     controls.verticalMax = 2.2;
-
-            
-
                 
-                
-    pucePool = new PUCES(scene);   
+    pucePool = new PUCES(scene,renderer);   
         
     sound = new Sound( [ './sounds/sheherazade.mp3', './sounds/sheherazade.ogg'], 50, 1 );
     sound.position.x = 0;
@@ -163,12 +173,13 @@ function init() {
             
             <?php 
             foreach ($models as $model_name => $model): ?>
-                pucePool.createPuce("<?php echo $model_name; ?>",
+              <?php for($i=0; $i< $model['qte']; $i++): ?>
+                pucePool.createPuce("<?php echo $model_name.'_'.$i; ?>",
                 <?php echo $model["puce_model"]; ?>,   
                     <?php echo $model["attache_model"]; ?>,
     "<?php echo $model["texture"]; ?>" ,
-    true, false, true ,0.05);
-               
+    true, false, true ,0.05,"<?php echo $model_name; ?>");
+              <?php  endfor; ?>    
           <?php  endforeach; ?>                       
                 
     //   initTrees(loader);
@@ -178,8 +189,7 @@ function init() {
     highLight = new THREE.SpotLight( 0xffffff,0);
     scene.add(highLight);
                                
-    scene.fog = new THREE.FogExp2( 0xffffff, 0.04 );
-
+    // scene.fog = new THREE.FogExp2( 0xffffff, 0.04 );
                 
     // Lights
     var ambianteLight = new THREE.AmbientLight( 0x333333 );
@@ -199,6 +209,12 @@ function init() {
     panier.domElement.style.top = '30px';
     panier.domElement.style.right = '30px';
     container.appendChild( panier.domElement );
+    
+    music = new Music(this);
+    music.domElement.style.position = 'absolute';
+    music.domElement.style.top = '130px';
+    music.domElement.style.right = '30px';
+    container.appendChild( music.domElement );
 
 
     window.addEventListener( 'resize', onWindowResize, false );
@@ -225,16 +241,22 @@ function onDocumentMouseMove( event ) {
 function onDocumentMouseClick( event ) {
     event.preventDefault();
     if(INTERSECTED != null){
+        if(INTERSECTED.id == ajout_panier_label){
+            panelNoRemove = true;
+            panier.addProduct(selectedModel_type);
+            return;
+        }
         pucePool.setVitesseTranslationRotationForAll(0,0);
         displayModelPanel(INTERSECTED.id);
     }
 } 
 
 function onDocumentMousePanelClick( event ) {
+    if(panelNoRemove){
+        panelNoRemove = false;
+        return;
+    }
     event.preventDefault();
-    
-    console.log(event.src);
-    return;
     for (var i in panelOverlay){
         scene.remove(panelOverlay[i]);
         delete panelOverlay[i];
@@ -314,10 +336,11 @@ function render() {
     pucePool.update(renderer);     
     if(!stop){            
         controls.update( clock.getDelta() );
+        logo.rotation.y = 0;
     }
     else
     {
-        logo.rotation.y -= 0.05;
+        logo.rotation.y += 0.05;
     }
     sound.updateSound( camera );   
     highLightInit(4);
@@ -388,7 +411,6 @@ function displayModelPanel(id){
     
     selectedModel_0 = id+'_panel_0';
     selectedModel_1 = id+'_panel_1';
-    
     var v = createTransparentPanel(direction,id);
     
     var x0 = camera.position.x + (v.x)*8;
@@ -403,6 +425,8 @@ function displayModelPanel(id){
     
     pucePool.copyPuceForPanel(id, selectedModel_1);
     pucePool.setPosition(selectedModel_1, x0 + 1.6 * vectX, 0.2, z0 + 1.6 * vectZ);
+    
+    selectedModel_type = pucePool.getModelType(id);
     
 }
                         
@@ -450,11 +474,12 @@ function createFloor(){
     scene.add(ground); 
 }
  
-function createTransparentPanel(direction,modelType){
+function createTransparentPanel(direction,id){
     
     panelCanvas = document.createElement("canvas");
     var xc = panelCanvas.getContext("2d");
     panelCanvas.width = panelCanvas.height = 1024;
+    var modelType = pucePool.getModelType(id);
     var caracteristique = document.getElementById(modelType+"_caracteristique").value;
     var description = document.getElementById(modelType+"_description").value;
     
@@ -630,7 +655,7 @@ function wrapText(context, text, x, y, maxWidth, lineHeight) {
      }
      
      function clickPanier(){
-        $('form#payer_or').submit();
+        $('form#panier_paypal').submit();
      }
 
 $(document).ready(function() {
@@ -690,11 +715,11 @@ $(document).ready(function() {
             <?php endif; ?>
         <?php endforeach; ?>
         
-       <form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" hidden id="payer_or">
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="KTNJ55KFEU7QW">
-<input type="image" src="https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_cart_LG.gif" border="0" name="submit" alt="PayPal - la solution de paiement en ligne la plus simple et la plus sécurisée !">
-<img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1" height="1">
+<form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" hidden id="panier_paypal">
+        <input type="hidden" name="cmd" value="_s-xclick">
+        <input type="hidden" name="hosted_button_id" value="KTNJ55KFEU7QW">
+        <input type="image" src="https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_cart_LG.gif" border="0" name="submit" alt="PayPal - la solution de paiement en ligne la plus simple et la plus sécurisée !">
+        <img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1" height="1">
 </form>
 
 
