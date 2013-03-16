@@ -166,7 +166,7 @@ function init() {
                 <?php echo $model["puce_model"]; ?>,   
                     <?php echo $model["attache_model"]; ?>,
     "<?php echo $model["texture"]; ?>" ,
-    false, false, true ,0.05);
+    true, false, true ,0.05);
                
           <?php  endforeach; ?>                       
                 
@@ -382,7 +382,7 @@ function displayModelPanel(id){
     
     stop = true;
     highLightDisable(id);
-    var vector = camera._vector.clone();
+    var vector = pucePool.getPosition(id);
     var direction = vector.subSelf( camera.position ).normalize();
     
     selectedModel_0 = id+'_panel_0';
@@ -486,21 +486,12 @@ function createTransparentPanel(direction,modelType){
     var buttonMat = new THREE.MeshPhongMaterial( {color: 0xff0000});
     
     
-   
-//    var panelOverlayGeo_1 = new THREE.PlaneGeometry(0.5, 3.5);
-//    var panelOverlayGeo_2 = new THREE.PlaneGeometry(6.5, 3.5);
-//    var panelOverlayGeo_3 = new THREE.PlaneGeometry(10, 10.25);
     var texture = new THREE.Texture(panelCanvas);
     var xm = new THREE.MeshLambertMaterial({ map: texture, transparent:true });
     xm.doubleSided = true; 
     xm.map.needsUpdate = true;
     
     panelText = new THREE.Mesh(panelTextGeo, xm);
-    
-//    var panelOverlay_0 = new THREE.Mesh(panelOverlayGeo_0,panelOverlayMat);
-//    var panelOverlay_1 = new THREE.Mesh(panelOverlayGeo_1,panelOverlayMat);
-//    var panelOverlay_2 = new THREE.Mesh(panelOverlayGeo_2,panelOverlayMat);
-//    var panelOverlay_3 = new THREE.Mesh(panelOverlayGeo_3,panelOverlayMat);
     buttonPanier = new THREE.Mesh(buttonGeo, buttonMat);
     
     var v = panelText.position.clone();
@@ -509,34 +500,20 @@ function createTransparentPanel(direction,modelType){
     var vI = v.clone().multiplyScalar(-1);
     panelText.lookAt( vI ); 
     logo.lookAt(vI);
-//    panelOverlay_0.lookAt( vI ); 
-//    panelOverlay_1.lookAt( vI ); 
-//    panelOverlay_2.lookAt( vI );
-//    panelOverlay_3.lookAt( vI );
     buttonPanier.lookAt(vI);
-    panelText.doubleSided = buttonPanier.doubleSided = true; //panelOverlay_0.doubleSided = panelOverlay_1.doubleSided = panelOverlay_2.doubleSided = panelOverlay_3.doubleSided = true; 
-    
+    panelText.doubleSided = buttonPanier.doubleSided = true;
    
     var baseX = camera.position.x + direction.x * 8;
     var baseZ = camera.position.z + direction.z * 8;
     
-    panelText.position.x = buttonPanier.position.x = baseX ; //= panelOverlay_0.position.x = panelOverlay_1.position.x = panelOverlay_2.position.x = panelOverlay_3.position.x = baseX ;
-    panelText.position.y = buttonPanier.position.y = -1.2; //= panelOverlay_0.position.y = panelOverlay_1.position.y = panelOverlay_2.position.y = panelOverlay_3.position.y = -1.2;
-    panelText.position.z = buttonPanier.position.z =baseZ ; // panelOverlay_0.position.z = panelOverlay_1.position.z = panelOverlay_2.position.z = panelOverlay_3.position.z = baseZ ;
+    panelText.position.x = buttonPanier.position.x = baseX ;
+    panelText.position.y = buttonPanier.position.y = -1.2;
+    panelText.position.z = buttonPanier.position.z =baseZ ;
     
     panelText.position.x -= direction.x * 0.1;
     panelText.position.z -= direction.z * 0.1;
     
     
-
-//    panelOverlay_0.position.y += 4.5;
-//    panelOverlay_1.position.y += 2;
-//    panelOverlay_2.position.y += 2;
-//    panelOverlay_1.position.z += - 4.75*v.x;
-//    panelOverlay_1.position.x += 4.75*v.z;
-//    panelOverlay_2.position.z += 1.75*v.x;
-//    panelOverlay_2.position.x += -1.75*v.z;
-//    panelOverlay_3.position.y -= 4.875;
     buttonPanier.position.y += 3;
     buttonPanier.position.x += -3.85*v.z - direction.x * 0.2;
     buttonPanier.position.z += 3.85*v.x - direction.z * 0.2;
@@ -546,18 +523,8 @@ function createTransparentPanel(direction,modelType){
     scene.add(panelText);
     
     scene.add(buttonPanier);
-    
-//    scene.add(panelOverlay_0);
-//    panelOverlay.push(panelOverlay_0);
-//    
-//    scene.add(panelOverlay_1);
-//    panelOverlay.push(panelOverlay_1);
-//    
-//    scene.add(panelOverlay_2);
-//    panelOverlay.push(panelOverlay_2);
-//    
-//    scene.add(panelOverlay_3);
-//    panelOverlay.push(panelOverlay_3);
+    panelOverlay.push(buttonPanier);
+
     
     var logoPosBase = new THREE.Vector3(baseX, -1.2+4.5, baseZ);
     logo.position.z = logoPosBase.z + 3.4*v.x + direction.z * -1.5;
