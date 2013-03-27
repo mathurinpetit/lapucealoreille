@@ -13,7 +13,7 @@ $models = $db->getAllModels();
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
                 
         <LINK href="css/main.css" rel="stylesheet" type="text/css">
-        <script src="lib/jquery-1.8.3.js"></script>
+        <script src="lib/jquery-1.8.3.js"></script>        
         <script src="lib/three.js/three.js"></script>
         <script src="lib/three.js/FirstPersonControls.js"></script>
         <script src="lib/three.js/ColladaLoader.js"></script>
@@ -24,7 +24,7 @@ $models = $db->getAllModels();
         <script src="lib/Music.js"></script>
         <script src="lib/Puces.js"></script>
     </head>
-    <body>        
+    <body> 
         <script>
             if (! Detector.webgl )
                 Detector.addGetWebGLMessage();
@@ -132,7 +132,7 @@ function init() {
     camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 2000 );
     camera.position.set( -15, 2 , 0 );
 
-    renderer = new THREE.WebGLRenderer();  
+    renderer = new THREE.WebGLRenderer({antialias:true});  
     renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.shadowMapEnabled = true;
     renderer.shadowMapSoft = true;
@@ -187,7 +187,7 @@ function init() {
                 
     //   initTrees(loader);
     initSpot(0,20,-20,true,false);                                
-    initSpot(0,20,20,true,false);
+   // initSpot(0,20,20,true,false);
        
     highLight = new THREE.SpotLight( 0xffffff,0);
     scene.add(highLight);
@@ -247,7 +247,7 @@ function onDocumentMouseClick( event ) {
         if(INTERSECTED.id == ajout_panier_label){
             panelNoRemove = true;
             panier.addProduct(selectedModel_type);
-            $("panier_paypal").append('<input type="hidden" name="hosted_button_id" value="KTNJ55KFEU7QW">');
+            $("#panier_paypal_"+selectedModel_type).submit();
             return;
         }
         pucePool.setVitesseTranslationRotationForAll(0,0);
@@ -402,7 +402,6 @@ function setSpotParameters(spot,x,y,z,shadow,debug){
         spot.shadowCameraFov = 70;
         spot.castShadow = true;
     }
-
     spot.shadowCameraVisible = debug;
 }
 
@@ -412,16 +411,17 @@ function displayModelPanel(id){
     highLightDisable(id);
     var vector = pucePool.getPosition(id);
     var direction = vector.subSelf( camera.position ).normalize();
+    var far = 10;
     
     selectedModel_0 = id+'_panel_0';
     selectedModel_1 = id+'_panel_1';
-    var v = createTransparentPanel(direction,id);
+    createTransparentPanel(direction,id,far);
+        
+    var x0 = camera.position.x + (direction.x)*far;
+    var z0 = camera.position.z + (direction.z)*far;
     
-    var x0 = camera.position.x + (v.x)*8;
-    var z0 = camera.position.z + (v.z)*8;
-    
-    var vectX = 2.2*v.z;
-    var vectZ = -2.2*v.x;
+    var vectX = 2.2*direction.z;
+    var vectZ = -2.2*direction.x;
     
     pucePool.copyPuceForPanel(id, selectedModel_0);
     pucePool.setPosition(selectedModel_0, x0+vectX, 0.2, z0+vectZ);  
@@ -478,21 +478,23 @@ function createFloor(){
     scene.add(ground); 
 }
  
-function createTransparentPanel(direction,id){
+function createTransparentPanel(direction,id,far){
     
+    var v = direction.clone();
+    v.y = 0;
     panelCanvas = document.createElement("canvas");
     var xc = panelCanvas.getContext("2d");
     panelCanvas.width = panelCanvas.height = 1024;
     var modelType = pucePool.getModelType(id);
     var caracteristique = document.getElementById(modelType+"_caracteristique").value;
     var description = document.getElementById(modelType+"_description").value;
-    
-    //xc.shadowBlur = 1;
+    xc.globalAlpha = 0.8;
+    xc.shadowBlur = 1;
     xc.fillStyle = "black";
     xc.font = "14pt arial bold";
-    xc.fillText("LA PUCE A L'OREILLE - Modèle Classic Or Rond Small", 208, 215);
+    xc.fillText("LA PUCE A L'OREILLE - "+modelType, 208, 215);
     xc.font = "10pt arial bold";
-    
+    xc.mozImageSmoothingEnabled = false;
     wrapText(xc, caracteristique, 440, 270, 400, 25);
     xc.font = "8pt arial bold";
     wrapText(xc, description, 440, 340, 400, 20);
@@ -523,18 +525,14 @@ function createTransparentPanel(direction,id){
     
     panelText = new THREE.Mesh(panelTextGeo, xm);
     buttonPanier = new THREE.Mesh(buttonGeo, buttonMat);
-    
-    var v = panelText.position.clone();
-    v.addSelf( direction );
-    v.y = 0;
     var vI = v.clone().multiplyScalar(-1);
     panelText.lookAt( vI ); 
     logo.lookAt(vI);
     buttonPanier.lookAt(vI);
     panelText.doubleSided = buttonPanier.doubleSided = true;
    
-    var baseX = camera.position.x + direction.x * 8;
-    var baseZ = camera.position.z + direction.z * 8;
+    var baseX = camera.position.x + direction.x * far;
+    var baseZ = camera.position.z + direction.z * far;
     
     panelText.position.x = buttonPanier.position.x = baseX ;
     panelText.position.y = buttonPanier.position.y = -1.2;
@@ -569,7 +567,6 @@ function createTransparentPanel(direction,id){
     document.addEventListener( 'click', onDocumentMousePanelClick, false );
     highLightEnable(panelText, direction, 10, v); 
     highLight.intensity = 1.5;
-    return v;
 }
                 
 function highLightInit(dist){
@@ -667,6 +664,7 @@ $(document).ready(function() {
      * Appel du premier modèle à charger => lancement de l'init et de l'animate
      */      
 <?php echo $dae_models_keys[0] . 'Func();'; ?>
+        
 });    
         </script>
         <?php foreach ($models as $model_name => $model) : 
@@ -716,18 +714,17 @@ $(document).ready(function() {
              <?php if($model['description']) : ?>  
                 <input id="<?php echo $key;?>_description"
                     value="<?php echo $model['description'];?>" hidden >
-            <?php endif; ?>
+            <?php endif; ?>               
+
+            <form id="panier_paypal_<?php echo $key; ?>" hidden target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                <input type="hidden" name="cmd" value="_s-xclick">
+                <input type="hidden" name="hosted_button_id" value="<?php echo $model['paypal']; ?>">
+                <input type="image" src="https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_cart_LG.gif" border="0" name="submit" alt="PayPal - la solution de paiement en ligne la plus simple et la plus sécurisée !">
+                <img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1" height="1">
+            </form>
+                
         <?php endforeach; ?>
-        
-<form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" hidden id="panier_paypal">
-        <input type="hidden" name="cmd" value="_s-xclick">
-        <input type="hidden" name="hosted_button_id" value="KTNJ55KFEU7QW">
-        <input type="image" src="https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_cart_LG.gif" border="0" name="submit" alt="PayPal - la solution de paiement en ligne la plus simple et la plus sécurisée !">
-        <img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1" height="1">
-</form>
-
-
-
-        
-    </body>
+               
+                
+ </body>
 </html>

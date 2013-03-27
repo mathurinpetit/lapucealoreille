@@ -9,7 +9,7 @@ sqlite3 lapucealoreille.db "insert into daemodels VALUES ('attache_argent','atta
 sqlite3 lapucealoreille.db "insert into daemodels VALUES ('attache_or_light','attache_or_light.dae');";
 sqlite3 lapucealoreille.db "insert into daemodels VALUES ('attache_argent_light','attache_argent_light.dae');";
 
-sqlite3 lapucealoreille.db "create table models (id INTEGER, model_libelle TEXT, puce_model TEXT, attache_model TEXT, texture TEXT, type_model TEXT, caracteristiques TEXT, description TEXT, image_0 TEXT, image_1 TEXT, image_2 TEXT, image_3 TEXT, qte INTEGER);";
+sqlite3 lapucealoreille.db "create table models (id INTEGER, model_libelle TEXT, puce_model TEXT, attache_model TEXT, texture TEXT, type_model TEXT, caracteristiques TEXT, description TEXT, image_0 TEXT, image_1 TEXT, image_2 TEXT, image_3 TEXT, qte INTEGER, paypal TEXT);";
 sqlite3 lapucealoreille.db "insert into models VALUES (1,
                             'Classic Or Rond',
                             'classic_puce',
@@ -21,7 +21,7 @@ sqlite3 lapucealoreille.db "insert into models VALUES (1,
                 'classic_or_petit_rond_0.jpg',
                 'classic_or_petit_rond_1.jpg',
                 'classic_or_petit_rond_2.jpg',
-                'classic_or_petit_rond_3.jpg',3);";
+                'classic_or_petit_rond_3.jpg',3, 'MUVPGHFZKUA8N');";
 sqlite3 lapucealoreille.db "insert into models VALUES (2,
                              'Classic Argent',
                              'classic_puce',
@@ -33,5 +33,5 @@ sqlite3 lapucealoreille.db "insert into models VALUES (2,
                 'classic_argent_0.jpg',
                 'classic_argent_1.jpg',
                 'classic_argent_2.jpg',
-                'classic_argent_3.jpg',3);";
+                'classic_argent_3.jpg',3, 'ULR6EJ6DCTNCY');";
 #sqlite3 lapucealoreille.db "insert into models VALUES (3,'classic_puce','attache_argent','texture_argent_carre','classic_argent_carre', 'SUPER PAIRE','SUPER PAIRE crée en ... par et de',null,null,null,null ,3);";
