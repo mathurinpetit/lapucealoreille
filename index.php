@@ -129,7 +129,7 @@ function musicSwitch(){
 var pucePool =null;
                     
 function init() {
-    camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 2000 );
+    camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 10000 );
     camera.position.set( -15, 2 , 0 );
 
     renderer = new THREE.WebGLRenderer({antialias:true});  
@@ -191,6 +191,21 @@ function init() {
        
     highLight = new THREE.SpotLight( 0xffffff,0);
     scene.add(highLight);
+    
+    
+        var materialArray = [];
+        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/px.jpg' ) }));
+        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/nx.jpg' ) }));
+        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/py.jpg' ) }));
+        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/ny.jpg' ) }));
+        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/pz.jpg' ) }));
+        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/nz.jpg' ) }));
+        for (var i = 0; i < 6; i++)
+        materialArray[i].side = THREE.BackSide;
+        var skyboxMaterial = new THREE.MeshFaceMaterial( materialArray );
+        var skyboxGeom = new THREE.CubeGeometry( 5000, 5000, 5000, 1, 1, 1 );
+        var skybox = new THREE.Mesh( skyboxGeom, skyboxMaterial );
+        scene.add( skybox ); 
                                
     // scene.fog = new THREE.FogExp2( 0xffffff, 0.04 );
                 
@@ -250,7 +265,7 @@ function onDocumentMouseClick( event ) {
             $("#panier_paypal_"+selectedModel_type).submit();
             return;
         }
-        pucePool.setVitesseTranslationRotationForAll(0,0);
+    //    pucePool.setVitesseTranslationRotationForAll(0,0.05);
         displayModelPanel(INTERSECTED.id);
     }
 } 
@@ -271,7 +286,7 @@ function onDocumentMousePanelClick( event ) {
     pucePool.removeModel(selectedModel_1);
     document.removeEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
     document.removeEventListener( 'click', onDocumentMousePanelClick, false );
-    pucePool.setVitesseTranslationRotationForAll(0.05,0.05);
+  //  pucePool.setVitesseTranslationRotationForAll(0.05,0.05);
     stop = false; 
 } 
 
@@ -337,7 +352,8 @@ function animate() {
 function render() {
 
     var timer = Date.now() * 0.0005;              
-    pucePool.update(renderer);     
+    pucePool.update(renderer,stop);
+    pucePool.updateNears(renderer);
     if(!stop){            
         controls.update( clock.getDelta() );
         logo.rotation.y = 0;
@@ -411,7 +427,7 @@ function displayModelPanel(id){
     highLightDisable(id);
     var vector = pucePool.getPosition(id);
     var direction = vector.subSelf( camera.position ).normalize();
-    var far = 10;
+    var far = 8;
     
     selectedModel_0 = id+'_panel_0';
     selectedModel_1 = id+'_panel_1';
@@ -431,6 +447,7 @@ function displayModelPanel(id){
     pucePool.setPosition(selectedModel_1, x0 + 1.6 * vectX, 0.2, z0 + 1.6 * vectZ);
     
     selectedModel_type = pucePool.getModelType(id);
+    pucePool.majPucesPositionPanel(camera,far,direction);
     
 }
                         
