@@ -213,7 +213,7 @@ function init() {
     var ambianteLight = new THREE.AmbientLight( 0x333333 );
     scene.add(ambianteLight);    
        
-    createFloor();
+ //   createFloor();
     
     if(debug){            
         stats = new Stats();
@@ -355,11 +355,13 @@ function render() {
     pucePool.update(renderer,stop);
     pucePool.updateNears(renderer);
     if(!stop){            
+        controls.freeze = false;
         controls.update( clock.getDelta() );
         logo.rotation.y = 0;
     }
     else
     {
+        controls.freeze = true;
         logo.rotation.y += 0.05;
     }
     sound.updateSound( camera );   
