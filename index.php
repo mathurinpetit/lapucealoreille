@@ -41,7 +41,7 @@ $models = $db->getAllModels();
             var t = 0;
             var clock = new THREE.Clock();
             var mouse = { x: 0, y: 0 }, INTERSECTED;
-            var stop = false;
+            var stop = true;
             var selectedModel_0, selectedModel_1, selectedModel_type;
             var panelCanvas;
             var ajout_panier_label = "ajout_panier";
@@ -131,6 +131,7 @@ var pucePool =null;
 function init() {
     camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 10000 );
     camera.position.set( -15, 2 , 0 );
+    camera.lookAt( new THREE.Vector3(0, 0, 0) );
 
     renderer = new THREE.WebGLRenderer({antialias:true});  
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -155,13 +156,13 @@ function init() {
     projector = new THREE.Projector();
                 
                 
-    controls = new THREE.FirstPersonControls( camera );
-    controls.movementSpeed = 4;
-    controls.lookSpeed = 0.05;
-    controls.lookVertical = false;
-    controls.constrainVertical = false;
-    controls.verticalMin = 1.1;
-    controls.verticalMax = 2.2;
+//    controls = new THREE.FirstPersonControls( camera );
+//    controls.movementSpeed = 4;
+//    controls.lookSpeed = 0.05;
+//    controls.lookVertical = false;
+//    controls.constrainVertical = false;
+//    controls.verticalMin = 1.1;
+//    controls.verticalMax = 2.2;
                 
     pucePool = new PUCES(scene,renderer);   
         
@@ -172,21 +173,24 @@ function init() {
     sound.playSound();  
             
             <?php 
+            $cpt = 0;
             foreach ($models as $model_name => $model): ?>
-              <?php for($i=0; $i< $model['qte']; $i++): ?>
+              <?php for($i=0; $i< 2; $i++): ?>
                 pucePool.createPuce("<?php echo $model_name.'_'.$i; ?>",
                 <?php echo $model["puce_model"]; ?>,   
                     <?php echo $model["attache_model"]; ?>,
     "<?php echo $model["texture"]; ?>" ,
     true, false, true ,0.05,"<?php echo $model_name; ?>");
-                var x = 5 - Math.random() * 10;
-                var z = 5 - Math.random() * 10;
-              pucePool.setPosition("<?php echo $model_name.'_'.$i; ?>",x,2,z);
-              <?php  endfor; ?>    
+                var x = -3;
+                var z = -5 + <?php echo $cpt; ?>;
+              pucePool.setPosition("<?php echo $model_name.'_'.$i; ?>",x,1,z);
+              <?php $cpt++; ?>
+              <?php  endfor; ?>
+                  <?php $cpt++; ?>
           <?php  endforeach; ?>                       
                 
     //   initTrees(loader);
-    initSpot(0,20,-20,true,false);                                
+    initSpot(-15,2,-3,true,false);                                
    // initSpot(0,20,20,true,false);
        
     highLight = new THREE.SpotLight( 0xffffff,0);
@@ -352,16 +356,16 @@ function animate() {
 function render() {
 
     var timer = Date.now() * 0.0005;              
-    pucePool.update(renderer,stop);
-    pucePool.updateNears(renderer);
+    pucePool.update(renderer,false);
+   // pucePool.updateNears(renderer);
     if(!stop){            
-        controls.freeze = false;
-        controls.update( clock.getDelta() );
+//        controls.freeze = false;
+//        controls.update( clock.getDelta() );
         logo.rotation.y = 0;
     }
     else
     {
-        controls.freeze = true;
+       // controls.freeze = true;
         logo.rotation.y += 0.05;
     }
     sound.updateSound( camera );   

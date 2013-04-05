@@ -34,4 +34,15 @@ sqlite3 lapucealoreille.db "insert into models VALUES (2,
                 'classic_argent_1.jpg',
                 'classic_argent_2.jpg',
                 'classic_argent_3.jpg',3, 'ULR6EJ6DCTNCY');";
-#sqlite3 lapucealoreille.db "insert into models VALUES (3,'classic_puce','attache_argent','texture_argent_carre','classic_argent_carre', 'SUPER PAIRE','SUPER PAIRE crée en ... par et de',null,null,null,null ,3);";
+sqlite3 lapucealoreille.db "insert into models VALUES (3,
+                                                      'Classic Argent carrée',
+                                                      'classic_puce',
+                                                      'attache_argent_light',
+                                                      'texture_argent_carre',
+                                                      'classic_argent_carre',
+                                                      'SUPER PAIRE',
+                                                      'SUPER PAIRE crée en ... par et de',
+                                                      'classic_argent_0.jpg',
+                                                      'classic_argent_1.jpg',
+                                                      'classic_argent_2.jpg',
+                                                      'classic_argent_3.jpg',3, 'ULR6EJ6DCTNCY');";
