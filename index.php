@@ -209,15 +209,14 @@ function init() {
         var skyboxMaterial = new THREE.MeshFaceMaterial( materialArray );
         var skyboxGeom = new THREE.CubeGeometry( 5000, 5000, 5000, 1, 1, 1 );
         var skybox = new THREE.Mesh( skyboxGeom, skyboxMaterial );
-        scene.add( skybox ); 
+    //    scene.add( skybox ); 
                                
-    // scene.fog = new THREE.FogExp2( 0xffffff, 0.04 );
+     scene.fog = new THREE.FogExp2( 0xffffff, 0.04 );
                 
     // Lights
     var ambianteLight = new THREE.AmbientLight( 0x333333 );
     scene.add(ambianteLight);    
-       
- //   createFloor();
+         createFloor();
     
     if(debug){            
         stats = new Stats();
