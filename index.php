@@ -196,26 +196,13 @@ function init() {
     highLight = new THREE.SpotLight( 0xffffff,0);
     scene.add(highLight);
     
-    
-//        var materialArray = [];
-//        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/px.jpg' ) }));
-//        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/nx.jpg' ) }));
-//        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/py.jpg' ) }));
-//        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/ny.jpg' ) }));
-//        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/pz.jpg' ) }));
-//        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/nz.jpg' ) }));
-//        for (var i = 0; i < 6; i++)
-//        materialArray[i].side = THREE.BackSide;
-//        var skyboxMaterial = new THREE.MeshFaceMaterial( materialArray );
-//        var skyboxGeom = new THREE.CubeGeometry( 5000, 5000, 5000, 1, 1, 1 );
-//        var skybox = new THREE.Mesh( skyboxGeom, skyboxMaterial );
-//        scene.add( skybox ); 
                                
     // scene.fog = new THREE.FogExp2( 0xffffff, 0.04 );
                 
     // Lights
     var ambianteLight = new THREE.AmbientLight( 0x333333 );
     scene.add(ambianteLight);    
+
        
     createFloor();
     
