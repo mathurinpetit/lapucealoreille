@@ -15,13 +15,11 @@ $models = $db->getAllModels();
         <LINK href="css/main.css" rel="stylesheet" type="text/css">
         <script src="lib/jquery-1.8.3.js"></script>        
         <script src="lib/three.js/three.js"></script>
-        <script src="lib/three.js/FirstPersonControls.js"></script>
         <script src="lib/three.js/ColladaLoader.js"></script>
         <script src="lib/three.js/Detector.js"></script>
         <script src="lib/three.js/Stats.js"></script>
         <script src="lib/microcache.js"></script>
         <script src="lib/Panier.js"></script>
-        <script src="lib/Music.js"></script>
         <script src="lib/Puces.js"></script>
     </head>
     <body> 
@@ -29,13 +27,11 @@ $models = $db->getAllModels();
             if (! Detector.webgl )
                 Detector.addGetWebGLMessage();
             var debug = true;
-            var container, stats, panier, music;
+            var container, stats, panier;
 
-            var camera, scene, renderer, controls, projector;
+            var camera, scene, plan, renderer, projector;
             var highLight;
-            var sound;
             
-            var plane;
             var panelOverlay = [];             
             var panelText; 
             var t = 0;
@@ -84,47 +80,6 @@ endforeach;
 ?>
 
 
-var Sound = function ( sources, radius, volume ) {
-    var audio = document.createElement( 'audio' );
-     $(audio).attr('loop','');
-    for ( var i = 0; i < sources.length; i ++ ) {
-        var source = document.createElement( 'source' );
-        source.src = sources[ i ];
-        audio.appendChild( source );
-    } 
-    
-    this.position = new THREE.Vector3();
-    
-    this.playSound = function () {
-        audio.play();        
-    }
-    
-    this.switchSound = function () {
-        if(audio.paused){
-            audio.play();  
-        }
-        else {
-            audio.pause();  
-        }
-    }
-            
-    this.updateSound = function ( camera ) {
-        var distance = this.position.distanceTo( camera.position );
-        if ( distance <= radius ) {
-            audio.volume = volume * ( 1 - distance / radius );
-        } else {
-            audio.volume = 0;
-        }
-    }
-    
-    audio.addEventListener('ended', function(){
-        this.currentTime = 0;
-    }, false);
-}
-
-function musicSwitch(){
-    sound.switchSound();
-}
 
 var pucePool =null;
                     
@@ -144,8 +99,8 @@ function init() {
         
     renderer.shadowMapBias = 0.0039;
     renderer.shadowMapDarkness = 0.5;
-    renderer.shadowMapWidth = 1024;
-    renderer.shadowMapHeight = 1024;
+    renderer.shadowMapWidth = 512;
+    renderer.shadowMapHeight = 512;
     renderer._microCache = new MicroCache();    
                 
                 
@@ -155,22 +110,7 @@ function init() {
     scene = new THREE.Scene();
     projector = new THREE.Projector();
                 
-                
-//    controls = new THREE.FirstPersonControls( camera );
-//    controls.movementSpeed = 4;
-//    controls.lookSpeed = 0.05;
-//    controls.lookVertical = false;
-//    controls.constrainVertical = false;
-//    controls.verticalMin = 1.1;
-//    controls.verticalMax = 2.2;
-                
     pucePool = new PUCES(scene,renderer);   
-        
-    sound = new Sound( [ './sounds/sheherazade.mp3', './sounds/sheherazade.ogg'], 50, 1 );
-    sound.position.x = 0;
-    sound.position.y = 0;
-    sound.position.z = 0;
-    sound.playSound();  
             
             <?php 
             $cpt = 0;
@@ -190,8 +130,7 @@ function init() {
           <?php  endforeach; ?>                       
                 
     //   initTrees(loader);
-    initSpot(-15,2,-3,true,true);                                
-    initSpot(0,0,0,true,true);
+    initSpot(-15,2,-3,true,true);   
        
     highLight = new THREE.SpotLight( 0xffffff,0);
     scene.add(highLight);
@@ -204,7 +143,7 @@ function init() {
     scene.add(ambianteLight);    
 
        
-    createFloor();
+    createPlan();
     
     if(debug){            
         stats = new Stats();
@@ -219,13 +158,6 @@ function init() {
     panier.domElement.style.right = '30px';
     container.appendChild( panier.domElement );
     
-    music = new Music(this);
-    music.domElement.style.position = 'absolute';
-    music.domElement.style.top = '130px';
-    music.domElement.style.right = '30px';
-    container.appendChild( music.domElement );
-
-
     window.addEventListener( 'resize', onWindowResize, false );
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     document.addEventListener( 'click', onDocumentMouseClick, false );
@@ -346,16 +278,13 @@ function render() {
     pucePool.update(renderer,false);
    // pucePool.updateNears(renderer);
     if(!stop){            
-//        controls.freeze = false;
-//        controls.update( clock.getDelta() );
         logo.rotation.y = 0;
     }
     else
     {
-       // controls.freeze = true;
         logo.rotation.y += 0.05;
     }
-    sound.updateSound( camera );   
+    
     highLightInit(4);
                             
     renderer.clear();
@@ -418,7 +347,7 @@ function displayModelPanel(id){
     
     stop = true;
     highLightDisable(id);
-    var vector = pucePool.getPosition(id);
+    var vector = plan.position;
     var direction = vector.subSelf( camera.position ).normalize();
     var far = 8;
     
@@ -477,15 +406,15 @@ function createTree(tree,x,z){
                     
 }
 
-function createFloor(){
-    var groundGeo = new THREE.PlaneGeometry(40, 40);
-    var groundMat = new THREE.MeshPhongMaterial( {color: 0xFFFFFF});
-    var ground = new THREE.Mesh(groundGeo,groundMat); 
-    ground.position.y = -1; 
-    ground.rotation.y = -Math.PI/2; 
-    ground.doubleSided = true; 
-    ground.receiveShadow = true;
-    scene.add(ground); 
+function createPlan(){
+    var planGeo = new THREE.PlaneGeometry(40, 40);
+    var planMat = new THREE.MeshPhongMaterial( {color: 0xFFFFFF});
+    plan = new THREE.Mesh(planGeo,planMat); 
+    plan.position.y = -1; 
+    plan.rotation.y = -Math.PI/2; 
+    plan.doubleSided = true; 
+    plan.receiveShadow = true;
+    scene.add(plan); 
 }
  
 function createTransparentPanel(direction,id,far){
@@ -576,7 +505,7 @@ function createTransparentPanel(direction,id,far){
     document.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
     document.addEventListener( 'click', onDocumentMousePanelClick, false );
     highLightEnable(panelText, direction, 10, v); 
-    highLight.intensity = 1.5;
+    highLight.intensity = 1;
 }
                 
 function highLightInit(dist){
