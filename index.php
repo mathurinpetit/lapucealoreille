@@ -181,7 +181,7 @@ function init() {
                     <?php echo $model["attache_model"]; ?>,
     "<?php echo $model["texture"]; ?>" ,
     true, false, true ,0.05,"<?php echo $model_name; ?>");
-                var x = -3;
+                var x = -4;
                 var z = -5 + <?php echo $cpt; ?>;
               pucePool.setPosition("<?php echo $model_name.'_'.$i; ?>",x,1,z);
               <?php $cpt++; ?>
@@ -190,26 +190,26 @@ function init() {
           <?php  endforeach; ?>                       
                 
     //   initTrees(loader);
-    initSpot(-15,2,-3,true,false);                                
-   // initSpot(0,20,20,true,false);
+    initSpot(-15,2,-3,true,true);                                
+    initSpot(0,0,0,true,true);
        
     highLight = new THREE.SpotLight( 0xffffff,0);
     scene.add(highLight);
     
     
-        var materialArray = [];
-        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/px.jpg' ) }));
-        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/nx.jpg' ) }));
-        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/py.jpg' ) }));
-        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/ny.jpg' ) }));
-        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/pz.jpg' ) }));
-        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/nz.jpg' ) }));
-        for (var i = 0; i < 6; i++)
-        materialArray[i].side = THREE.BackSide;
-        var skyboxMaterial = new THREE.MeshFaceMaterial( materialArray );
-        var skyboxGeom = new THREE.CubeGeometry( 5000, 5000, 5000, 1, 1, 1 );
-        var skybox = new THREE.Mesh( skyboxGeom, skyboxMaterial );
-        scene.add( skybox ); 
+//        var materialArray = [];
+//        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/px.jpg' ) }));
+//        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/nx.jpg' ) }));
+//        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/py.jpg' ) }));
+//        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/ny.jpg' ) }));
+//        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/pz.jpg' ) }));
+//        materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( 'skybox/nz.jpg' ) }));
+//        for (var i = 0; i < 6; i++)
+//        materialArray[i].side = THREE.BackSide;
+//        var skyboxMaterial = new THREE.MeshFaceMaterial( materialArray );
+//        var skyboxGeom = new THREE.CubeGeometry( 5000, 5000, 5000, 1, 1, 1 );
+//        var skybox = new THREE.Mesh( skyboxGeom, skyboxMaterial );
+//        scene.add( skybox ); 
                                
     // scene.fog = new THREE.FogExp2( 0xffffff, 0.04 );
                 
@@ -217,7 +217,7 @@ function init() {
     var ambianteLight = new THREE.AmbientLight( 0x333333 );
     scene.add(ambianteLight);    
        
- //   createFloor();
+    createFloor();
     
     if(debug){            
         stats = new Stats();
@@ -491,11 +491,11 @@ function createTree(tree,x,z){
 }
 
 function createFloor(){
-    var groundGeo = new THREE.PlaneGeometry(400, 400);
+    var groundGeo = new THREE.PlaneGeometry(40, 40);
     var groundMat = new THREE.MeshPhongMaterial( {color: 0xFFFFFF});
     var ground = new THREE.Mesh(groundGeo,groundMat); 
     ground.position.y = -1; 
-    ground.rotation.x = -Math.PI/2; 
+    ground.rotation.y = -Math.PI/2; 
     ground.doubleSided = true; 
     ground.receiveShadow = true;
     scene.add(ground); 

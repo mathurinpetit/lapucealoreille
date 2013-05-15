@@ -428,7 +428,7 @@ function createFloor(){
     var groundMat = new THREE.MeshPhongMaterial( {color: 0xFFFFFF});
     var ground = new THREE.Mesh(groundGeo,groundMat); 
     ground.position.y = -1; 
-    ground.rotation.x = -Math.PI/2; 
+    ground.rotation.y = Math.PI; 
     ground.doubleSided = true; 
     ground.receiveShadow = true;
     scene.add(ground); 
