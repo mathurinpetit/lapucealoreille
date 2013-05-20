@@ -21,6 +21,7 @@ $models = $db->getAllModels();
         <script src="lib/microcache.js"></script>
         <script src="lib/Panier.js"></script>
         <script src="lib/Puces.js"></script>
+         <script src="lib/three.js/FirstPersonControls.js"></script>
     </head>
     <body> 
         <script>
@@ -36,8 +37,9 @@ $models = $db->getAllModels();
             var panelText; 
             var t = 0;
             var clock = new THREE.Clock();
+            var step = 0;
             var mouse = { x: 0, y: 0 }, INTERSECTED;
-            var stop = true;
+            var stop = false;
             var selectedModel_0, selectedModel_1, selectedModel_type;
             var panelCanvas;
             var ajout_panier_label = "ajout_panier";
@@ -45,6 +47,7 @@ $models = $db->getAllModels();
             /*
              * Fonctions de chargement en chaine des modèles collada
              */
+            var controls;
             
 <?php
 $cpt = 0;
@@ -120,17 +123,16 @@ function init() {
                 <?php echo $model["puce_model"]; ?>,   
                     <?php echo $model["attache_model"]; ?>,
     "<?php echo $model["texture"]; ?>" ,
-    true, false, true ,0.05,"<?php echo $model_name; ?>");
-                var x = -4;
-                var z = -5 + <?php echo $cpt; ?>;
-              pucePool.setPosition("<?php echo $model_name.'_'.$i; ?>",x,1,z);
+    true, false, true ,0.08,"<?php echo $model_name; ?>");
+                
+              pucePool.setInitPosition("<?php echo $model_name.'_'.$i; ?>",<?php echo $cpt; ?>);
               <?php $cpt++; ?>
               <?php  endfor; ?>
                   <?php $cpt++; ?>
           <?php  endforeach; ?>                       
                 
     //   initTrees(loader);
-    initSpot(-15,2,-3,true,true);   
+    initSpot(-70,2,-3,true,false);   
        
     highLight = new THREE.SpotLight( 0xffffff,0);
     scene.add(highLight);
@@ -139,7 +141,7 @@ function init() {
     // scene.fog = new THREE.FogExp2( 0xffffff, 0.04 );
                 
     // Lights
-    var ambianteLight = new THREE.AmbientLight( 0x333333 );
+    var ambianteLight = new THREE.AmbientLight( 0x111111 );
     scene.add(ambianteLight);    
 
        
@@ -162,6 +164,14 @@ function init() {
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     document.addEventListener( 'click', onDocumentMouseClick, false );
     container.appendChild( renderer.domElement );
+    
+    controls = new THREE.FirstPersonControls( camera );
+    controls.movementSpeed = 4;
+    controls.lookSpeed = 0.05;
+    controls.lookVertical = false;
+    controls.constrainVertical = false;
+    controls.verticalMin = 1.1;
+    controls.verticalMax = 2.2;
 }
             
 function onWindowResize() {
@@ -273,9 +283,11 @@ function animate() {
 }
             
 function render() {
-
-    var timer = Date.now() * 0.0005;              
-    pucePool.update(renderer,false);
+   
+   var timer = Date.now() * 0.05;
+   step += clock.getDelta()/8;
+   if(step > (Math.PI*2)) step=0;
+   pucePool.update(renderer,false,step);
    // pucePool.updateNears(renderer);
     if(!stop){            
         logo.rotation.y = 0;
@@ -284,7 +296,7 @@ function render() {
     {
         logo.rotation.y += 0.05;
     }
-    
+    controls.update( clock.getDelta() );
     highLightInit(4);
                             
     renderer.clear();
@@ -323,7 +335,7 @@ function sphereDebug(x,y,z){
 }
             
 function initSpot(x,y,z,shadow,debug){
-    var spot = new THREE.SpotLight( 0xffffff,0.7);
+    var spot = new THREE.SpotLight( 0xffffff,0.6);
     setSpotParameters(spot,x,y,z,shadow,debug);   
     scene.add(spot); 
 }
@@ -331,7 +343,7 @@ function initSpot(x,y,z,shadow,debug){
 function setSpotParameters(spot,x,y,z,shadow,debug){
     spot.position.set(x,y,z);
     if(shadow){
-        spot.shadowDarkness = 0.7; 
+        spot.shadowDarkness = 0.6; 
         spot.shadowMapWidth = 1024;
         spot.shadowMapHeight = 1024;
 
@@ -340,7 +352,7 @@ function setSpotParameters(spot,x,y,z,shadow,debug){
         spot.shadowCameraFov = 70;
         spot.castShadow = true;
     }
-    spot.shadowCameraVisible = debug;
+        spot.shadowCameraVisible = debug;
 }
 
 function displayModelPanel(id){
@@ -407,14 +419,38 @@ function createTree(tree,x,z){
 }
 
 function createPlan(){
-    var planGeo = new THREE.PlaneGeometry(40, 40);
+    var planGeo = new THREE.PlaneGeometry(10, 30);
     var planMat = new THREE.MeshPhongMaterial( {color: 0xFFFFFF});
     plan = new THREE.Mesh(planGeo,planMat); 
-    plan.position.y = -1; 
     plan.rotation.y = -Math.PI/2; 
-    plan.doubleSided = true; 
     plan.receiveShadow = true;
     scene.add(plan); 
+    
+    var planGeo2 = new THREE.PlaneGeometry(20, 5);
+    var plan2 = new THREE.Mesh(planGeo2,planMat);  
+    plan2.rotation.y = -Math.PI/2; 
+    plan2.position.y = 6;
+    plan2.receiveShadow = true;
+    scene.add(plan2); 
+    
+    var plan4 = new THREE.Mesh(planGeo2,planMat);  
+    plan4.rotation.y = -Math.PI/2;
+    plan4.position.y = -3;
+    plan4.receiveShadow = true;
+    scene.add(plan4);
+    
+    var planGeo3 = new THREE.PlaneGeometry(3, 20);
+    var plan5 = new THREE.Mesh(planGeo3,planMat);  
+    plan5.rotation.y = -Math.PI/2; 
+    plan5.position.z = -9;
+    plan5.receiveShadow = true;
+    scene.add(plan5); 
+    
+    var plan6 = new THREE.Mesh(planGeo3,planMat);  
+    plan6.rotation.y = -Math.PI/2; 
+    plan6.position.z = 9;
+    plan6.receiveShadow = true;
+       scene.add(plan6); 
 }
  
 function createTransparentPanel(direction,id,far){
@@ -505,7 +541,7 @@ function createTransparentPanel(direction,id,far){
     document.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
     document.addEventListener( 'click', onDocumentMousePanelClick, false );
     highLightEnable(panelText, direction, 10, v); 
-    highLight.intensity = 1;
+    highLight.intensity = 0.5;
 }
                 
 function highLightInit(dist){
@@ -560,7 +596,7 @@ function highLightEnable(obj,vector,dist,direction){
     position.sub(obj.position,d);
     setSpotParameters(highLight,position.x,position.y,position.z,true,false);
     highLight.target.position.set(obj.position.x,obj.position.y,obj.position.z);
-    highLight.intensity = 1;
+    highLight.intensity = 0.5;
 }
 
 function cursor_transform(cursor_type){
