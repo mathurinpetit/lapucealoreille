@@ -1,18 +1,22 @@
 <?php
-include_once 'db/DB.class.php';
 
+include_once 'db/DB.class.php';
+include_once 'db/DAEModelsLoader.class.php';
 $db = new DB();
 $dae_models = $db->getAllDaeModels();
 $models = $db->getAllModels();
+
+$daeModelLoader = new DAEModelsLoader();
+$loadProcess = $daeModelLoader->createLoadProcess($dae_models);
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
     <head>
         <title>La Puce à l'oreille</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-                
-        <LINK href="css/main.css" rel="stylesheet" type="text/css">
+        <link href="css/main.css" rel="stylesheet" type="text/css">
         <script src="lib/jquery-1.8.3.js"></script>        
         <script src="lib/three.js/three.js"></script>
         <script src="lib/three.js/ColladaLoader.js"></script>
@@ -20,8 +24,7 @@ $models = $db->getAllModels();
         <script src="lib/three.js/Stats.js"></script>
         <script src="lib/microcache.js"></script>
         <script src="lib/Panier.js"></script>
-        <script src="lib/Puces.js"></script>
-         <script src="lib/three.js/FirstPersonControls.js"></script>
+        <script src="lib/Puces_light.js"></script>
     </head>
     <body> 
         <script>
@@ -47,41 +50,8 @@ $models = $db->getAllModels();
             /*
              * Fonctions de chargement en chaine des modèles collada
              */
-            var controls;
             
-<?php
-$cpt = 0;
-$dae_models_keys = array_keys($dae_models);
-foreach ($dae_models as $key => $dae_model):
-    ?>
-                                    
-            var <?php echo 'loader_for_' . $key; ?> = new THREE.ColladaLoader();
-    <?php echo 'loader_for_' . $key; ?>.options.convertUpAxis = true;
-                                    
-            var <?php echo $key; ?> = null;  
-            var <?php echo $key . 'Func'; ?> = function(){
-    <?php echo 'loader_for_' . $key; ?>.load("<?php echo $dae_model; ?>", function colladaReady(collada) {
-                model = collada.scene;                
-                model.scale.x = model.scale.y = model.scale.z = 0.02;
-                model.updateMatrix();
-    <?php echo $key; ?> = model;
-    <?php
-    if ($cpt < count($dae_models) - 1):
-        echo $dae_models_keys[$cpt + 1] . 'Func();';
-    else :
-        ?> 
-                        init();
-                        animate();    
-    <?php
-    endif;
-    ?>           
-            },function(){} ); 
-        };
-    <?php
-    $cpt++;
-endforeach;
-?>
-
+<?php echo $loadProcess; ?>
 
 
 var pucePool =null;
@@ -93,8 +63,8 @@ function init() {
 
     renderer = new THREE.WebGLRenderer({antialias:true});  
     renderer.setSize( window.innerWidth, window.innerHeight );
-    renderer.shadowMapEnabled = true;
-    renderer.shadowMapSoft = true;
+    renderer.shadowMapEnabled = false;
+    renderer.shadowMapSoft = false;
         
     renderer.shadowCameraNear = 0.5;
     renderer.shadowCameraFar = camera.far;
@@ -123,7 +93,7 @@ function init() {
                 <?php echo $model["puce_model"]; ?>,   
                     <?php echo $model["attache_model"]; ?>,
     "<?php echo $model["texture"]; ?>" ,
-    false, false, false ,0.08,"<?php echo $model_name; ?>");
+    false, false, true ,0.08,"<?php echo $model_name; ?>");
                 
               pucePool.setInitPosition("<?php echo $model_name.'_'.$i; ?>",<?php echo $cpt; ?>);
               <?php $cpt++; ?>
@@ -144,9 +114,6 @@ function init() {
     var ambianteLight = new THREE.AmbientLight( 0x111111 );
     scene.add(ambianteLight);    
 
-       
-    createPlan();
-    
     if(debug){            
         stats = new Stats();
         stats.domElement.style.position = 'absolute';
@@ -164,14 +131,7 @@ function init() {
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     document.addEventListener( 'click', onDocumentMouseClick, false );
     container.appendChild( renderer.domElement );
-    
-    controls = new THREE.FirstPersonControls( camera );
-    controls.movementSpeed = 4;
-    controls.lookSpeed = 0.05;
-    controls.lookVertical = false;
-    controls.constrainVertical = false;
-    controls.verticalMin = 1.1;
-    controls.verticalMax = 2.2;
+ 
 }
             
 function onWindowResize() {
@@ -296,7 +256,6 @@ function render() {
     {
         logo.rotation.y += 0.05;
     }
-    controls.update( clock.getDelta() );
     highLightInit(4);
                             
     renderer.clear();
@@ -359,7 +318,7 @@ function displayModelPanel(id){
     
     stop = true;
     highLightDisable(id);
-    var vector = plan.position;
+    var vector = new THREE.Vector3(0, 0, 0);
     var direction = vector.subSelf( camera.position ).normalize();
     var far = 8;
     
@@ -418,41 +377,6 @@ function createTree(tree,x,z){
                     
 }
 
-function createPlan(){
-    var planGeo = new THREE.PlaneGeometry(10, 30);
-    var planMat = new THREE.MeshPhongMaterial( {color: 0xFFFFFF});
-    plan = new THREE.Mesh(planGeo,planMat); 
-    plan.rotation.y = -Math.PI/2; 
-    plan.receiveShadow = true;
-    scene.add(plan); 
-    
-    var planGeo2 = new THREE.PlaneGeometry(20, 5);
-    var plan2 = new THREE.Mesh(planGeo2,planMat);  
-    plan2.rotation.y = -Math.PI/2; 
-    plan2.position.y = 6;
-    plan2.receiveShadow = true;
-    scene.add(plan2); 
-    
-    var plan4 = new THREE.Mesh(planGeo2,planMat);  
-    plan4.rotation.y = -Math.PI/2;
-    plan4.position.y = -3;
-    plan4.receiveShadow = true;
-    scene.add(plan4);
-    
-    var planGeo3 = new THREE.PlaneGeometry(3, 20);
-    var plan5 = new THREE.Mesh(planGeo3,planMat);  
-    plan5.rotation.y = -Math.PI/2; 
-    plan5.position.z = -9;
-    plan5.receiveShadow = true;
-    scene.add(plan5); 
-    
-    var plan6 = new THREE.Mesh(planGeo3,planMat);  
-    plan6.rotation.y = -Math.PI/2; 
-    plan6.position.z = 9;
-    plan6.receiveShadow = true;
-       scene.add(plan6); 
-}
- 
 function createTransparentPanel(direction,id,far){
     
     var v = direction.clone();
@@ -638,7 +562,10 @@ $(document).ready(function() {
     /**
      * Appel du premier modèle à charger => lancement de l'init et de l'animate
      */      
-<?php echo $dae_models_keys[0] . 'Func();'; ?>
+<?php 
+$dae_models_keys = array_keys($dae_models);
+echo $dae_models_keys[0] . 'Func();'; 
+?>
         
 });    
         </script>
