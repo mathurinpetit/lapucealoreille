@@ -25,8 +25,22 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
         <script src="lib/microcache.js"></script>
         <script src="lib/Panier.js"></script>
         <script src="lib/Puces_light.js"></script>
+        <script type="text/javascript" src="lib/Worker.js"></script>
     </head>
     <body> 
+        
+        <script>
+var worker = new Worker('lib/test_worker.js');
+worker.addEventListener('message', function(msg) {
+  console.log('UI thread received result:', msg.data.result);
+});
+
+worker.postMessage({
+  cmd: 'say_something',
+  other_var: 'foo1234'
+});
+
+</script>
         <script>
             if (! Detector.webgl )
                 Detector.addGetWebGLMessage();
@@ -246,9 +260,8 @@ function render() {
    
    var timer = Date.now() * 0.05;
    step += clock.getDelta()/8;
-   if(step > (Math.PI*2)) step=0;
-   pucePool.update(renderer,false,step);
-   // pucePool.updateNears(renderer);
+   pucePool.update(false);
+   
     if(!stop){            
         logo.rotation.y = 0;
     }
