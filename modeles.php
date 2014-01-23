@@ -25,22 +25,8 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
         <script src="lib/microcache.js"></script>
         <script src="lib/Panier.js"></script>
         <script src="lib/Puces_light.js"></script>
-        <script type="text/javascript" src="lib/Worker.js"></script>
     </head>
     <body> 
-        
-        <script>
-var worker = new Worker('lib/test_worker.js');
-worker.addEventListener('message', function(msg) {
-  console.log('UI thread received result:', msg.data.result);
-});
-
-worker.postMessage({
-  cmd: 'say_something',
-  other_var: 'foo1234'
-});
-
-</script>
         <script>
             if (! Detector.webgl )
                 Detector.addGetWebGLMessage();
@@ -107,12 +93,11 @@ function init() {
                 <?php echo $model["puce_model"]; ?>,   
                     <?php echo $model["attache_model"]; ?>,
     "<?php echo $model["texture"]; ?>" ,
-    false, false, true ,0.08,"<?php echo $model_name; ?>");
+    false, false, true ,-0.08,"<?php echo $model_name; ?>");
                 
               pucePool.setInitPosition("<?php echo $model_name.'_'.$i; ?>",<?php echo $cpt; ?>);
               <?php $cpt++; ?>
               <?php  endfor; ?>
-                  <?php $cpt++; ?>
           <?php  endforeach; ?>                       
                 
     //   initTrees(loader);

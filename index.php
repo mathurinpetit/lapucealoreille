@@ -123,7 +123,7 @@ function init() {
                 <?php echo $model["puce_model"]; ?>,   
                     <?php echo $model["attache_model"]; ?>,
     "<?php echo $model["texture"]; ?>" ,
-    false, false, false ,0.08,"<?php echo $model_name; ?>");
+    false, false, true ,0.08,"<?php echo $model_name; ?>");
                 
               pucePool.setInitPosition("<?php echo $model_name.'_'.$i; ?>",<?php echo $cpt; ?>);
               <?php $cpt++; ?>
