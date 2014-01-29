@@ -2,12 +2,10 @@
 
 include_once 'db/DB.class.php';
 include_once 'db/DAEModelsLoader.class.php';
-$db = new DB();
-$dae_models = $db->getAllDaeModels();
-$models = $db->getAllModels();
+$dae_models = DB::getAllDaeModels();
+$models = DB::getAllModels();
 
-$daeModelLoader = new DAEModelsLoader();
-$loadProcess = $daeModelLoader->createLoadProcess($dae_models);
+$loadProcess = DAEModelsLoader::createLoadProcess($dae_models);
 ?>
 
 <!DOCTYPE html>

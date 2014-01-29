@@ -13,7 +13,7 @@
 class DAEModelsLoader {
     
         
-    function createLoadProcess($dae_models) {
+    public static function createLoadProcess($dae_models) {
         $loadProcessString = "";
         $cpt = 0;
         $dae_models_keys = array_keys($dae_models);
