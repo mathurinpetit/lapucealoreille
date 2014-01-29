@@ -129,6 +129,7 @@ function init() {
     window.addEventListener( 'resize', onWindowResize, false );
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     document.addEventListener( 'click', onDocumentMouseClick, false );
+    document.addEventListener('DOMMouseScroll', onDocumentMouseWheelGlobal, false);
     container.appendChild( renderer.domElement );
  
 }
@@ -176,15 +177,18 @@ function onDocumentMousePanelClick( event ) {
     scene.remove(logo);
     pucePool.removeModel(selectedModel_0);
     pucePool.removeModel(selectedModel_1);
-    document.removeEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
+    document.removeEventListener('DOMMouseScroll', onDocumentMouseWheelPanel, false);
     document.removeEventListener( 'click', onDocumentMousePanelClick, false );
   //  pucePool.setVitesseTranslationRotationForAll(0.05,0.05);
     stop = false; 
 } 
 
+function onDocumentMouseWheelGlobal(event){
+    var delta = getDeltaWheel(event);
+    pucePool.translateAllWithVector(0,delta*-3,0);
+}
 
-
-function onDocumentMouseWheel( event ){
+function getDeltaWheel(event){
     event.preventDefault();
     var delta = 0;
     if (event.wheelDelta) {
@@ -193,6 +197,11 @@ function onDocumentMouseWheel( event ){
     } else if (event.detail) {
          delta = -event.detail / 20;
     }
+    return delta;
+}
+
+function onDocumentMouseWheelPanel( event ){
+    var delta = getDeltaWheel(event);
     var pos0 = pucePool.getPosition(selectedModel_0);
     var pos1 = pucePool.getPosition(selectedModel_1);
     
@@ -341,39 +350,8 @@ function displayModelPanel(id){
     pucePool.majPucesPositionPanel(camera,far,direction);
     
 }
-                        
-function initTrees(loader){
-    loader.load( './models/tree.dae', function ( collada ) {
-        var tree = collada.scene;
-        tree.scale.x = tree.scale.y = tree.scale.z = 0.002;
-        var made = false;
-        // for(var i=-15; i<15;i+=10){
-        //  for(var j=-15; j<15;j+=10){
-        if(!made){
-            var x = 0 + Math.random()*10;
-            var z = 0 + Math.random()*10;
-            createTree(tree,x,z);
-        }
-        made=!made;
-        //        }
-        //   }
-    });
-}
-            
-            
-function createTree(tree,x,z){
-    var treeCloned = tree.clone();	 
-    treeCloned.position.x = x;
-    treeCloned.position.z = z;
-    treeCloned.rotation.y = Math.random() * Math.PI * 2;
-    treeCloned.traverse(function ( child ) {
 
-        child.castShadow = true;
-
-    } );
-    scene.add( treeCloned );
-                    
-}
+            
 
 function createTransparentPanel(direction,id,far){
     
