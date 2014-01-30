@@ -179,13 +179,27 @@ function onDocumentMousePanelClick( event ) {
     pucePool.removeModel(selectedModel_1);
     document.removeEventListener('DOMMouseScroll', onDocumentMouseWheelPanel, false);
     document.removeEventListener( 'click', onDocumentMousePanelClick, false );
+    
+    document.addEventListener('DOMMouseScroll', onDocumentMouseWheelGlobal, false);
+    document.addEventListener( 'click', onDocumentMouseClick, false );
   //  pucePool.setVitesseTranslationRotationForAll(0.05,0.05);
     stop = false; 
 } 
 
 function onDocumentMouseWheelGlobal(event){
     var delta = getDeltaWheel(event);
-    pucePool.translateAllWithVector(0,delta*-3,0);
+    
+         position_first = pucePool.positionOfFirst();
+         position_last = pucePool.positionOfLast();
+         if(delta > 0 && position_first.y < -4) {             
+                      return;
+           }
+        if(delta < 0 && position_last.y > 1) {
+            return;
+        }
+    
+    
+    pucePool.translateAllWithVector(0,delta*-4,0);
 }
 
 function getDeltaWheel(event){
@@ -205,9 +219,9 @@ function onDocumentMouseWheelPanel( event ){
     var pos0 = pucePool.getPosition(selectedModel_0);
     var pos1 = pucePool.getPosition(selectedModel_1);
     
-    if(delta > 0 && pos0.y < -0.4) 
+    if(delta > 0 && pos0.y < 0) 
         return;
-    if(delta < 0 && pos0.y > 8.30) 
+    if(delta < 0 && pos0.y > 6.9) 
         return;
     for(var i in panelOverlay){
         panelOverlay[i].position.y += -delta;
@@ -324,10 +338,14 @@ function setSpotParameters(spot,x,y,z,shadow,debug){
 function displayModelPanel(id){
     
     stop = true;
+    document.removeEventListener('DOMMouseScroll', onDocumentMouseWheelGlobal, false);
+    document.removeEventListener( 'click', onDocumentMouseClick, false );
     highLightDisable(id);
     var vector = new THREE.Vector3(0, 0, 0);
     var direction = vector.subSelf( camera.position ).normalize();
-    var far = 8;
+    var far = 14;
+    
+    var coeffDir = 2.2;
     
     selectedModel_0 = id+'_panel_0';
     selectedModel_1 = id+'_panel_1';
@@ -336,16 +354,17 @@ function displayModelPanel(id){
     var x0 = camera.position.x + (direction.x)*far;
     var z0 = camera.position.z + (direction.z)*far;
     
-    var vectX = 2.2*direction.z;
-    var vectZ = -2.2*direction.x;
+    var vectX = coeffDir*direction.z;
+    var vectZ = -coeffDir*direction.x;
     
     pucePool.copyPuceForPanel(id, selectedModel_0);
     pucePool.setPosition(selectedModel_0, x0+vectX, 0.2, z0+vectZ);  
     
     
+    var coeffDirPuce = 1.6;
     pucePool.copyPuceForPanel(id, selectedModel_1);
-    pucePool.setPosition(selectedModel_1, x0 + 1.6 * vectX, 0.2, z0 + 1.6 * vectZ);
-    
+    pucePool.setPosition(selectedModel_1, x0 + coeffDirPuce * vectX, 0.2, z0 + coeffDirPuce * vectZ);
+     
     selectedModel_type = pucePool.getModelType(id);
     pucePool.majPucesPositionPanel(camera,far,direction);
     
@@ -438,7 +457,7 @@ function createTransparentPanel(direction,id,far){
     scene.add( logo );
     
     panelCanvas.addEventListener("mousemove", onCanvasMouseMove, false);
-    document.addEventListener('DOMMouseScroll', onDocumentMouseWheel, false);
+    document.addEventListener('DOMMouseScroll', onDocumentMouseWheelPanel, false);
     document.addEventListener( 'click', onDocumentMousePanelClick, false );
     highLightEnable(panelText, direction, 10, v); 
     highLight.intensity = 0.5;
@@ -496,7 +515,7 @@ function highLightEnable(obj,vector,dist,direction){
     position.sub(obj.position,d);
     setSpotParameters(highLight,position.x,position.y,position.z,true,false);
     highLight.target.position.set(obj.position.x,obj.position.y,obj.position.z);
-    highLight.intensity = 0.5;
+    highLight.intensity = 0.6;
 }
 
 function cursor_transform(cursor_type){
