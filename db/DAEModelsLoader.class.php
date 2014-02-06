@@ -24,7 +24,7 @@ class DAEModelsLoader {
             $loadProcessString.= " var ".$key."Func =  function(){ ";
             $loadProcessString.= " loader_for_$key.load(\"".$dae_model."\", function colladaReady(collada) { ";
             $loadProcessString.= " model = collada.scene; "; 
-            $loadProcessString.= " model.scale.x = model.scale.y = model.scale.z = 0.02; "; 
+            $loadProcessString.= " model.scale.x = model.scale.y = model.scale.z = 0.04; "; 
             $loadProcessString.= " model.updateMatrix(); "; 
             $loadProcessString.= " $key = model; "; 
             if ($cpt < count($dae_models) - 1){
