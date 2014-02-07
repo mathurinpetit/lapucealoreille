@@ -175,6 +175,7 @@ function onDocumentMousePanelClick( event ) {
     }
     scene.remove(panelText);
     scene.remove(logo);
+    logo.position.x = logo.position.y = logo.position.z = 0;
     pucePool.removeModel(selectedModel_0);
     pucePool.removeModel(selectedModel_1);
     document.removeEventListener('DOMMouseScroll', onDocumentMouseWheelPanel, false);
@@ -339,7 +340,6 @@ function displayModelPanel(id){
     
     stop = true;
     document.removeEventListener('DOMMouseScroll', onDocumentMouseWheelGlobal, false);
-    document.removeEventListener( 'click', onDocumentMouseClick, false );
     highLightDisable(id);
     var vector = new THREE.Vector3(0, 0, 0);
     var direction = vector.subSelf( camera.position ).normalize();
@@ -382,16 +382,8 @@ function createTransparentPanel(direction,id,far){
     var modelType = pucePool.getModelType(id);
     var caracteristique = document.getElementById(modelType+"_caracteristique").value;
     var description = document.getElementById(modelType+"_description").value;
-    xc.globalAlpha = 0.8;
-    xc.shadowBlur = 1;
-    xc.fillStyle = "black";
-    xc.font = "14pt arial bold";
-    xc.fillText("LA PUCE A L'OREILLE - "+modelType, 208, 215);
-    xc.font = "10pt arial bold";
-    xc.mozImageSmoothingEnabled = false;
-    wrapText(xc, caracteristique, 440, 270, 400, 25);
-    xc.font = "8pt arial bold";
-    wrapText(xc, description, 440, 340, 400, 20);
+    xc.globalAlpha = 1;
+    xc.shadowBlur = 1;    
         
     var model_img_0 = document.getElementById(modelType+'_img_0');
     var model_img_1 = document.getElementById(modelType+'_img_1');
@@ -399,10 +391,19 @@ function createTransparentPanel(direction,id,far){
     var model_img_3 = document.getElementById(modelType+'_img_3');
     xc.drawImage(document.getElementById('contour'), 190, 150,670,880);
     
-    xc.drawImage(model_img_0, 208, 510, 300, 225);
-    xc.drawImage(model_img_1, 530, 510, 300, 225);
-    xc.drawImage(model_img_2, 208, 770, 300, 225);
-    xc.drawImage(model_img_3, 530, 770, 300, 225);
+    xc.drawImage(model_img_0, 210, 510, 300, 225);
+    xc.drawImage(model_img_1, 532, 510, 300, 225);
+    xc.drawImage(model_img_2, 210, 770, 300, 225);
+    xc.drawImage(model_img_3, 532, 770, 300, 225);
+    
+    xc.fillStyle = "black";
+    xc.font = "14pt arial bold";
+    xc.fillText("LA PUCE A L'OREILLE - "+modelType, 215, 215);
+    xc.font = "10pt arial bold";
+    xc.mozImageSmoothingEnabled = false;
+    wrapText(xc, caracteristique, 440, 270, 400, 25);
+    xc.font = "8pt arial bold";
+    wrapText(xc, description, 440, 340, 400, 20);
     
         
     var panelTextGeo = new THREE.PlaneGeometry(15, 15);
@@ -413,7 +414,7 @@ function createTransparentPanel(direction,id,far){
     
     
     var texture = new THREE.Texture(panelCanvas);
-    var xm = new THREE.MeshLambertMaterial({ map: texture, transparent:true });
+    var xm = new THREE.MeshPhongMaterial({ map: texture, transparent:true });
     xm.doubleSided = true; 
     xm.map.needsUpdate = true;
     
@@ -452,7 +453,7 @@ function createTransparentPanel(direction,id,far){
     logo.position.z = logoPosBase.z + 3.4*v.x + direction.z * -1.5;
     logo.position.x = logoPosBase.x - 3.4*v.z + direction.x * -1.5;
     logo.position.y = logoPosBase.y - 0.6;  
-    //logo.rotation.y = Math.PI;
+    
     logo.scale.x = logo.scale.y = logo.scale.z = 0.05;
     scene.add( logo );
     
@@ -460,7 +461,7 @@ function createTransparentPanel(direction,id,far){
     document.addEventListener('DOMMouseScroll', onDocumentMouseWheelPanel, false);
     document.addEventListener( 'click', onDocumentMousePanelClick, false );
     highLightEnable(panelText, direction, 10, v); 
-    highLight.intensity = 0.5;
+    highLight.intensity = 0.8;
 }
                 
 function highLightInit(dist){
@@ -483,7 +484,7 @@ function highLightInit(dist){
                 if(INTERSECTED.id  != ajout_panier_label)
                     highLightEnable(INTERSECTED,vector,dist,direction);
                 cursor_transform('pointer');
-            }else{
+            }else{                
                 INTERSECTED = null;
             }
         }
