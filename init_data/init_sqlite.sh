@@ -46,41 +46,26 @@ sqlite3 lapucealoreille.db "insert into models VALUES (3,
                             'classic_or_carre',
                             'Modèle : Classic Or \Type de puce : Classics Or carrée \Attaches : Dorées ',
                 '            Cette paire est constituée d''une puce ""Classic Or carrée"" dont le centre est de petite taille, elle porte une attache simple de couleur dorée et fait partie de la collection des Classics. C''est le second modèle le plus vendu par La Puce à l''oreille. C''est une boucle d''oreille élégante et simple qui reste néamoins originale. Entièrement faite à la main avec des puces de récupération, elle présente une mise en bijoux écologique d''un produit courant. C''est une bonne alternative à la puce Classic ronde qui offre un rendu légérement plus chip.',
-                'classic_or_petit_rond_0.jpg',
-                'classic_or_petit_rond_1.jpg',
-                'classic_or_petit_rond_2.jpg',
-                'classic_or_petit_rond_3.jpg',3, 'MUVPGHFZKUA8N', 1, 1);";
-
-
+                'classic_or_petit_carree_0.jpg',
+                'classic_or_petit_carree_1.jpg',
+                'classic_or_petit_carree_2.jpg',
+                'classic_or_petit_carree_3.jpg',3, 'MUVPGHFZKUA8N', 1, 1);";
 
 
 sqlite3 lapucealoreille.db "insert into models VALUES (4,
-                                                      'Classic Argent carrée',
-                                                      'classic_puce_light',
-                                                      'attache_argent_light',
-                                                      'texture_argent_carre',
-                                                      'classic_argent_carre',
-                                                      'SUPER PAIRE',
-                                                      'SUPER PAIRE crée en ... par et de',
-                                                      'classic_argent_0.jpg',
-                                                      'classic_argent_1.jpg',
-                                                      'classic_argent_2.jpg',
-                                                      'classic_argent_3.jpg',3, 'ULR6EJ6DCTNCY',1,1);";
-
-sqlite3 lapucealoreille.db "insert into models VALUES (5,
-                            'Classic Argent Papillon (I)',
+                            'Classic Argent Papillon',
                             'classic_puce_light',
                             'attache_argent_light',
                             'texture_argent_papillon_plein',
                             'texture_argent_papillon_plein',
                             'Modèle : Classic Or \Type de puce : Classics Or rond (petit) \Attaches : Dorées ',
                 '            Cette paire est constituée d''une puce Classic Or rond dont le centre est de petite taille (à contrario de la paire Classic Or rond 2), elle porte une attache simple dorée et fait partie de la collection des Classics. Premier modèle vendu par La Puce à l''oreille. C''est une boucle d''oreille élégante et simple qui reste néamoins originale. Entièrement faite à la main avec des puces de récupération, elle présente une mise en bijoux écologique d''un produit courant. Première paire des créations La Puce à l''oreille, Elle est le Must have de la marque et aussi le modèle le plus vendu.',
-                'classic_or_petit_rond_0.jpg',
-                'classic_or_petit_rond_1.jpg',
-                'classic_or_petit_rond_2.jpg',
-                'classic_or_petit_rond_3.jpg',3, 'MUVPGHFZKUA8N', 1, 1);";
+                'classic_argent_papillon_0.jpg',
+                'classic_argent_papillon_1.jpg',
+                'classic_argent_papillon_2.jpg',
+                'classic_argent_papillon_3.jpg',3, 'MUVPGHFZKUA8N', 1, 1);";
 
-sqlite3 lapucealoreille.db "insert into models VALUES (6,
+sqlite3 lapucealoreille.db "insert into models VALUES (5,
                             'Classic Or Papillon Carré',
                             'classic_puce_light',
                             'attache_or_light',
@@ -88,12 +73,12 @@ sqlite3 lapucealoreille.db "insert into models VALUES (6,
                             'classic_or_papillon_carre',
                             'Modèle : Classic Or \Type de puce : Classics Or rond (petit) \Attaches : Dorées ',
                 '            Cette paire est constituée d''une puce Classic Or rond dont le centre est de petite taille (à contrario de la paire Classic Or rond 2), elle porte une attache simple dorée et fait partie de la collection des Classics. Premier modèle vendu par La Puce à l''oreille. C''est une boucle d''oreille élégante et simple qui reste néamoins originale. Entièrement faite à la main avec des puces de récupération, elle présente une mise en bijoux écologique d''un produit courant. Première paire des créations La Puce à l''oreille, Elle est le Must have de la marque et aussi le modèle le plus vendu.',
-                'classic_or_petit_rond_0.jpg',
-                'classic_or_petit_rond_1.jpg',
-                'classic_or_petit_rond_2.jpg',
-                'classic_or_petit_rond_3.jpg',3, 'MUVPGHFZKUA8N', 1, 1);";
+                'classic_or_papillon_carree_0.jpg',
+                'classic_or_papillon_carree_1.jpg',
+                'classic_or_papillon_carree_2.jpg',
+                'classic_or_papillon_carree_3.jpg',3, 'MUVPGHFZKUA8N', 1, 1);";
 
-sqlite3 lapucealoreille.db "insert into models VALUES (7,
+sqlite3 lapucealoreille.db "insert into models VALUES (6,
                             'Classic Argent Papillon (II)',
                             'classic_puce_light',
                             'attache_argent_light',
@@ -101,7 +86,7 @@ sqlite3 lapucealoreille.db "insert into models VALUES (7,
                             'classic_argent_papillon_creu',
                             'Modèle : Classic Or \Type de puce : Classics Or rond (petit) \Attaches : Dorées ',
                 '            Cette paire est constituée d''une puce Classic Or rond dont le centre est de petite taille (à contrario de la paire Classic Or rond 2), elle porte une attache simple dorée et fait partie de la collection des Classics. Premier modèle vendu par La Puce à l''oreille. C''est une boucle d''oreille élégante et simple qui reste néamoins originale. Entièrement faite à la main avec des puces de récupération, elle présente une mise en bijoux écologique d''un produit courant. Première paire des créations La Puce à l''oreille, Elle est le Must have de la marque et aussi le modèle le plus vendu.',
-                'classic_or_petit_rond_0.jpg',
-                'classic_or_petit_rond_1.jpg',
-                'classic_or_petit_rond_2.jpg',
-                'classic_or_petit_rond_3.jpg',3, 'MUVPGHFZKUA8N', 1, 1);";
+                'classic_argent_papillon_creu_0.jpg',
+                'classic_argent_papillon_creu_1.jpg',
+                'classic_argent_papillon_creu_2.jpg',
+                'classic_argent_papillon_creu_3.jpg',3, 'MUVPGHFZKUA8N', 1, 1);";

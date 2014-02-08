@@ -152,13 +152,6 @@ function onDocumentMouseMove( event ) {
 function onDocumentMouseClick( event ) {
     event.preventDefault();
     if(INTERSECTED != null){
-        if(INTERSECTED.id == ajout_panier_label){
-            panelNoRemove = true;
-            panier.addProduct(selectedModel_type);
-            $("#panier_paypal_"+selectedModel_type).submit();
-            return;
-        }
-    //    pucePool.setVitesseTranslationRotationForAll(0,0.05);
         displayModelPanel(INTERSECTED.id);
     }
 } 
@@ -169,6 +162,14 @@ function onDocumentMousePanelClick( event ) {
         return;
     }
     event.preventDefault();
+    if(INTERSECTED != null){
+        if(INTERSECTED.id == ajout_panier_label){
+            panelNoRemove = true;
+            panier.addProduct(selectedModel_type);
+            $("#panier_paypal_"+selectedModel_type).submit();
+            return;
+        }
+    }
     for (var i in panelOverlay){
         scene.remove(panelOverlay[i]);
         delete panelOverlay[i];
@@ -460,8 +461,9 @@ function createTransparentPanel(direction,id,far){
     panelCanvas.addEventListener("mousemove", onCanvasMouseMove, false);
     document.addEventListener('DOMMouseScroll', onDocumentMouseWheelPanel, false);
     document.addEventListener( 'click', onDocumentMousePanelClick, false );
+    document.removeEventListener( 'click', onDocumentMouseClick, false );
     highLightEnable(panelText, direction, 10, v); 
-    highLight.intensity = 0.8;
+    highLight.intensity = 0.5;
 }
                 
 function highLightInit(dist){
