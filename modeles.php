@@ -28,8 +28,10 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
     </head>
     <body> 
         <script>
-            if (! Detector.webgl )
-                Detector.addGetWebGLMessage();
+            if (! Detector.webgl ){
+               // Detector.addGetWebGLMessage();
+                window.location.assign("http://lapucealoreille.dev/light");
+            }
             var debug = true;
             var container, stats, panier;
 
@@ -107,7 +109,7 @@ function init() {
     scene.add(highLight);
     
                                
-    // scene.fog = new THREE.FogExp2( 0xffffff, 0.04 );
+    scene.fog = new THREE.FogExp2( 0xffffff, 0.01 );
                 
     // Lights
     var ambianteLight = new THREE.AmbientLight( 0x111111 );
@@ -130,6 +132,7 @@ function init() {
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     document.addEventListener( 'click', onDocumentMouseClick, false );
     document.addEventListener('DOMMouseScroll', onDocumentMouseWheelGlobal, false);
+    document.addEventListener("mousewheel", onDocumentMouseWheelGlobal, false);
     container.appendChild( renderer.domElement );
  
 }
@@ -144,6 +147,7 @@ function onWindowResize() {
 }
             
 function onDocumentMouseMove( event ) {
+    if(!event) event = window.event;
     event.preventDefault();
     mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
@@ -180,16 +184,18 @@ function onDocumentMousePanelClick( event ) {
     pucePool.removeModel(selectedModel_0);
     pucePool.removeModel(selectedModel_1);
     document.removeEventListener('DOMMouseScroll', onDocumentMouseWheelPanel, false);
+    document.removeEventListener("mousewheel", onDocumentMouseWheelPanel, false);
     document.removeEventListener( 'click', onDocumentMousePanelClick, false );
     
-    document.addEventListener('DOMMouseScroll', onDocumentMouseWheelGlobal, false);
-    document.addEventListener( 'click', onDocumentMouseClick, false );
-  //  pucePool.setVitesseTranslationRotationForAll(0.05,0.05);
     stop = false; 
+    document.addEventListener( 'click', onDocumentMouseClick, false );
+    document.addEventListener('DOMMouseScroll', onDocumentMouseWheelGlobal, false);
+    document.addEventListener("mousewheel", onDocumentMouseWheelGlobal, false);
+  //  pucePool.setVitesseTranslationRotationForAll(0.05,0.05);
 } 
 
 function onDocumentMouseWheelGlobal(event){
-    var delta = getDeltaWheel(event);
+    var delta = getDeltaWheel(event); 
     
          position_first = pucePool.positionOfFirst();
          position_last = pucePool.positionOfLast();
@@ -341,6 +347,7 @@ function displayModelPanel(id){
     
     stop = true;
     document.removeEventListener('DOMMouseScroll', onDocumentMouseWheelGlobal, false);
+    document.removeEventListener('mousewheel', onDocumentMouseWheelGlobal, false);
     highLightDisable(id);
     var vector = new THREE.Vector3(0, 0, 0);
     var direction = vector.subSelf( camera.position ).normalize();
@@ -460,6 +467,7 @@ function createTransparentPanel(direction,id,far){
     
     panelCanvas.addEventListener("mousemove", onCanvasMouseMove, false);
     document.addEventListener('DOMMouseScroll', onDocumentMouseWheelPanel, false);
+    document.addEventListener('mousewheel', onDocumentMouseWheelPanel, false);
     document.addEventListener( 'click', onDocumentMousePanelClick, false );
     document.removeEventListener( 'click', onDocumentMouseClick, false );
     highLightEnable(panelText, direction, 10, v); 
@@ -625,6 +633,6 @@ echo $dae_models_keys[0] . 'Func();';
                 
         <?php endforeach; ?>
                
-                
+              
  </body>
 </html>
