@@ -24,8 +24,8 @@ $models = array('classic_or_rond' => array('puce_model' => 'classic_puce',
 
         <script src="lib/three.js/Detector.js"></script>
         <script src="lib/three.js/Stats.js"></script>
-        <script src="lib/Puces.js"></script>
-        <!--        <div id="ajax-waiter"></div>-->
+        <script src="lib/Puces.js"></script>        
+        <script src="lib/microcache.js"></script>
         <script>
             if (! Detector.webgl )
                 Detector.addGetWebGLMessage();
@@ -94,7 +94,7 @@ function init() {
     renderer.shadowMapDarkness = 0.5;
     renderer.shadowMapWidth = 1024;
     renderer.shadowMapHeight = 1024;
-                
+    renderer._microCache = new MicroCache(); 
                 
                 
     container = document.createElement( 'div' );
@@ -103,7 +103,7 @@ function init() {
     scene = new THREE.Scene();
                 
                 
-    pucePool = new PUCES(scene);   
+    pucePool = new PUCES(scene,renderer);   
             
             <?php 
             $cpt = 0;
