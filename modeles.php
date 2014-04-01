@@ -390,6 +390,8 @@ function createTransparentPanel(direction,id,far){
     var modelType = pucePool.getModelType(id);
     var caracteristique = document.getElementById(modelType+"_caracteristique").value;
     var description = document.getElementById(modelType+"_description").value;
+    var nom = document.getElementById(modelType+"_caracteristique").getAttribute("data-nom");
+    var prix = document.getElementById(modelType+"_caracteristique").getAttribute("data-prix");
     xc.globalAlpha = 1;
     xc.shadowBlur = 1;    
         
@@ -406,19 +408,22 @@ function createTransparentPanel(direction,id,far){
     
     xc.fillStyle = "black";
     xc.font = "14pt arial bold";
-    xc.fillText("LA PUCE A L'OREILLE - "+modelType, 215, 215);
+    xc.fillText("LA PUCE A L'OREILLE - "+nom, 215, 215);
     xc.font = "10pt arial bold";
     xc.mozImageSmoothingEnabled = false;
     wrapText(xc, caracteristique, 440, 270, 400, 25);
+    
+    var prix_label = "Acheter pour "+prix+" €";
+    wrapText(xc, prix_label, 710, 320, 800, 340);
+    
     xc.font = "8pt arial bold";
-    wrapText(xc, description, 440, 340, 400, 20);
-    
+    wrapText(xc, description, 440, 340, 400, 20);    
         
-    var panelTextGeo = new THREE.PlaneGeometry(15, 15);
+    var panelTextGeo = new THREE.PlaneGeometry(15, 15);    
     
     
-    var buttonGeo = new THREE.PlaneGeometry(1.90, 0.3);    
-    var buttonMat = new THREE.MeshPhongMaterial( {color: 0xff0000});
+    var buttonGeo = new THREE.PlaneGeometry(1.94, 0.4);    
+    var buttonMat = new THREE.MeshPhongMaterial( {color: 0x0000ff, transparent:true, opacity: 0.3});
     
     
     var texture = new THREE.Texture(panelCanvas);
@@ -445,7 +450,7 @@ function createTransparentPanel(direction,id,far){
     panelText.position.z -= direction.z * 0.1;
     
     
-    buttonPanier.position.y += 3;
+    buttonPanier.position.y += 2.9;
     buttonPanier.position.x += -3.85*v.z - direction.x * 0.2;
     buttonPanier.position.z += 3.85*v.x - direction.z * 0.2;
     
@@ -575,9 +580,7 @@ echo $dae_models_keys[0] . 'Func();';
         
 });    
         </script>
-        <?php foreach ($models as $model_name => $model) : 
-     
-            ?>
+        <?php foreach ($models as $model_name => $model) : ?>
         
         <form id="<?php echo $model_name; ?>" action="visualisation.php" method="post" >
             <input type="text" hidden="<?php echo $model_name; ?>" name="model" value="<?php echo $model_name; ?>"/>
@@ -615,7 +618,7 @@ echo $dae_models_keys[0] . 'Func();';
                  hidden />
              <?php endif; ?>
              <?php if($model['caracteristiques']) : ?>  
-                <input id="<?php echo $key;?>_caracteristique"
+                <input id="<?php echo $key;?>_caracteristique" data-name="<?php echo $model['model_libelle'];?>" data-prix="<?php echo $model['prix'];?>"
                     value="<?php echo $model['caracteristiques'];?>" hidden >
             <?php endif; ?>
                 
