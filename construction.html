@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <title>La Puce à l'oreille - Construction</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <link href="css/main.css" rel="stylesheet" type="text/css">
+        <script src="lib/jquery-1.8.3.js"></script>        
+        <script src="lib/three.js/three.js"></script>
+        <script src="lib/three.js/gentilis_bold.typeface.js"></script>
+        <script src="lib/three.js/ColladaLoader.js"></script>
+        <script src="lib/three.js/Detector.js"></script>
+        <script src="lib/three.js/Stats.js"></script>
+        <script src="lib/microcache.js"></script>
+    </head>
+    <body> 
+        <script>
+            if (! Detector.webgl ){
+                // Detector.addGetWebGLMessage();
+                window.location.assign("http://lapucealoreille.dev/light");
+            }
+            var debug = true;
+            var container, stats;
+
+            var camera, scene, logo, renderer, projector;
+            var highLight;
+            
+            var panelOverlay = [];             
+            var panelText; 
+            var t = 0;
+            var clock = new THREE.Clock();
+            var step = 0;
+            var mouse = { x: 0, y: 0 }, INTERSECTED;
+            var panelCanvas;
+                    
+            function init() {
+                camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 10000 );
+                camera.position.set( -15, 2 , 0 );
+                camera.lookAt( new THREE.Vector3(0, 0, 0) );
+
+                renderer = new THREE.WebGLRenderer({antialias:true});  
+                renderer.setSize( window.innerWidth, window.innerHeight );
+                renderer.shadowMapEnabled = false;
+                renderer.shadowMapSoft = false;
+        
+                renderer.shadowCameraNear = 0.5;
+                renderer.shadowCameraFar = camera.far;
+                renderer.shadowCameraFov = 50;
+        
+                renderer.shadowMapBias = 0.0039;
+                renderer.shadowMapDarkness = 0.5;
+                renderer.shadowMapWidth = 512;
+                renderer.shadowMapHeight = 512;
+                renderer._microCache = new MicroCache();    
+                
+                
+                container = document.createElement( 'div' );
+                document.body.appendChild( container );
+    
+                scene = new THREE.Scene();
+                projector = new THREE.Projector();                               
+                
+                initSpot(-70,2,-3,true,false);   
+                initLogoAndText();
+                highLight = new THREE.SpotLight( 0xffffff,0);
+                scene.add(highLight);
+    
+                               
+                scene.fog = new THREE.FogExp2( 0xffffff, 0.01 );
+                
+                // Lights
+                var ambianteLight = new THREE.AmbientLight( 0x111111 );
+                scene.add(ambianteLight);    
+
+                if(debug){            
+                    stats = new Stats();
+                    stats.domElement.style.position = 'absolute';
+                    stats.domElement.style.top = '0px';
+                    container.appendChild( stats.domElement );
+                }    
+    
+                window.addEventListener( 'resize', onWindowResize, false );
+                document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+                document.addEventListener( 'click', onDocumentMouseClick, false );
+                container.appendChild( renderer.domElement );                
+            }
+            
+            var loader_for_logo = new THREE.ColladaLoader();
+            loader_for_logo.options.convertUpAxis = true;
+            var logo = null;
+            var textMesh = null;
+            var point1 = null;
+            var point2 = null;
+            var point3 = null;
+            var logoFunc = function(){ 
+                loader_for_logo.load("models/logo.dae", function colladaReady(collada) 
+                { 
+                    model = collada.scene; 
+                    model.scale.x = model.scale.y = model.scale.z = 0.2; 
+                    model.updateMatrix(); 
+                    logo = model; 
+                    init(); 
+                    animate();
+                },function(){} ); 
+            };
+                
+            function onWindowResize() {
+
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                
+                renderer.setSize( window.innerWidth, window.innerHeight );
+
+            }
+            
+            function initLogoAndText(){
+                var vector = new THREE.Vector3(0, 0, 0);
+                var direction = vector.subSelf( camera.position ).normalize();
+                var v = direction.clone();
+                v.y = 0;
+                var vI = v.clone().multiplyScalar(-1);
+                logo.lookAt(vI);
+    
+                var logoPosBase = new THREE.Vector3(0, 0, 0);
+                logo.position.z = logoPosBase.z + direction.z * -1.5;
+                logo.position.x = logoPosBase.x + direction.x * -1.5;
+                logo.position.y = logoPosBase.y + 1;  
+    
+                logo.scale.x = logo.scale.y = logo.scale.z = 0.2;
+                scene.add( logo );
+                
+                var material = new THREE.MeshPhongMaterial( { color: 0x000000 } );
+                //                var materialSide = new THREE.MeshBasicMaterial( { color: 0xffffff, transparancy: true, opacity:0 } );
+                //                var materialArray = [ material, materialSide ];
+                var textGeom = new THREE.TextGeometry( "En Construction",
+                {
+                    size: 0.5, height: 0.1, curveSegments: 3,
+                    font: "gentilis", weight: "bold", style: "normal"
+                    //                    bevelThickness: 1, bevelSize: 2, bevelEnabled: true,
+                    //                    material: 0, extrudeMaterial: 1
+                });
+                textMesh = new THREE.Mesh(textGeom, material );
+                textGeom.computeBoundingBox();
+                textMesh.rotation.y = -Math.PI / 2;
+                
+                textMesh.position.set( logo.position.x , logo.position.y -3.5, logo.position.z - 2.5 );
+                
+                scene.add(textMesh); 
+                
+                var textPointGeom = new THREE.TextGeometry( ".",
+                {
+                    size: 0.5, height: 0.1, curveSegments: 3,
+                    font: "gentilis", weight: "bold", style: "normal"
+                    //                    bevelThickness: 1, bevelSize: 2, bevelEnabled: true,
+                    //                    material: 0, extrudeMaterial: 1
+                });
+                point1 = new THREE.Mesh(textPointGeom, material );
+                textPointGeom.computeBoundingBox();
+                point1.rotation.y = -Math.PI / 2;
+                
+                point1.position.set( textMesh.position.x , textMesh.position.y, textMesh.position.z + 5);
+                
+                scene.add(point1); 
+                
+                point2 = new THREE.Mesh(textPointGeom, material );
+                textPointGeom.computeBoundingBox();
+                point2.rotation.y = -Math.PI / 2;
+                
+                point2.position.set( textMesh.position.x , textMesh.position.y, textMesh.position.z + 5.2);
+                
+                scene.add(point2); 
+                
+                point3 = new THREE.Mesh(textPointGeom, material );
+                textPointGeom.computeBoundingBox();
+                point3.rotation.y = -Math.PI / 2;
+                
+                point3.position.set( textMesh.position.x , textMesh.position.y, textMesh.position.z + 5.4);
+                
+                scene.add(point3); 
+                
+            }
+            
+            function onDocumentMouseMove( event ) {
+                if(!event) event = window.event;
+                event.preventDefault();
+                mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+                mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+            } 
+
+            function onDocumentMouseClick( event ) {
+                event.preventDefault();
+                if(INTERSECTED != null){
+                    displayModelPanel(INTERSECTED.id);
+                }
+            } 
+
+            function animate() {
+                
+                //  updateTrees();
+                
+                requestAnimationFrame( animate );
+                render();
+                if(debug)
+                    stats.update();
+            }
+     
+     
+            function render() {
+   
+                var timer = Date.now() * 0.05;
+                step += clock.getDelta()/8;
+                logo.rotation.y -= 0.05;
+                highLightInit(4);
+                switch((Math.floor(step * 10)) % 4){
+                    case 0 :{
+                            scene.remove(point1);
+                            scene.remove(point2);
+                            scene.remove(point3);
+                            break;
+                        }
+                    case 1 :{
+                            scene.add(point1); 
+                            break;                          
+                        }
+                    
+                    case 2 :{
+                            scene.add(point2);  
+                            break;                         
+                        }
+                    
+                    case 3 :{
+                            scene.add(point3);   
+                            break;                        
+                        }
+                }            
+                renderer.clear();
+                renderer.render( scene, camera );
+            }
+            
+            function initSpot(x,y,z,shadow,debug){
+                var spot = new THREE.SpotLight( 0xffffff,0.6);
+                setSpotParameters(spot,x,y,z,shadow,debug);   
+                scene.add(spot); 
+            }
+            
+            function setSpotParameters(spot,x,y,z,shadow,debug){
+                spot.position.set(x,y,z);
+                if(shadow){
+                    spot.shadowDarkness = 0.6; 
+                    spot.shadowMapWidth = 1024;
+                    spot.shadowMapHeight = 1024;
+
+                    spot.shadowCameraNear = 0.1;
+                    spot.shadowCameraFar = 100;
+                    spot.shadowCameraFov = 70;
+                    spot.castShadow = true;
+                }
+                spot.shadowCameraVisible = debug;
+            }
+
+            
+                
+            function highLightInit(dist){
+                // find intersections
+                var vector = new THREE.Vector3( mouse.x, mouse.y, 1 );
+                projector.unprojectVector( vector, camera );
+                var direction = vector.subSelf( camera.position ).normalize();
+                var raycaster = new THREE.Raycaster( camera.position, direction );
+                var intersects = raycaster.intersectObjects( scene.children );
+                if ( intersects.length > 0 ) {
+
+                    if ( INTERSECTED != intersects[ 0 ].object ) {
+                        if ( INTERSECTED ){
+                            if(INTERSECTED.id  != ajout_panier_label)
+                                highLightDisable(INTERSECTED);
+                            cursor_transform('default');
+                        }
+                        INTERSECTED = intersects[ 0 ].object;
+                        if(typeof INTERSECTED.id  != "number"){
+                            if(INTERSECTED.id  != ajout_panier_label)
+                                highLightEnable(INTERSECTED,vector,dist,direction);
+                            cursor_transform('pointer');
+                        }else{                
+                            INTERSECTED = null;
+                        }
+                    }
+                } else {
+                    if ( INTERSECTED ){
+                        if(INTERSECTED.id  != ajout_panier_label)
+                            highLightDisable(INTERSECTED);
+                        cursor_transform('default');
+                    }
+                    INTERSECTED = null;
+                }   
+            }
+       
+        
+
+            $(document).ready(function() {
+                /**
+                 * Appel du premier modèle à charger => lancement de l'init et de l'animate
+                 */   
+                logoFunc(); 
+            });    
+        </script>
+
+
+    </body>
+</html>
