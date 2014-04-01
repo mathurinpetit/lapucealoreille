@@ -9,11 +9,10 @@ $models = $db->getAllModels();
 $daeModelLoader = new DAEModelsLoader();
 $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
     <head>
-        <title>La Puce à l'oreille</title>
+        <title>La Puce à l'Oreille</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
         <link href="css/main.css" rel="stylesheet" type="text/css">
@@ -28,10 +27,9 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
     </head>
     <body> 
         <script>
-            if (! Detector.webgl ){
-               // Detector.addGetWebGLMessage();
+           // if (! Detector.webgl ){
                 window.location.assign("http://lapucealoreille.dev/light");
-            }
+           // }
             var debug = true;
             var container, stats, panier;
 
@@ -423,7 +421,7 @@ function createTransparentPanel(direction,id,far){
     
     
     var buttonGeo = new THREE.PlaneGeometry(1.94, 0.4);    
-    var buttonMat = new THREE.MeshPhongMaterial( {color: 0x0000ff, transparent:true, opacity: 0.3});
+    var buttonMat = new THREE.MeshPhongMaterial( {color: 0x539bd6, transparent:true, opacity: 0.3});
     
     
     var texture = new THREE.Texture(panelCanvas);
@@ -618,7 +616,7 @@ echo $dae_models_keys[0] . 'Func();';
                  hidden />
              <?php endif; ?>
              <?php if($model['caracteristiques']) : ?>  
-                <input id="<?php echo $key;?>_caracteristique" data-name="<?php echo $model['model_libelle'];?>" data-prix="<?php echo $model['prix'];?>"
+                <input id="<?php echo $key;?>_caracteristique" data-nom="<?php echo $model['model_libelle'];?>" data-prix="<?php echo $model['prix'];?>"
                     value="<?php echo $model['caracteristiques'];?>" hidden >
             <?php endif; ?>
                 

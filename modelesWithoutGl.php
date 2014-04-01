@@ -20,25 +20,51 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
         <link href="css/main_withoutGl.css" rel="stylesheet" type="text/css">
         <script src="lib/jquery-1.8.3.js"></script>  
-        <script src="lib/roundabout/jquery.roundabout.js"></script>
-        <script src="lib/roundabout/jquery.roundabout-shapes.js"></script> 
-        <script src="lib/roundabout/jquery.easing.js"></script>  
+        <script src="lib/boostrap-3.1.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="lib/boostrap-3.1.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="lib/boostrap-3.1.1/css/bootstrap-theme.min.css">
     </head>
     <body> 
-
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+      <?php 
+      $cpt=0;
+      foreach ($models as $model_name => $model) :
+      ?>
+          <li data-target="#carousel-example-generic" data-slide-to="<?php echo $cpt ?>" class="<?php echo (!$cpt)? "active" : "" ?>"></li>
+      <?php endforeach; ?>
+  </ol>
         
-<!--        <video onload="fullscreen()">
-  <source src="movie.mp4" type="video/mp4">
-  <source src="movie.ogg" type="video/ogg">
-  Your browser does not support the video tag.
-</video>-->
-        <?php foreach ($models as $model_name => $model) :  ?>
-        
-        <form id="<?php echo $model_name; ?>" action="visualisation.php" method="post" >
+  <div class="carousel-inner">
+      <?php foreach ($models as $key => $model) : ?>
+    <div class="item <?php echo (!$cpt)? "active" : "" ?>">
+      <?php if($model['image_0']) : ?>
+                <img id="<?php echo $key;?>_img_0"
+                    src="./models/images/<?php echo $model['image_0'];?>"
+                    alt="<?php echo $key;?>" />
+            <?php endif; ?>            
+      <div class="carousel-caption">
+        <?php if($model['description']) : ?>  
+                <span id="<?php echo $key;?>_description" ><?php echo $model['description'];?></span>
+        <?php endif; ?>    
+      </div>
+    </div>
+      <form id="<?php echo $model_name; ?>" action="visualisation.php" method="post" >
             <input type="button" id="<?php echo $model_name; ?>" name="model" value="<?php echo $model_name; ?>"/>
-        </form>
-        <?php 
-        endforeach; ?>
+      </form>      
+      <?php endforeach; ?>
+  </div>
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+  </a>
+  <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+  </a>
+</div>     
+        
+        
 <div class="facade">
          <ul class="column1">
         <?php foreach ($models as $key => $model) : ?>
@@ -131,58 +157,6 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
        </ul> 
      
             </div>
-
-<div class="interact">
-<a id="advance" href="#">Next Image</a>
-</div> 
-
-
-        <script>
-            
-        $(document).ready(function() {
-var i = 0,
-settings = [
-{ duration: 1200, easing: 'easeOutBounce' },
-{ duration: 1600, easing: 'easeOutElastic' },
-{ duration: 600, easing: 'easeOutQuad' },
-{ duration: 1000, easing: 'easeOutBack' }
-];
-
-$('ul.column1, ul.column3').roundabout({
-clickToFocus: false,
-minOpacity: 0,
-minScale: 0,
-minZ: 0,
-duration: 1500,
-shape: 'rollerCoaster'
-});
-$('ul.column2, ul.column4').roundabout({
-clickToFocus: false,
-minOpacity: 0,
-minScale: 0,
-minZ: 0,
-reflect: true,
-duration: 1500,
-shape: 'rollerCoaster'
-});
-
-$('#advance').click(function() {
-    console.log('here');
-if ($('.column1').data("roundabout").animating || $('.column4').data("roundabout").animating) {
-return false;
-}
-i++;
-i = i++ % settings.length;
-// fade out link
-$(this).fadeTo(400, 0.5);
-$('.column1').roundabout('animateToNextChild', settings[i].duration, settings[i].easing);
-setTimeout(function() { $('.column2').roundabout('animateToNextChild', settings[i].duration + 100, settings[i].easing); }, 100);
-setTimeout(function() { $('.column3').roundabout('animateToNextChild', settings[i].duration + 200, settings[i].easing); }, 200);
-setTimeout(function() { $('.column4').roundabout('animateToNextChild', settings[i].duration + 250, settings[i].easing, function() { $('#advance').fadeTo(400, 1); }); }, 300);
-return false;
-});
-}); 
-        </script>
 
  </body>
 </html>
