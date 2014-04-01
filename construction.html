@@ -30,7 +30,7 @@
             var t = 0;
             var clock = new THREE.Clock();
             var step = 0;
-            var mouse = { x: 0, y: 0 }, INTERSECTED;
+            var mouse = { x: 0, y: 0 };
             var panelCanvas;
                     
             function init() {
@@ -81,7 +81,6 @@
     
                 window.addEventListener( 'resize', onWindowResize, false );
                 document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-                document.addEventListener( 'click', onDocumentMouseClick, false );
                 container.appendChild( renderer.domElement );                
             }
             
@@ -187,13 +186,6 @@
                 mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
             } 
 
-            function onDocumentMouseClick( event ) {
-                event.preventDefault();
-                if(INTERSECTED != null){
-                    displayModelPanel(INTERSECTED.id);
-                }
-            } 
-
             function animate() {
                 
                 //  updateTrees();
@@ -210,7 +202,6 @@
                 var timer = Date.now() * 0.05;
                 step += clock.getDelta()/8;
                 logo.rotation.y -= 0.05;
-                highLightInit(4);
                 switch((Math.floor(step * 10)) % 4){
                     case 0 :{
                             scene.remove(point1);
@@ -258,43 +249,6 @@
                 spot.shadowCameraVisible = debug;
             }
 
-            
-                
-            function highLightInit(dist){
-                // find intersections
-                var vector = new THREE.Vector3( mouse.x, mouse.y, 1 );
-                projector.unprojectVector( vector, camera );
-                var direction = vector.subSelf( camera.position ).normalize();
-                var raycaster = new THREE.Raycaster( camera.position, direction );
-                var intersects = raycaster.intersectObjects( scene.children );
-                if ( intersects.length > 0 ) {
-
-                    if ( INTERSECTED != intersects[ 0 ].object ) {
-                        if ( INTERSECTED ){
-                            if(INTERSECTED.id  != ajout_panier_label)
-                                highLightDisable(INTERSECTED);
-                            cursor_transform('default');
-                        }
-                        INTERSECTED = intersects[ 0 ].object;
-                        if(typeof INTERSECTED.id  != "number"){
-                            if(INTERSECTED.id  != ajout_panier_label)
-                                highLightEnable(INTERSECTED,vector,dist,direction);
-                            cursor_transform('pointer');
-                        }else{                
-                            INTERSECTED = null;
-                        }
-                    }
-                } else {
-                    if ( INTERSECTED ){
-                        if(INTERSECTED.id  != ajout_panier_label)
-                            highLightDisable(INTERSECTED);
-                        cursor_transform('default');
-                    }
-                    INTERSECTED = null;
-                }   
-            }
-       
-        
 
             $(document).ready(function() {
                 /**
