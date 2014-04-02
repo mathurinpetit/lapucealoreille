@@ -14,9 +14,11 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
 <!DOCTYPE html>
 <html lang="fr">
     <head>
-        <title>La Puce à l'oreille</title>
+        <title>La Pusse à l'oreille</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <link rel="icon" type="image/png" href="favicon.png" />
+        <!--[if IE]><link rel="shortcut icon" type="image/x-icon" href="favicon.ico" /><![endif]-->
         <link href="css/main_withoutGl.css" rel="stylesheet" type="text/css">
         <script src="lib/jquery-1.8.3.js"></script>  
         <script src="lib/bootstrap-3.1.1/js/bootstrap.js"></script>
@@ -25,7 +27,7 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
     </head>
     <body> 
         <div id="container_light" class="container">
-            <h1>La Puce à l'oreille</h1>
+            <h1>La Pusse à l'oreille</h1>
             <div id="carousel" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators">
                     <?php

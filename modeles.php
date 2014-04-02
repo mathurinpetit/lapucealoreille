@@ -12,9 +12,11 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
 <!DOCTYPE html>
 <html lang="fr">
     <head>
-        <title>La Puce à l'Oreille</title>
+        <title>La Pusse à l'Oreille</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <link rel="icon" type="image/png" href="favicon.png" />
+        <!--[if IE]><link rel="shortcut icon" type="image/x-icon" href="favicon.ico" /><![endif]-->
         <link href="css/main.css" rel="stylesheet" type="text/css">
         <script src="lib/jquery-1.8.3.js"></script>        
         <script src="lib/three.js/three.js"></script>
@@ -406,7 +408,7 @@ function createTransparentPanel(direction,id,far){
     
     xc.fillStyle = "black";
     xc.font = "14pt arial bold";
-    xc.fillText("LA PUCE A L'OREILLE - "+nom, 215, 215);
+    xc.fillText("LA PUSSE A L'OREILLE - "+nom, 215, 215);
     xc.font = "10pt arial bold";
     xc.mozImageSmoothingEnabled = false;
     wrapText(xc, caracteristique, 440, 270, 400, 25);
