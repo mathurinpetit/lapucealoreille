@@ -15,3 +15,27 @@ h1 {
     margin: 1em 0 0.5em;
     text-align: center;
 }
+
+
+#container_light, .carousel {
+    padding-top: 10px;
+}
+
+#container_light img {
+    padding-bottom: 10px;
+    padding-left: 10px;
+    width: 450px;
+    height: 337.5px;
+    display: block;
+}
+
+.image_container {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.center-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
