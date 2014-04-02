@@ -23,9 +23,10 @@ h1 {
 
 #container_light img {
     padding-bottom: 10px;
+    padding-top: 10px;
     padding-left: 10px;
-    width: 450px;
-    height: 337.5px;
+    width: 320px;
+    height: 280px;
     display: block;
 }
 

@@ -125,11 +125,10 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
             });
             $(document).ready(function(){
                 $('.btn_submit').click(function(){
-                    var id = 'panier_paypal_'+$(this).attr('id');
-                    $("#"+id).submit();
+                    var id = '#panier_paypal_'+$(this).attr('id');
+                    $(id).submit();
                 })
             });
-            $("#panier_paypal_"+selectedModel_type).submit();
         </script>
     </body>
 </html>

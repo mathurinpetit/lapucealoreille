@@ -27,10 +27,10 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
     </head>
     <body> 
         <script>
-           // if (! Detector.webgl ){
+            if (! Detector.webgl ){
                 window.location.assign("http://lapucealoreille.dev/light");
-           // }
-            var debug = true;
+            }
+            var debug = false;
             var container, stats, panier;
 
             var camera, scene, plan, renderer, projector;
