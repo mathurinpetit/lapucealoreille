@@ -417,7 +417,7 @@ function createTransparentPanel(direction,id,far){
     wrapText(xc, prix_label, 710, 320, 800, 340);
     
     xc.font = "8pt arial bold";
-    wrapText(xc, description, 440, 340, 400, 20);    
+    wrapText(xc, description, 440, 345, 400, 20);    
         
     var panelTextGeo = new THREE.PlaneGeometry(15, 15);    
     
