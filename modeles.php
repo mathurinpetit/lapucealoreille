@@ -407,7 +407,7 @@ function createTransparentPanel(direction,id,far){
     xc.drawImage(model_img_3, 532, 770, 300, 225);
     
     xc.fillStyle = "black";
-    xc.font = "14pt arial bold";
+    xc.font = "13pt arial bold";
     xc.fillText("LA PUSSE A L'OREILLE - "+nom, 215, 215);
     xc.font = "10pt arial bold";
     xc.mozImageSmoothingEnabled = false;
