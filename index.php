@@ -30,7 +30,7 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
     <body> 
         <script>
             if (! Detector.webgl ){
-                window.location.assign("http://lapucealoreille.dev/light");
+                window.location.assign("http://www.lapussealoreille.fr/light");
             }
             var debug = false;
             var container, stats, panier;
@@ -386,7 +386,7 @@ function createTransparentPanel(direction,id,far){
     v.y = 0;
     panelCanvas = document.createElement("canvas");
     var xc = panelCanvas.getContext("2d");
-    panelCanvas.width = panelCanvas.height = 1024;
+    panelCanvas.width = panelCanvas.height = 1048;
     var modelType = pucePool.getModelType(id);
     var caracteristique = document.getElementById(modelType+"_caracteristique").value;
     var description = document.getElementById(modelType+"_description").value;
@@ -399,25 +399,25 @@ function createTransparentPanel(direction,id,far){
     var model_img_1 = document.getElementById(modelType+'_img_1');
     var model_img_2 = document.getElementById(modelType+'_img_2');
     var model_img_3 = document.getElementById(modelType+'_img_3');
-    xc.drawImage(document.getElementById('contour'), 190, 150,670,880);
+    xc.drawImage(document.getElementById('contour'), 194, 153,685,901);
     
-    xc.drawImage(model_img_0, 210, 510, 300, 225);
-    xc.drawImage(model_img_1, 532, 510, 300, 225);
-    xc.drawImage(model_img_2, 210, 770, 300, 225);
-    xc.drawImage(model_img_3, 532, 770, 300, 225);
+    xc.drawImage(model_img_0, 215, 522, 307, 230);
+    xc.drawImage(model_img_1, 544, 522, 307, 230);
+    xc.drawImage(model_img_2, 215, 788, 307, 230);
+    xc.drawImage(model_img_3, 544, 788, 307, 230);
     
     xc.fillStyle = "black";
     xc.font = "13pt arial bold";
-    xc.fillText("LA PUSSE A L'OREILLE - "+nom, 215, 215);
+    xc.fillText("LA PUSSE A L'OREILLE - "+nom, 220, 220);
     xc.font = "10pt arial bold";
     xc.mozImageSmoothingEnabled = false;
-    wrapText(xc, caracteristique, 440, 270, 400, 25);
+    wrapText(xc, caracteristique, 450, 276, 409, 26);
     
     var prix_label = "Acheter pour "+prix+" €";
-    wrapText(xc, prix_label, 710, 320, 800, 340);
+    wrapText(xc, prix_label, 726, 327.5, 819, 350);
     
     xc.font = "8pt arial bold";
-    wrapText(xc, description, 440, 345, 400, 20);    
+    wrapText(xc, description, 450, 360, 400, 21);    
         
     var panelTextGeo = new THREE.PlaneGeometry(15, 15);    
     
@@ -443,16 +443,16 @@ function createTransparentPanel(direction,id,far){
     var baseZ = camera.position.z + direction.z * far;
     
     panelText.position.x = buttonPanier.position.x = baseX ;
-    panelText.position.y = buttonPanier.position.y = -1.2;
-    panelText.position.z = buttonPanier.position.z =baseZ ;
+    panelText.position.y = buttonPanier.position.y = -1.4;
+    panelText.position.z = buttonPanier.position.z = baseZ ;
     
     panelText.position.x -= direction.x * 0.1;
     panelText.position.z -= direction.z * 0.1;
     
     
-    buttonPanier.position.y += 2.9;
-    buttonPanier.position.x += -3.85*v.z - direction.x * 0.2;
-    buttonPanier.position.z += 3.85*v.x - direction.z * 0.2;
+    buttonPanier.position.y += 2.85;
+    buttonPanier.position.x += -3.75*v.z - direction.x * 0.2;
+    buttonPanier.position.z += 3.75*v.x - direction.z * 0.2;
     
     buttonPanier.id = ajout_panier_label;
     
@@ -465,7 +465,7 @@ function createTransparentPanel(direction,id,far){
     var logoPosBase = new THREE.Vector3(baseX, -1.2+4.5, baseZ);
     logo.position.z = logoPosBase.z + 3.4*v.x + direction.z * -1.5;
     logo.position.x = logoPosBase.x - 3.4*v.z + direction.x * -1.5;
-    logo.position.y = logoPosBase.y - 0.6;  
+    logo.position.y = logoPosBase.y - 0.75;  
     
     logo.scale.x = logo.scale.y = logo.scale.z = 0.05;
     scene.add( logo );
