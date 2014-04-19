@@ -14,7 +14,7 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
 <!DOCTYPE html>
 <html lang="fr">
     <head>
-        <title>La Pusse à l'oreille</title>
+        <title>La Pusse à l'Oreille</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
         <link rel="icon" type="image/png" href="favicon.png" />
@@ -27,7 +27,7 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
     </head>
     <body> 
         <div id="container_light" class="container">
-            <h1>La Pusse à l'oreille</h1>
+            <h1>La Pusse à l'Oreille</h1>
             <div id="carousel" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators">
                     <?php
@@ -47,48 +47,47 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
                         ?>
                         <div class="item <?php echo (!$cpt) ? "active" : "" ?>">
                             <div class="row">
-                            <div class="col-lg-1"></div>                            
-                            <div class="col-lg-7">
+                            <div class="col-xs-1"></div>                            
+                            <div class="col-xs-6">
                             <div class="row">
-                                <div class="col-lg-6 image_container">
+                                <div class="col-xs-6 image_container">
                                     <img src="./models/images/<?php echo $model['image_0']; ?>"
-                                         class="img-responsive"
+                                         class="img-responsive img-thumbnail"
                                          alt="<?php echo $key; ?>" />
                                 </div>
-                                <div class="col-lg-6 image_container">
+                                <div class="col-xs-6 image_container">
                                     <img src="./models/images/<?php echo $model['image_1']; ?>"
-                                         class="img-responsive"
+                                         class="img-responsive img-thumbnail"
                                          alt="<?php echo $key; ?>" />
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-6 image_container">
+                                <div class="col-xs-6 image_container">
                                     <img src="./models/images/<?php echo $model['image_2']; ?>"
-                                         class="img-responsive"
+                                         class="img-responsive img-thumbnail"
                                          alt="<?php echo $key; ?>" />
                                 </div>
-                                <div class="col-lg-6 image_container">
+                                <div class="col-xs-6 image_container">
                                     <img src="./models/images/<?php echo $model['image_3']; ?>"
-                                         class="img-responsive"
+                                         class="img-responsive img-thumbnail"
                                          alt="<?php echo $key; ?>" />
                                 </div>
                             </div> 
                             </div>
-                            <div class="col-lg-3">
+                            <div class="col-xs-4 text_boucle">
                                 <?php if ($model['model_libelle']) : ?> 
                                 <h3>
-                                <span id="<?php echo $key; ?>_model_libelle" ><?php echo $model['model_libelle']; ?></span>
+                                <span id="<?php echo $key; ?>_model_libelle" class="titre"><?php echo $model['model_libelle']; ?></span>
                                 <?php endif; ?>
                                 </h3>
                                 <br/>
-                                <br/>
                                 <?php if ($model['caracteristiques']) : ?>  
-                                <span id="<?php echo $key; ?>_caracteristique" ><?php echo str_replace('\\','<br/>', $model['caracteristiques']); ?></span>
+                                <span id="<?php echo $key; ?>_caracteristique" class="carcateristique"><?php echo str_replace('\\','<br/>', $model['caracteristiques']); ?></span>
                             <?php endif; ?>
                                 <br/>
                                 <br/>
                                 <?php if ($model['description']) : ?>  
-                                    <span id="<?php echo $key; ?>_description" class="text-justify" >
+                                    <span id="<?php echo $key; ?>_description" class="description text-justify" >
                                         <?php echo $model['description']; ?>
                                     </span>
                                 <?php endif; ?>  
