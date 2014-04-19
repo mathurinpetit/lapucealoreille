@@ -48,33 +48,29 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
                         <div class="item <?php echo (!$cpt) ? "active" : "" ?>">
                             <div class="row">
                             <div class="col-xs-1"></div>                            
-                            <div class="col-xs-6">
-                            <div class="row">
-                                <div class="col-xs-6 image_container">
+                            <div class="col-xs-4">
+                                <div class="image_container">
                                     <img src="./models/images/<?php echo $model['image_0']; ?>"
                                          class="img-responsive img-thumbnail"
                                          alt="<?php echo $key; ?>" />
                                 </div>
-                                <div class="col-xs-6 image_container">
+                                <div class="image_container">
                                     <img src="./models/images/<?php echo $model['image_1']; ?>"
                                          class="img-responsive img-thumbnail"
                                          alt="<?php echo $key; ?>" />
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-6 image_container">
+                                <div class="image_container">
                                     <img src="./models/images/<?php echo $model['image_2']; ?>"
                                          class="img-responsive img-thumbnail"
                                          alt="<?php echo $key; ?>" />
                                 </div>
-                                <div class="col-xs-6 image_container">
+                                <div class="image_container">
                                     <img src="./models/images/<?php echo $model['image_3']; ?>"
                                          class="img-responsive img-thumbnail"
                                          alt="<?php echo $key; ?>" />
                                 </div>
                             </div> 
-                            </div>
-                            <div class="col-xs-4 text_boucle">
+                            <div class="col-xs-6 text_boucle">
                                 <?php if ($model['model_libelle']) : ?> 
                                 <h3>
                                 <span id="<?php echo $key; ?>_model_libelle" class="titre"><?php echo $model['model_libelle']; ?></span>
@@ -104,9 +100,10 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
                                 </div>
                 
                             </div>                            
-                            <div class="col-lg-1"></div> 
+                            <div class="col-xs-1"></div> 
                         </div>    
                         </div>
+            
                         <?php $cpt++; ?>
 
 <?php endforeach; ?>

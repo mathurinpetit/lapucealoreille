@@ -43,6 +43,14 @@ h1 {
     }
 }
 
+@media screen and (min-width: 700px) {
+    .image_container{
+    width: 170px;
+    margin-left: 5px;
+    display: inline-block;
+    }
+}
+
 .image_container {
     padding-left: 0px;
     padding-right: 0px;
