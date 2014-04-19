@@ -21,7 +21,14 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
         <!--[if IE]><link rel="shortcut icon" type="image/x-icon" href="favicon.ico" /><![endif]-->
         <link href="css/main_withoutGl.css" rel="stylesheet" type="text/css">
         <script src="lib/jquery-1.8.3.js"></script>  
+        <script src="lib/bootstrap-3.1.1/js/blueimp-gallery.min.js"></script>
+        <!--<script src="lib/bootstrap-3.1.1/js/bootstrap-image-gallery.js"></script>-->
+        <script src="lib/bootstrap-3.1.1/js/blueimp-gallery-fullscreen.js"></script>
+        <script src="lib/bootstrap-3.1.1/js/blueimp-gallery-indicator.js"></script>
+        <script src="lib/bootstrap-3.1.1/js/jquery.blueimp-gallery.min.js"></script>
         <script src="lib/bootstrap-3.1.1/js/bootstrap.js"></script>
+        <link rel="stylesheet" href="lib/bootstrap-3.1.1/css/bootstrap-image-gallery.css">
+        <link rel="stylesheet" href="lib/bootstrap-3.1.1/css/blueimp-gallery.css">
         <link rel="stylesheet" href="lib/bootstrap-3.1.1/css/bootstrap.css">
         <link rel="stylesheet" href="lib/bootstrap-3.1.1/css/bootstrap-theme.css">
     </head>
@@ -48,27 +55,14 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
                         <div class="item <?php echo (!$cpt) ? "active" : "" ?>">
                             <div class="row">
                             <div class="col-xs-1"></div>                            
-                            <div class="col-xs-4">
-                                <div class="image_container">
-                                    <img src="./models/images/<?php echo $model['image_0']; ?>"
+                            <div class="col-xs-4" id="links">
+                                <?php for ($j = 0; $j < 4; $j++) : ?>                                                            
+                                <a href="./models/images/<?php echo $model['image_'.$j]; ?>" title="<?php echo $model['model_libelle']. ' ('. ($j+1) .')'; ?>" data-gallery class="image_container">
+                                    <img src="./models/images/<?php echo $model['image_'.$j]; ?>"
                                          class="img-responsive img-thumbnail"
-                                         alt="<?php echo $key; ?>" />
-                                </div>
-                                <div class="image_container">
-                                    <img src="./models/images/<?php echo $model['image_1']; ?>"
-                                         class="img-responsive img-thumbnail"
-                                         alt="<?php echo $key; ?>" />
-                                </div>
-                                <div class="image_container">
-                                    <img src="./models/images/<?php echo $model['image_2']; ?>"
-                                         class="img-responsive img-thumbnail"
-                                         alt="<?php echo $key; ?>" />
-                                </div>
-                                <div class="image_container">
-                                    <img src="./models/images/<?php echo $model['image_3']; ?>"
-                                         class="img-responsive img-thumbnail"
-                                         alt="<?php echo $key; ?>" />
-                                </div>
+                                         alt="<?php echo $model['model_libelle']. ' ('. ($j+1) .')'; ?>" />
+                                </a>
+                                <?php endfor; ?>
                             </div> 
                             <div class="col-xs-6 text_boucle">
                                 <?php if ($model['model_libelle']) : ?> 
@@ -96,7 +90,7 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
                                 <br/>
                                 <br/>
                                 <div class="center-block">
-                                <button id="<?php echo $key; ?>" class="btn_submit" value="">Acheter pour <?php echo $model['prix'];?> €</button>
+                                <button id="<?php echo $key; ?>" class="btn_submit btn btn-info" value="">Acheter pour <?php echo $model['prix'];?> €</button>
                                 </div>
                 
                             </div>                            
@@ -117,7 +111,25 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
                 </a>
             </div>     
         </div>
+
+<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+</div>
         <script>
+document.getElementById('links').onclick = function (event) {
+    event = event || window.event;
+    var target = event.target || event.srcElement,
+        link = target.src ? target.parentNode : target,
+        options = {index: link, event: event},
+        links = this.getElementsByTagName('a');
+    blueimp.Gallery(links, options);
+};
             $('.carousel').carousel({
                 interval: 100000
             });
