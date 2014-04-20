@@ -132,7 +132,6 @@
 
             function createTransparentPanel() {
 
-                var v = new THREE.Vector3(0, 0, 0);
                 panelCanvas = document.createElement("canvas");
                 var xc = panelCanvas.getContext("2d");
                 panelCanvas.width = panelCanvas.height = 1048;
@@ -146,7 +145,7 @@
                 wrapText(xc, "Mathurin Petit\\226, rue de tolbiac\\75013 Paris\\06 45 18 10 87\\despucesauxoreilles@gmail.com\\mathurin.petit@gmail.com", 10, 470, 200, 20);
 
                 xc.font = "10pt arial bold";
-                wrapText(xc, "La Pusse à l'Oreille est un site de vente de boucle d'Oreille tendance et branchées.\\Ces boucles d'oreilles artisanales et fabriquées en France sont un cadeau idéale à s'offrir\\ou à offrir au quotidien à une tierce personne.\\\\Achetez en! Oui plein!", 340, 380, 10000, 20);
+                wrapText(xc, "La Pusse à l'Oreille est un site de vente de boucle d'Oreille tendance et branchées.\\Artisanal et fabriqué en France, c'est un bijou qui ne craint pas l'anti-poux !\\", 340, 380, 10000, 20);
 
                 var panelTextGeo = new THREE.PlaneGeometry(22, 22);
                 var texture = new THREE.Texture(panelCanvas);
