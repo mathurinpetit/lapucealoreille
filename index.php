@@ -25,12 +25,13 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
         <script src="lib/three.js/Stats.js"></script>
         <script src="lib/microcache.js"></script>
         <script src="lib/Panier.js"></script>
+        <script src="lib/About.js"></script>
         <script src="lib/Puces_light.js"></script>
     </head>
     <body> 
         <script>
-            if (! Detector.webgl ){
-                window.location.assign("http://www.lapussealoreille.fr/light");
+           if (! Detector.webgl ){
+                window.location.assign("http://dev.lapucealoreille.com/light");
             }
             var debug = false;
             var container, stats, panier;
@@ -102,7 +103,6 @@ function init() {
               <?php  endfor; ?>
           <?php  endforeach; ?>                       
                 
-    //   initTrees(loader);
     initSpot(-70,2,-3,true,false);   
        
     highLight = new THREE.SpotLight( 0xffffff,0);
@@ -127,6 +127,12 @@ function init() {
     panier.domElement.style.top = '30px';
     panier.domElement.style.right = '30px';
     container.appendChild( panier.domElement );
+    
+    about = new About(this);
+    about.domElement.style.position = 'absolute';
+    about.domElement.style.top = '140px';
+    about.domElement.style.right = '30px';
+    container.appendChild( about.domElement );
     
     window.addEventListener( 'resize', onWindowResize, false );
     document.addEventListener( 'mousemove', onDocumentMouseMove, false );
@@ -567,6 +573,10 @@ function wrapText(context, text, x, y, maxWidth, lineHeight) {
      
      function clickPanier(){
         $('form#panier_paypal').submit();
+     }
+
+     function clickAbout(){
+        window.location.assign("http://dev.lapucealoreille.com/contact");
      }
 
 $(document).ready(function() {
