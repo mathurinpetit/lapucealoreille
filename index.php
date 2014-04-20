@@ -205,10 +205,10 @@ function onDocumentMouseWheelGlobal(event){
     
          position_first = pucePool.positionOfFirst();
          position_last = pucePool.positionOfLast();
-         if(delta > 0 && position_first.y < -4) {             
+         if(delta > 0 && position_first.y < -2) {             
                       return;
            }
-        if(delta < 0 && position_last.y > 1) {
+        if(delta < 0 && position_last.y > -2) {
             return;
         }
     
