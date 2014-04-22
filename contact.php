@@ -120,7 +120,7 @@
                 logo.lookAt(vI);
 
                 var logoPosBase = new THREE.Vector3(0, 0, 0);
-                logo.position.z = logoPosBase.z + direction.z * -1.5 - 7.7;
+                logo.position.z = logoPosBase.z + direction.z * -1.5 - 5;
                 logo.position.x = logoPosBase.x + direction.x * -1.5;
                 logo.position.y = logoPosBase.y + 4;
 
@@ -139,13 +139,13 @@
                 xc.shadowBlur = 1;
                 xc.fillStyle = "black";
                 xc.font = "15pt arial bold";
-                xc.fillText("LA PUSSE A L'OREILLE ", 10, 410);
+                xc.fillText("LA PUSSE A L'OREILLE ", 150, 410);
                 xc.font = "12pt arial bold";
                 xc.mozImageSmoothingEnabled = false;
-                wrapText(xc, "Mathurin Petit\\226, rue de tolbiac\\75013 Paris\\06 45 18 10 87\\despucesauxoreilles@gmail.com\\mathurin.petit@gmail.com", 10, 470, 200, 20);
+                wrapText(xc, "Mathurin Petit\\226, rue de tolbiac\\75013 Paris\\06 45 18 10 87\\despucesauxoreilles@gmail.com\\mathurin.petit@gmail.com", 150, 470, 200, 20);
 
                 xc.font = "10pt arial bold";
-                wrapText(xc, "La Pusse à l'Oreille est un site de vente de boucle d'Oreille tendance et branchées.\\Artisanal et fabriqué en France, c'est un bijou qui ne craint pas l'anti-poux !\\", 340, 380, 10000, 20);
+                wrapText(xc, "La Pusse à l'Oreille est un site de vente de boucle d'Oreille tendance et branchées.\\\\Artisanal et fabriqué en France, c'est un bijou qui ne craint pas l'anti-poux !\\", 460, 380, 450, 20);
 
                 var panelTextGeo = new THREE.PlaneGeometry(22, 22);
                 var texture = new THREE.Texture(panelCanvas);

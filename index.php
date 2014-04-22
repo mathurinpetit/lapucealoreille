@@ -357,7 +357,7 @@ function displayModelPanel(id){
     highLightDisable(id);
     var vector = new THREE.Vector3(0, 0, 0);
     var direction = vector.subSelf( camera.position ).normalize();
-    var far = 10;
+    var far = 12;
     
     var coeffDir = 2.2;
     
