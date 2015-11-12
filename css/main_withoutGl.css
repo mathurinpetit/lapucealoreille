@@ -22,9 +22,7 @@ h1 {
 }
 
 #container_light img {
-    padding-bottom: 10px;
-    padding-top: 10px;
-    padding-left: 10px;
+    padding: 10px;
     display: block;
 }
 
