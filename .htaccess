@@ -1,9 +1,0 @@
-AddType video/ogg  .ogv
-AddType video/mp4  .mp4
-AddType video/webm .webm
-
-RewriteEngine On
-RewriteRule ^comment_soigner$ gabarits/comment_soigner.php
-RewriteRule ^contact$ contact.php
-RewriteRule ^$ modeles.php
-RewriteRule ^light$ modelesWithoutGl.php
