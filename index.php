@@ -53,8 +53,7 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
                     </div>  
                 </div>
             </div>
-            <br/>          
-            <br/>  
+            
             <div id="myCarousel" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner" role="listbox">
 
@@ -143,6 +142,9 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
                         </div>
                     </div>
                 </div>
+            </div>
+                <div class=" col-md-offset-1 col-md-10 visible-md visible-lg">
+                    <a href="/3d">Accèdez à l'ancienne boutique</a>
             </div>
             <div class="visible-md visible-lg">
 

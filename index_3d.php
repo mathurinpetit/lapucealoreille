@@ -31,7 +31,7 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
     <body> 
         <script>
            if (! Detector.webgl ){
-                window.location.assign("http://dev.lapussealoreille.fr/light");
+                window.location.assign("http://www.lapussealoreille.fr");
             }
             var debug = false;
             var container, stats, panier;
@@ -576,7 +576,7 @@ function wrapText(context, text, x, y, maxWidth, lineHeight) {
      }
 
      function clickAbout(){
-        window.location.assign("http://dev.lapussealoreille.fr/contact");
+        window.location.assign("http://www.lapussealoreille.fr/contact");
      }
 
 $(document).ready(function() {
