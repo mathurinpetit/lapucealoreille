@@ -79,13 +79,13 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
                                 <div class="col-xs-8  col-md-6 text_boucle">
                                     <?php if ($model['model_libelle']) : ?> 
                                         <div class="row">
-                                            <div class="col-xs-4 col-md-6">
+                                            <div class="col-xs-12 col-md-6">
 
                                                 <h3>
                                                     <span id="<?php echo $key; ?>_model_libelle" class="titre"><?php echo $model['model_libelle']; ?></span>
                                                 </h3>
                                             </div>
-                                            <div class="col-xs-8 col-md-6">
+                                            <div class="col-xs-12 col-md-6">
                                                 <div class="center-block" style="padding-top: 18px;">
                                                     <button id="<?php echo $key; ?>" class="btn_submit btn btn-default" value=""><img src="./models/images/<?php echo $key; ?>_small.png" class="pull-left" style="padding:0px;" />&nbsp;&nbsp;&nbsp;<span style="padding-top: 15px;">Acheter pour <?php echo $model['prix']; ?> €</span></button>
                                                 </div>
