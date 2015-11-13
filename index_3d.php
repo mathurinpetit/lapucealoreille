@@ -18,7 +18,7 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
         <link rel="icon" type="image/png" href="favicon.png" />
         <!--[if IE]><link rel="shortcut icon" type="image/x-icon" href="favicon.ico" /><![endif]-->
         <link href="css/main.css" rel="stylesheet" type="text/css">
-        <script src="lib/jquery-1.8.3.js"></script>        
+        <script src="lib/jquery.min.js"></script>        
         <script src="lib/three.js/three.js"></script>
         <script src="lib/three.js/ColladaLoader.js"></script>
         <script src="lib/three.js/Detector.js"></script>
@@ -233,7 +233,7 @@ function onDocumentMouseWheelPanel( event ){
     var pos0 = pucePool.getPosition(selectedModel_0);
     var pos1 = pucePool.getPosition(selectedModel_1);
     
-    if(delta > 0 && pos0.y < 0) 
+    if(delta > 0 && pos0.y < 2) 
         return;
     if(delta < 0 && pos0.y > 6.9) 
         return;
@@ -357,7 +357,7 @@ function displayModelPanel(id){
     highLightDisable(id);
     var vector = new THREE.Vector3(0, 0, 0);
     var direction = vector.subSelf( camera.position ).normalize();
-    var far = 12;
+    var far = 15;
     
     var coeffDir = 2.2;
     
