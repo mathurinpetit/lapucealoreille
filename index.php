@@ -8,7 +8,7 @@ $models = $db->getAllModels();
 $daeModelLoader = new DAEModelsLoader();
 $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
 
-$modelId = 0;
+$modelId = 1;
 if(isset($_REQUEST['model'])){
    $modelId =  (int) $_REQUEST['model'];
 }
