@@ -7,6 +7,11 @@ $models = $db->getAllModels();
 
 $daeModelLoader = new DAEModelsLoader();
 $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
+
+$modelId = 0;
+if(isset($_REQUEST['model'])){
+   $modelId =  (int) $_REQUEST['model'];
+}
 ?>
 
 
@@ -47,7 +52,8 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
                     <div class="row">
                         <div class="col-xs-3" style="height: 84px"> <img src="./logo/lapussealoreille.png" class="img-responsive pull-right" style="padding-top:20px;" /></div>
                         <div class="col-xs-7"> 
-                            <h1 class="pull-left">La Pusse à l'Oreille</h1>
+                            <h1 class="pull-left visible-md visible-lg">La Pusse à l'Oreille</h1>
+                            <h3 class="pull-left visible-xs">La Pusse à l'Oreille</h3>                            
                         </div>
 
                     </div>  
@@ -58,24 +64,26 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
                 <div class="carousel-inner" role="listbox">
 
                     <?php
-                    $cpt = 0;
+                    $cpt = 1;
                     foreach ($models as $key => $model) :
                         ?>
                         <div class=" row item <?php
-                        if (!$cpt): echo "active";
+                        if ($cpt == $modelId): echo "active";
                         endif;
                         ?>">
                             <div class="col-md-12 col-xs-12">                     
                                 <div class="col-xs-4 col-md-5" id="links"  style="padding-top: 20px;">
-                                    <?php for ($j = 0; $j < 4; $j++) : ?>                                                            
-                                        <a href="./models/images/<?php echo $model['image_' . $j]; ?>" title="<?php echo $model['model_libelle'] . ' (' . ($j + 1) . ')'; ?>" data-gallery class="image_container">
-                                            <img src="./models/images/<?php echo $model['image_' . $j]; ?>"
+                                    <?php 
+                                    for ($j = 0; $j < 4; $j++) :
+                                        ?>                                                            
+                                    <a href="visualisation/<?php echo $key; ?>/<?php echo $j ?>" title="<?php echo $model['model_libelle'] . ' (' . ($j + 1) . ')'; ?>" data-gallery class="image_container">
+                                            <img src="./<?php echo $model['images'][$j]; ?>"
                                                  class="img-responsive img-thumbnail"
                                                  alt="<?php echo $model['model_libelle'] . ' (' . ($j + 1) . ')'; ?>" />
                                         </a>
                                     <?php endfor; ?>
                                 </div> 
-                                <div class="col-xs-8  col-md-6 text_boucle">
+                                <div class="col-xs-7  col-md-6 text_boucle">
                                     <?php if ($model['model_libelle']) : ?> 
                                         <div class="row">
                                             <div class="col-xs-12 col-md-6">
@@ -99,8 +107,11 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
                                     <br/>
                                     <br/>
                                     <?php if ($model['description']) : ?>  
-                                        <span id="<?php echo $key; ?>_description" class="description text-justify" >
+                                        <span id="<?php echo $key; ?>_description" class="visible-md visible-lg description text-justify" >
                                             <?php echo $model['description']; ?>
+                                        </span>
+                                    <span id="<?php echo $key; ?>_description" class="visible-xs description text-justify" >
+                                            <?php echo $model['short_description']; ?>
                                         </span>
                                     <?php endif; ?>  
                                     <form id="panier_paypal_<?php echo $key; ?>" hidden target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
@@ -161,7 +172,7 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
             </div>
             <br/>
             <br/>
-        </div>    
+        </div>           
     </body>
 </html>
 

@@ -43,9 +43,9 @@ h1 {
 
 @media screen and (min-width: 700px) {
     .image_container{
-    width: 170px;
-    margin-left: 5px;
-    display: inline-block;
+        width: 170px;
+        margin-left: 5px;
+        display: inline-block;
     }
 }
 
@@ -55,7 +55,16 @@ h1 {
 }
 
 .center-block {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+img.unselectable {
+    -khtml-user-select: none;
+    -o-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-drag: none; 
+    -webkit-user-drag: none;
 }
