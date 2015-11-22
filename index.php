@@ -85,7 +85,7 @@ if (isset($_REQUEST['model'])) {
                                             ?>                                                            
                                             <a href="visualisation/<?php echo $key; ?>/<?php echo $j ?>" title="<?php echo $model['model_libelle'] . ' (' . ($j + 1) . ')'; ?>" data-gallery class="image_container">
                                                 <img src="./<?php echo $model['images_thumbs'][$j]; ?>"
-                                                     class="img-responsive img-thumbnail" style="height: 140px;"
+                                                     class="img-responsive img-thumbnail"
                                                      alt="<?php echo $model['model_libelle'] . ' (' . ($j + 1) . ')'; ?>" />
                                             </a>
                                         <?php endfor; ?>
