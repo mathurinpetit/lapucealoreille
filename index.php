@@ -75,7 +75,7 @@ if (isset($_REQUEST['model'])) {
                                <div class="col-xs-4 col-md-5" id="links"  style="padding-top: 20px;">
                                     <?php if ($key == 'diy') : ?>
                                         <a href="visualisation/<?php echo $key; ?>/0" title="<?php echo $model['model_libelle']; ?>" data-gallery class="image_container_diy"  >
-                                            <img src="./<?php echo $model['images'][0]; ?>"
+                                            <img src="./<?php echo $model['images_thumbs'][0]; ?>"
                                                  class="img-responsive img-thumbnail"
                                                  alt="<?php echo $model['model_libelle'] ; ?>" />
                                         </a>
@@ -84,7 +84,7 @@ if (isset($_REQUEST['model'])) {
                                        <?php  for ($j = 0; $j < 4; $j++) :
                                             ?>                                                            
                                             <a href="visualisation/<?php echo $key; ?>/<?php echo $j ?>" title="<?php echo $model['model_libelle'] . ' (' . ($j + 1) . ')'; ?>" data-gallery class="image_container">
-                                                <img src="./<?php echo $model['images'][$j]; ?>"
+                                                <img src="./<?php echo $model['images_thumbs'][$j]; ?>"
                                                      class="img-responsive img-thumbnail" style="height: 140px;"
                                                      alt="<?php echo $model['model_libelle'] . ' (' . ($j + 1) . ')'; ?>" />
                                             </a>
