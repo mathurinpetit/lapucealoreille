@@ -9,8 +9,8 @@ $daeModelLoader = new DAEModelsLoader();
 $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
 
 $modelId = 1;
-if(isset($_REQUEST['model'])){
-   $modelId =  (int) $_REQUEST['model'];
+if (isset($_REQUEST['model'])) {
+    $modelId = (int) $_REQUEST['model'];
 }
 ?>
 
@@ -59,7 +59,7 @@ if(isset($_REQUEST['model'])){
                     </div>  
                 </div>
             </div>
-            
+
             <div id="myCarousel" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner" role="listbox">
 
@@ -72,16 +72,24 @@ if(isset($_REQUEST['model'])){
                         endif;
                         ?>">
                             <div class="col-md-12 col-xs-12">                     
-                                <div class="col-xs-4 col-md-5" id="links"  style="padding-top: 20px;">
-                                    <?php 
-                                    for ($j = 0; $j < 4; $j++) :
-                                        ?>                                                            
-                                    <a href="visualisation/<?php echo $key; ?>/<?php echo $j ?>" title="<?php echo $model['model_libelle'] . ' (' . ($j + 1) . ')'; ?>" data-gallery class="image_container">
-                                            <img src="./<?php echo $model['images'][$j]; ?>"
+                               <div class="col-xs-4 col-md-5" id="links"  style="padding-top: 20px;">
+                                    <?php if ($key == 'diy') : ?>
+                                        <a href="visualisation/<?php echo $key; ?>/0" title="<?php echo $model['model_libelle']; ?>" data-gallery class="image_container_diy"  >
+                                            <img src="./<?php echo $model['images'][0]; ?>"
                                                  class="img-responsive img-thumbnail"
-                                                 alt="<?php echo $model['model_libelle'] . ' (' . ($j + 1) . ')'; ?>" />
+                                                 alt="<?php echo $model['model_libelle'] ; ?>" />
                                         </a>
-                                    <?php endfor; ?>
+                               
+                                    <?php else: ?>
+                                       <?php  for ($j = 0; $j < 4; $j++) :
+                                            ?>                                                            
+                                            <a href="visualisation/<?php echo $key; ?>/<?php echo $j ?>" title="<?php echo $model['model_libelle'] . ' (' . ($j + 1) . ')'; ?>" data-gallery class="image_container">
+                                                <img src="./<?php echo $model['images'][$j]; ?>"
+                                                     class="img-responsive img-thumbnail" style="height: 140px;"
+                                                     alt="<?php echo $model['model_libelle'] . ' (' . ($j + 1) . ')'; ?>" />
+                                            </a>
+                                        <?php endfor; ?>
+                                    <?php endif; ?>
                                 </div> 
                                 <div class="col-xs-7  col-md-6 text_boucle">
                                     <?php if ($model['model_libelle']) : ?> 
@@ -110,7 +118,7 @@ if(isset($_REQUEST['model'])){
                                         <span id="<?php echo $key; ?>_description" class="visible-md visible-lg description text-justify" >
                                             <?php echo $model['description']; ?>
                                         </span>
-                                    <span id="<?php echo $key; ?>_description" class="visible-xs description text-justify" >
+                                        <span id="<?php echo $key; ?>_description" class="visible-xs description text-justify" >
                                             <?php echo $model['short_description']; ?>
                                         </span>
                                     <?php endif; ?>  
@@ -145,7 +153,7 @@ if(isset($_REQUEST['model'])){
                                             fjs.parentNode.insertBefore(js, fjs);
                                         }
                                     }(document, 'script', 'twitter-wjs');</script>
-                               </div>
+                            </div>
                         </div>
                         <div class="col-xs-6  col-md-6" style="padding-top: 5px;">
 
@@ -154,8 +162,8 @@ if(isset($_REQUEST['model'])){
                     </div>
                 </div>
             </div>
-                <div class=" col-md-offset-1 col-md-10 visible-md visible-lg">
-                    <a href="/3d">Accèdez à l'ancienne boutique</a>
+            <div class=" col-md-offset-1 col-md-10 visible-md visible-lg">
+                <a href="/3d">Accèdez à l'ancienne boutique</a>
             </div>
             <div class="visible-md visible-lg">
 

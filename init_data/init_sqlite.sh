@@ -72,3 +72,14 @@ sqlite3 lapucealoreille.db "insert into models VALUES (6,
                             'Modèle : Classic Argent Papillon (II) \Type de puce : Argent Papillon (II) \Attaches : Argentées ',
                 '            Contrairement à la puce Classic Argent Papillon (I), ce modèle est à la fois plus petit, et plus sophistiqué. Constitué d''une puce Classics ""Argent Papillon (II)"" en plastique blanc, la paire paraît presque transparente à la lumière du jour. De base elle possède une attache simple argentée, mais il est possible de la commander avec une attache de couleur ou d''un autre type sur simple demande téléphonique. La petite carrure de ce modèle en fait un bijou raffiné et discret qui sait ce faire remarquer par son aspect réfléchissant dans la lumière.',
            'La ""Classic Argent Papillon (II)"",  modèle plus petit, plus sophistiqué. Cette paire quasiment transparente s''accorde très bien avec les attaches de couleurs.',   3, 'TWTV4JDHM6X2L', 7.5);";
+
+sqlite3 lapucealoreille.db "insert into models VALUES (1,
+                            'Fais le toi-même',
+                            null,
+                             null,
+                             null,
+                            'diy',
+                            'Modèle : A faire soi-même \Type de puce : Au choix dans la collection de lapussealoreille \Attaches : Au choix aussi ',
+                '            Le Kit ""Fais-le toi-même"" comprend deux cartes téléphoniques, deux attaches de boucle d''oreille et un morceau de lime à ongle. Il vous propose de faire vous même votre propre modèle de la pusse à l''oreille en personalisant votre paire. Un tutoriel est disponible ci-dessous afin de créer une paire aussi jolie que celle proposées dans la boutique.<br/><br/> <iframe width=""560"" height=""315"" src=""https://www.youtube.com/embed/_NvqhNxjjIc"" frameborder=""0"" allowfullscreen></iframe>',
+       'Le Kit ""Fais-le toi-même"" comprend deux cartes téléphoniques, deux attaches de boucle d''oreille et un morceau de lime à ongle. Tutoriel disponible ici : <br/> <iframe width=""260"" height=""115"" src=""https://www.youtube.com/embed/_NvqhNxjjIc"" frameborder=""0"" allowfullscreen></iframe> ',3, 'MUVPGHFZKUA8N', 3.5);";
+

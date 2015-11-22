@@ -47,6 +47,11 @@ h1 {
         margin-left: 5px;
         display: inline-block;
     }
+    .image_container_diy{
+        width: 370px;
+        margin-left: 5px;
+        display: inline-block;
+    }
 }
 
 .image_container {
