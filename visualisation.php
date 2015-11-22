@@ -35,13 +35,9 @@ $models = $db->getAllModels();
                 <div class="carousel-inner" role="listbox">
 
                     <?php foreach ($models[$model_name]['images'] as $cpt => $imgpath): ?>     
-                                                     <!--             <img src="path/to/image.jpg" />
-                                                        <iframe src="//www.youtube.com/embed/video_id" frameborder="0"></iframe>
-                                                        <div>Some inline content.</div>-->
-                        <div class=" row item <?php
-                        if ($cpt == $index): echo "active";
-                        endif;
-                        ?>">
+                        <?php if ($model_name != 'diy') : ?>
+                            <div class=" row item <?php if ($cpt == $index): echo "active";  endif; ?>">
+                                 <?php endif; ?>
                             <br/>
                             <div class="col-md-12 col-xs-12 text-center" style="position: relative;">
 
@@ -67,11 +63,13 @@ $models = $db->getAllModels();
                                     </div> 
                                 </div>
                             </div>
-
-                        </div>
-                    <?php endforeach; ?>
+                            <?php if ($model_name != 'diy') : ?>
+                            </div>
+                        <?php endif; ?>
+                <?php endforeach; ?>
                 </div>
-            </div> 
+            </div>
+        <?php if ($model_name != 'diy') : ?>
             <div class="visible-md visible-lg">
 
                 <a class="col-md-1 left carousel-control" href="#myCarousel" role="button" data-slide="prev">
@@ -84,16 +82,17 @@ $models = $db->getAllModels();
                     <span class="sr-only">Next</span>
                 </a>
 
-            </div>
-        </div>
-        <form id="panier_paypal_<?php echo $model_name; ?>" hidden target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-            <input type="hidden" name="cmd" value="_s-xclick">
-            <input type="hidden" name="hosted_button_id" value="<?php echo $models[$model_name]['paypal']; ?>">
-            <input type="image" src="https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_cart_LG.gif" border="0" name="submit" alt="PayPal - la solution de paiement en ligne la plus simple et la plus sécurisée !">
-            <img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1" height="1">
-        </form>  
+            </div> 
+        <?php endif; ?>
+    </div>
+    <form id="panier_paypal_<?php echo $model_name; ?>" hidden target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+        <input type="hidden" name="cmd" value="_s-xclick">
+        <input type="hidden" name="hosted_button_id" value="<?php echo $models[$model_name]['paypal']; ?>">
+        <input type="image" src="https://www.paypalobjects.com/fr_FR/FR/i/btn/btn_cart_LG.gif" border="0" name="submit" alt="PayPal - la solution de paiement en ligne la plus simple et la plus sécurisée !">
+        <img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1" height="1">
+    </form>  
 
 
-    </body>   
+</body>   
 
 </html>
