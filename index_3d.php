@@ -90,6 +90,9 @@ $loadProcess = $daeModelLoader->createLoadProcess($dae_models);
 <?php
 $cpt = 0;
 foreach ($models as $model_name => $model):
+    if($model_name == 'diy'){
+        continue;
+    }
     ?>
     <?php for ($i = 0; $i < 2; $i++): ?>
                         pucePool.createPuce("<?php echo $model_name . '_' . $i; ?>",
