@@ -40,10 +40,23 @@ h1 {
         font-size:12px;
     }
 }
+.description2 {
+    padding-bottom: 0px;
+    font-size:16px;
+}
+.titre2 {
+    padding-bottom: 0px;
+    font-size:28px;
+}
+.carateristique2 {
+    padding-bottom: 0px;
+    font-size:16px;
+}
+
 
 @media screen and (min-width: 700px) {
     .image_container{
-        width: 170px;
+        width: 230px;
         margin-left: 5px;
         display: inline-block;
     }

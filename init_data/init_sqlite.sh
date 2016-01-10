@@ -22,6 +22,18 @@ sqlite3 lapucealoreille.db "insert into models VALUES (1,
        'La paire ""Classic Or rond"", le plus grand des ""Classic"" de lapussealoreille. ',3, 'MUVPGHFZKUA8N', 7.5);";
 
 sqlite3 lapucealoreille.db "insert into models VALUES (2,
+                            'Fais le toi-même',
+                            null,
+                             null,
+                             null,
+                            'diy',
+                            'Modèle : A faire soi-même \Type de puce : Au choix dans la collection de lapussealoreille \Attaches : Au choix aussi ',
+                '            Le Kit ""Fais-le toi-même"" comprend deux cartes téléphoniques, deux attaches de boucle d''oreille et un morceau de lime à ongle. Il vous propose de faire vous même votre propre modèle de la pusse à l''oreille en personalisant votre paire. Un tutoriel est disponible ci-dessous afin de créer une paire aussi jolie que celle proposées dans la boutique.',
+       'Le Kit ""Fais-le toi-même"" comprend deux cartes téléphoniques, deux attaches de boucle d''oreille et un morceau de lime à ongle. Tutoriel disponible ici : <br/> <br/> <iframe width=""260"" height=""145"" src=""https://www.youtube.com/embed/_NvqhNxjjIc"" frameborder=""0"" allowfullscreen></iframe> ',3, 'U5V6QWBT42W4S', 3.5);";
+
+
+
+sqlite3 lapucealoreille.db "insert into models VALUES (3,
                              'Classic Argent',
                              'classic_puce_light',
                              'attache_argent_light',
@@ -32,7 +44,7 @@ sqlite3 lapucealoreille.db "insert into models VALUES (2,
                'Paire constituée d''une puce ""Classic Argent"", elle est sobre et élégante. On ne voit pas qu''il s''agit d''une puce éléctronique.', 3, 'ULR6EJ6DCTNCY', 7.5);";
 
 
-sqlite3 lapucealoreille.db "insert into models VALUES (3,
+sqlite3 lapucealoreille.db "insert into models VALUES (4,
                             'Classic Or Carré',
                             'classic_puce_light',
                             'attache_or_light',
@@ -43,7 +55,7 @@ sqlite3 lapucealoreille.db "insert into models VALUES (3,
               'Cette paire est constituée d''une puce ""Classic Or carré"" dont le centre est de petite taille et joliment carré.',  3, 'AKT6QTRXW8F2L', 7.5);";
 
 
-sqlite3 lapucealoreille.db "insert into models VALUES (4,
+sqlite3 lapucealoreille.db "insert into models VALUES (5,
                             'Classic Argent Papillon(I)',
                             'classic_puce_light',
                             'attache_argent_light',
@@ -53,7 +65,7 @@ sqlite3 lapucealoreille.db "insert into models VALUES (4,
                 '            Cette paire est constituée d''une puce Argent Papillon (I) plus large et plus robuste dont le centre en silicum vert donne un aspect rerto des plus intéressant. Comme toute paire de la collection des Classics cette boucle d''oreille élégante est entièrement fabriquée à la main avec des puces de récupération. L''originalité de ce bijoux écologiquement geek vous fera briller en soirée. Ce modèle constistue un format original plus rectangulaire que les autres. Son détourage blanc renforce les constrastes du bijou.',
          'Cette paire est constituée d''une puce Argent Papillon (I) plus large et plus robuste  en silicum vert. Aspect très ""robot"".',  3, 'NUWFSSL459BLQ', 7.5);";
 
-sqlite3 lapucealoreille.db "insert into models VALUES (5,
+sqlite3 lapucealoreille.db "insert into models VALUES (6,
                             'Classic Or Papillon Carré',
                             'classic_puce_light',
                             'attache_or_light',
@@ -63,7 +75,7 @@ sqlite3 lapucealoreille.db "insert into models VALUES (5,
                 '            Cette paire est constituée d''une puce Classic Or Papillon Carré dont le format est quasiment carré. De petite taille (1.4 x 1.4 cm), elle porte une attache simple dorée et fait partie de la collection des Classics. C''est un modèle de puce plus rare représentant une sorte de papillon doré en son centre. Cette boucle d''oreille élégante et simple reste très originale, de plus, elle est entièrement faite à la main. Au vu de la pauvreté de ce type de puce en France, elle est une des créations les plus demandées sur La Pusse à l''Oreille.',
  'Les ""Classic Or Papillon Carré"" dont le format carré de (1.4 x 1.4 cm), une paire rare !!!', 3, '58PJ9MYEE9GM8', 7.5);";
 
-sqlite3 lapucealoreille.db "insert into models VALUES (6,
+sqlite3 lapucealoreille.db "insert into models VALUES (7,
                             'Classic Argent Papillon (II)',
                             'classic_puce_light',
                             'attache_argent_light',
@@ -72,14 +84,3 @@ sqlite3 lapucealoreille.db "insert into models VALUES (6,
                             'Modèle : Classic Argent Papillon (II) \Type de puce : Argent Papillon (II) \Attaches : Argentées ',
                 '            Contrairement à la puce Classic Argent Papillon (I), ce modèle est à la fois plus petit, et plus sophistiqué. Constitué d''une puce Classics ""Argent Papillon (II)"" en plastique blanc, la paire paraît presque transparente à la lumière du jour. De base elle possède une attache simple argentée, mais il est possible de la commander avec une attache de couleur ou d''un autre type sur simple demande téléphonique. La petite carrure de ce modèle en fait un bijou raffiné et discret qui sait ce faire remarquer par son aspect réfléchissant dans la lumière.',
            'La ""Classic Argent Papillon (II)"",  modèle plus petit, plus sophistiqué. Cette paire quasiment transparente s''accorde très bien avec les attaches de couleurs.',   3, 'TWTV4JDHM6X2L', 7.5);";
-
-sqlite3 lapucealoreille.db "insert into models VALUES (7,
-                            'Fais le toi-même',
-                            null,
-                             null,
-                             null,
-                            'diy',
-                            'Modèle : A faire soi-même \Type de puce : Au choix dans la collection de lapussealoreille \Attaches : Au choix aussi ',
-                '            Le Kit ""Fais-le toi-même"" comprend deux cartes téléphoniques, deux attaches de boucle d''oreille et un morceau de lime à ongle. Il vous propose de faire vous même votre propre modèle de la pusse à l''oreille en personalisant votre paire. Un tutoriel est disponible ci-dessous afin de créer une paire aussi jolie que celle proposées dans la boutique.<br/><br/> <iframe width=""560"" height=""315"" src=""https://www.youtube.com/embed/_NvqhNxjjIc"" frameborder=""0"" allowfullscreen></iframe>',
-       'Le Kit ""Fais-le toi-même"" comprend deux cartes téléphoniques, deux attaches de boucle d''oreille et un morceau de lime à ongle. Tutoriel disponible ici : <br/> <br/> <iframe width=""260"" height=""145"" src=""https://www.youtube.com/embed/_NvqhNxjjIc"" frameborder=""0"" allowfullscreen></iframe> ',3, 'U5V6QWBT42W4S', 3.5);";
-
