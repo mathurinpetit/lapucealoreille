@@ -32,7 +32,7 @@ if (isset($_REQUEST['model'])) {
         <meta property="og:type" content="article" />
         <meta property="og:title" content="LaPusseAlOreille - Vente de bijoux et de boucles d'oreilles originales" />
         <meta property="og:description" content="Des boucles d'oreilles originales fabriquées avec des puces éléctroniques" />
-        <meta property="og:image" content="http://lapussealoreille.fr/visualisation/classic_or_petit_rond/0" />
+        <meta property="og:image" content="http://lapussealoreille.fr/models/images/classic_or_petit_rond_0.jpg" />
 
     </head>
     <body> 
