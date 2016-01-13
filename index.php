@@ -13,9 +13,6 @@ if (isset($_REQUEST['model'])) {
     $modelId = (int) $_REQUEST['model'];
 }
 ?>
-
-
-
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -31,6 +28,11 @@ if (isset($_REQUEST['model'])) {
         <script src="lib/lapussealoreille.js"></script>  
         <link rel="stylesheet" href="lib/bootstrap-3.3.5/css/bootstrap.css">
         <link rel="stylesheet" href="lib/bootstrap-3.3.5/css/bootstrap-theme.css">
+        <meta property="og:url" content="http://www.lapussealoreille.fr" />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="LaPusseAlOreille - Vente de bijoux et de boucles d'oreilles originales" />
+        <meta property="og:description" content="Des boucles d'oreilles originales fabriquées avec des puces éléctroniques" />
+        <meta property="og:image" content="http://lapussealoreille.fr/visualisation/classic_or_petit_rond/0" />
 
     </head>
     <body> 
@@ -205,10 +207,10 @@ if (isset($_REQUEST['model'])) {
                                     <?php if ($key == 'diy') : ?>
                                         <div class="row">
                                             <div class="col-md-8" style="padding-top: 20px; "  >
-                                                
+
                                                 <iframe class="visible-lg visible-xl" width="870" height="315" src="https://www.youtube.com/embed/_NvqhNxjjIc" frameborder="0" allowfullscreen id="" ></iframe>
-                                            <iframe class="visible-md" width="720" height="315" src="https://www.youtube.com/embed/_NvqhNxjjIc" frameborder="0" allowfullscreen id="" ></iframe>
-                                            
+                                                <iframe class="visible-md" width="720" height="315" src="https://www.youtube.com/embed/_NvqhNxjjIc" frameborder="0" allowfullscreen id="" ></iframe>
+
                                             </div>
                                         </div>
                                     <?php endif; ?>    
